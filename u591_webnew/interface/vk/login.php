@@ -38,7 +38,7 @@ if($rdata){
     	$memId = $rdata['response']['user_id'];
         //CP操作,请求成功,用户有效
         global $accountServer;
-        $accountConn = $accountServer[$gameId];
+        $accountConn = $gameId;
         $conn = SetConn($accountConn);
         if($conn == false){
             write_log(ROOT_PATH."log","vk_login_error_","account connect error. conn=$accountConn, ".mysqli_error($conn)." ".date("Y-m-d H:i:s")."\r\n");

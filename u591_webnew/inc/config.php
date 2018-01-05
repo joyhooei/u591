@@ -8,7 +8,7 @@ function SetConn($ServerInfo){
                         return ConnServer("127.0.0.1","root","root","u591");
                         break;
                 //acount database
-                case 85:
+                case 100: //阿拉伯
                         return ConnServer("119.28.77.164:3356", "gameuser", "rio8t89o,690.60fk", "account");
                         break;
                

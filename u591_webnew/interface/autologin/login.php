@@ -50,9 +50,7 @@ if($mySign != $sign){
 /*
  * 验证账号
  */
-global $accountServer;
-$accountConn = $accountServer[$game_id];
-$conn = SetConn($accountConn);
+$conn = SetConn($game_id);
 $sql = "select id from account where id='$accountId' limit 1";
 if(false == $query = mysqli_query($conn,$sql)){
 	write_log(ROOT_PATH."log","autologin_error_","$accountConn, sql=$sql, mysql error, ".mysqli_error($conn)." ".date("Y-m-d H:i:s")."\r\n");

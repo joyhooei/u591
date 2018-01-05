@@ -68,16 +68,16 @@ if(false == mysqli_query($conn,$iSql)){
 	
 
 
-$title = '海牛网络登陆信';
-$message = "亲爱的$email
-您的邮箱登陆码是：$code
-此登陆码在15分钟内有效! 
+$title = 'Seacow network login email';
+$message = "Dear $email
+Your email login code is：$code
+This login code is valid within 15 minutes! 
 
-温馨提示：
-* 本邮件为系统自动发送，不受理客户在线直接回复。
-* 您可以使用客户服务电话0591-87678008联系我们。再次感谢您使用海牛提供的服务！
+Note:
+This email is automatically sent by the system. Customer messages won’t be answered directly online.
+* You can contact us by the customer service hot line: 0591-87678008. Thank you for your support!
 
-福州海牛游戏软件开发有限公司版权所有";
+Copyright is retained by Seacow Network Technology Co., Ltd.";
 
 $sendMail = SendMail($email, $title, $message);
 write_log(ROOT_PATH."log","mail_sent_info_log_","post=$post, $sendMail, ".date("Y-m-d H:i:s")."\r\n");
@@ -101,7 +101,7 @@ function SendMail($address,$title,$message){
 	// 设置邮件头的From字段。
 	$mail->From='pokemon_vs@163.com';
 	// 设置发件人名字
-	$mail->FromName='海牛网络';
+	$mail->FromName='Seacowgame';
 	// 设置邮件标题
 	$mail->Subject=$title;
 	// 设置SMTP服务器。

@@ -48,9 +48,7 @@ if ($verifyOK) {
         exit('101');
     }
     //获取账号信息
-    global $accountServer;
-    $accountConn = $accountServer[$gameId];
-    $conn = SetConn($accountConn);
+    $conn = SetConn($gameId);
     $sql_account = " select NAME,dwFenBaoID,clienttype from account where id='$accountId' limit 1;";
     $query_account = @mysqli_query($conn, $sql_account);
     $result_account = @mysqli_fetch_assoc($query_account);

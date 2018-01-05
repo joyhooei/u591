@@ -18,7 +18,7 @@ write_log(ROOT_PATH."log","guanwang_login_log_","post=$post, get=$get, ".date("Y
 
 $token = trim($_REQUEST['p']);
 $gameId = intval($_REQUEST['game_id']);
-$accountConn = $accountServer[$gameId];
+$accountConn = $gameId;
 if(!$token || !$gameId || !$accountConn){
 	write_log(ROOT_PATH."log","guanwang_login_error_log_"," parameter error!, accountConn=$accountConn, token=$token ,game_id=$gameId, ".date("Y-m-d H:i:s")."\r\n");
 	exit('2 0');

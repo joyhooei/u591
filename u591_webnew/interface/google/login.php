@@ -44,9 +44,7 @@ $jsonRs = isset($token_data) ? json_encode($token_data) : json_encode($token);
 write_log(ROOT_PATH.'log','google_login_check_',"$jsonRs, ".date('Y-m-d H:i:s')."\r\n");
 if(isset($token_data['sub'])){
     $google_id = $token_data['sub'];
-    global $accountServer;
-    $accountConn = $accountServer[$gameId];
-    $conn = SetConn($accountConn);
+    $conn = SetConn($gameId);
     if($conn == false){
         write_log(ROOT_PATH.'log','google_login_error_',"account mysql connect error. ".date('Y-m-d H:i:s')."\r\n");
         exit('3 0');

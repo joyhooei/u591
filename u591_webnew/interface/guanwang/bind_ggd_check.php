@@ -26,7 +26,7 @@ if($sign != $mySign)
     exit(json_encode(array('status'=>2, 'msg'=>'sign error.')));
 
 global $accountServer;
-$accountConn = $accountServer[$array['game_id']];
+$accountConn = $array['game_id'];
 $conn = SetConn($accountConn);
 if($conn == false){
     write_log(ROOT_PATH."log","bind_ggd_check_error_","mysql connect error. ".date("Y-m-d H:i:s")."\r\n");

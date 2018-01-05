@@ -64,9 +64,7 @@ if($type == 'google'){
     }
     $channel_account = $token_data['sub'].'@google';
 }
-global $accountServer;
-$accountConn = $accountServer[$gameId];
-$conn = SetConn($accountConn);
+$conn = SetConn($gameId);
 if($conn == false){
     write_log(ROOT_PATH.'log','bindall_login_error_',"account mysql connect error.".date('Y-m-d H:i:s')."\r\n");
     exit("3 0");

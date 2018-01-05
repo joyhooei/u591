@@ -96,7 +96,7 @@ if($code){
 
 $password_my=md5($password.$mdString);
 $reg_time=date("ymdHi");
-$accountConn = $accountServer[$gameId];
+$accountConn = $gameId;
 
 $conn = SetConn($accountConn);
 $sql = " select id from account where NAME = '$username'";

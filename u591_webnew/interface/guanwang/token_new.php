@@ -36,7 +36,7 @@ $sign = trim($_POST['sign']);
 
 $gameId = intval($_POST['game_id']);
 $array['game_id'] = $gameId;
-$accountConn = $accountServer[$gameId];
+$accountConn = $gameId;
 if(empty($accountConn) || empty($gameId))
 	exit(json_encode(array('status'=>2, 'msg'=>'game id error.')));
 if(empty($array))
