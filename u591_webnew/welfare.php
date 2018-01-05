@@ -5,6 +5,7 @@
  * Date: 2016/12/15
  * Time: 下午2:53
  */
+1;
 $table = 'web_welfare';
 include("./inc/config.php");
 include("./inc/function.php");
