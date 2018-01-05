@@ -1,0 +1,40 @@
+result=FAIL
+,post=a:0:{},get=a:2:{s:9:"orderinfo";s:20:"8_8001_12313_android";s:6:"amount";s:1:"3";}, 2017-11-30 17:50:57
+result=SUCCESS
+mc_gross=3.00
+invoice=8_8001_12313_android_3_12
+protection_eligibility=Ineligible
+payer_id=LSQK6SFMMLJDJ
+tax=0.00
+payment_date=01%3A52%3A54+Nov+30%2C+2017+PST
+payment_status=Completed
+charset=windows-1252
+first_name=tao
+mc_fee=0.39
+custom=
+payer_status=verified
+business=821586178%40qq.com
+quantity=1
+payer_email=rmiswt%40126.com
+txn_id=53J94501F7439740C
+payment_type=instant
+last_name=wangtao
+receiver_email=821586178%40qq.com
+payment_fee=0.39
+shipping_discount=0.00
+insurance_amount=0.00
+receiver_id=R7DDPAYCXR9K2
+txn_type=web_accept
+item_name=8_8001_12313_android_3_12
+discount=0.00
+mc_currency=USD
+item_number=
+residence_country=US
+handling_amount=0.00
+shipping_method=Default
+transaction_subject=
+payment_gross=3.00
+shipping=0.00
+,post=a:0:{},get=a:5:{s:3:"amt";s:4:"3.00";s:2:"cc";s:3:"USD";s:9:"item_name";s:25:"8_8001_12313_android_3_12";s:2:"st";s:9:"Completed";s:2:"tx";s:17:"53J94501F7439740C";}, 2017-11-30 17:53:01
+post=a:0:{},get=a:5:{s:3:"amt";s:4:"3.00";s:2:"cc";s:3:"USD";s:9:"item_name";s:25:"8_8001_12313_android_3_12";s:2:"st";s:9:"Completed";s:2:"tx";s:17:"53J94501F7439740C";}, 2017-11-30 17:58:39
+result={"mc_gross":"3.00","invoice":"8_8001_12313_android_3_12","protection_eligibility":"Ineligible","payer_id":"LSQK6SFMMLJDJ","tax":"0.00","payment_date":"01:52:54 Nov 30, 2017 PST","payment_status":"Completed","charset":"windows-1252","first_name":"tao","mc_fee":"0.39","custom":"","payer_status":"verified","business":"821586178@qq.com","quantity":"1","payer_email":"rmiswt@126.com","txn_id":"53J94501F7439740C","payment_type":"instant","last_name":"wangtao","receiver_email":"821586178@qq.com","payment_fee":"0.39","shipping_discount":"0.00","insurance_amount":"0.00","receiver_id":"R7DDPAYCXR9K2","txn_type":"web_accept","item_name":"8_8001_12313_android_3_12","discount":"0.00","mc_currency":"USD","item_number":"","residence_country":"US","handling_amount":"0.00","shipping_method":"Default","transaction_subject":"","payment_gross":"3.00","shipping":"0.00"},post=a:0:{},get=a:5:{s:3:"amt";s:4:"3.00";s:2:"cc";s:3:"USD";s:9:"item_name";s:25:"8_8001_12313_android_3_12";s:2:"st";s:9:"Completed";s:2:"tx";s:17:"53J94501F7439740C";}, 2017-11-30 17:58:41
