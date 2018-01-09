@@ -30,7 +30,7 @@ if(strlen($password) < 6)
 	exit(json_encode(array('status'=>1, 'msg'=>'password length can not be less than six.')));
 
 $gameId = $_POST['game_id'];
-$accountConn = $accountServer[$gameId];
+$accountConn = $gameId;
 if(empty($gameId) || empty($accountConn))
 	exit(json_encode(array('status'=>1, 'msg'=>'gameId or conn config should not empty.')));
 $sign = trim($_POST['sign']);

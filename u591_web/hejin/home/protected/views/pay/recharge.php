@@ -1,77 +1,56 @@
-<?php
-/**
-* ==============================================
-* Copyright (c) 2015 All rights reserved.
-* ----------------------------------------------
-* 官网注册接口 兼容普通账号注册 手机、邮箱验证码注册
-* 暂时邮箱没有 预留着.
-* ==============================================
-* @date: 2016-5-6
-* @author: Administrator
-* @return:
-*/
-include_once 'config.php';
-global $mdString;
-
-$post = serialize($_POST);
-$username = trim($_POST['username']);
-$password = trim($_POST['password']);
-$gameId = intval($_POST['game_id']);
-$sign = trim($_POST['sign']);
-
-$params = array(
-		'username',
-		'password',
-		'game_id',
-		'sign'
-);
-for ($i = 0; $i< count($params); $i++){
-	if (!isset($_POST[$params[$i]])) {
-		exit(json_encode(array('status'=>1, 'msg'=>'Missing '.$params[$i])));
-	} else {
-		if(empty($_POST[$params[$i]]))
-			exit(json_encode(array('status'=>1, 'msg'=>$params[$i].' should not be empty.')));
-	}
-}
-if (eregi('^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$', $username)){
-	//邮箱注册
-	$email = $username;
-} else if(strlen($username) == 11 && preg_match('/^1[34578]{1}\d{9}$/', $username)){
-	//手机注册
-	$phone = $username;
-} else
-	exit(json_encode(array('status'=>1, 'msg'=>'账号格式错误.')));
-
-
-if(!preg_match("/^[A-Za-z0-9]{6,16}$/", $password))
-	exit(json_encode(array('status'=>1, 'msg'=>'密码长度只能在6-16之间.'))); //密码长度或者格式不对
-
-$appKey = $key_arr['appKey'];
-$array['username'] = $username;
-$array['password'] = $password;
-$array['game_id'] = $gameId;
-$mySign = httpBuidQuery($array, $appKey);
-if($mySign != $sign)
-	exit(json_encode(array('status'=>1, 'msg'=>'验证失败.')));
-
-$password_my=md5($password.$mdString);
-$reg_time=date("ymdHi");
-$accountConn = $accountServer[$gameId];
-
-$conn = SetConn($accountConn);
-$sql = " select id from account where NAME = '$username'";
-if(false == $query = mysqli_query($conn, $sql))
-	exit(json_encode(array('status'=>1, 'msg'=>'数据异常.')));
-
-$result = @mysqli_fetch_assoc($query);
-if(isset($result['id']))
-	exit(json_encode(array('status'=>1, 'msg'=>'账号已被注册.')));
-	
-$sql_game = "insert into account (NAME,phone,email,password,reg_date) VALUES ('$username','$phone', '$email', '$password_my', '$reg_time')";
-if(false == mysqli_query($conn, $sql_game))
-	exit(json_encode(array('status'=>1, 'msg'=>'数据异常.')));
-$insert_id = mysqli_insert_id($conn);
-if($insert_id)
-	exit(json_encode(array('status'=>0, 'msg'=>'success', 'data'=>array('account_id'=>$insert_id, 'username'=>$username, 'reg_date'=>$reg_time))));
-else 
-	exit(json_encode(array('status'=>0, 'msg'=>'fail')));
+<!DOCTYPE html>
+<!-- saved from url=(0058)http://recharge.iwantang.com/payorder/weixinpay/1184827998 -->
+<html style="font-size: 96px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+<title>口袋妖怪-充值信息</title>
+<!--<base href="http://recharge.iwantang.com">--><base href=".">
+<link href="webpay/recharge/wap501b.css" rel="stylesheet">
+<script src="webpay/recharge/utility.js"></script>
+<script src="webpay/recharge/wap.js"></script>
+</head>
+<body style="visibility: visible;">
+<dl class="pagetop">
+<dt><img src="webpay/recharge/icon.png" alt="口袋妖怪用户平台">
+    <h1>口袋妖怪</h1>
+    <h4>精灵大冒险</h4>
+    </dt>
+</dl>
+<div id="container">
+  <dl class="pagetitle">
+    <dt></dt>
+    <dd>
+      <h2><strong>充值</strong></h2>
+    </dd>
+    <dd>&nbsp;</dd>
+  </dl>
+  <ul class="formline">
+    <li class="text"><span>游戏名：</span><span>口袋妖怪</span></li>
+    <li class="text"><span>服务器：</span><span><?=$server_name;?></span></li>
+    <li class="text"><span>角色名：</span><span><?=$player_name;?></span></li>
+        <li class="text"><span>充值金额：<?=$tinfo['money'];?>元</span></li>
+    <li class="text"><span>支付方式：支付宝</span></li>
+    <li class="text"><span>套餐描述：</span><span><?=$tinfo['desc'];?></span></li>
+  </ul>
+  <ul class="formline">
+    <li>
+      <div class="inputbutton"><a class="button" href="wap?pay=ali">确认信息无误，前往支付</a></div>
+    </li>
+  </ul>
+  <ul class="formline">
+    <li><span style="color:red;">特别说明：请您务必仔细核对服务器与角色名，若因玩家失误充错角色，平台概不负责！</span></li>
+  </ul>
+  <hr style="width: 90%"/>
+    <ul class="formline">
+    <li><span style="color:white;">
+    <pre>【注意事项】
+    1、目前官方充值仅支持支付宝充值
+    2、充值成功后将在3分钟内到帐，请稍事等待
+    3、若您遇到充值问题请询问官方客服
+    客服热线：0591-87678008或手动添加客服QQ
+    2637357440、3327487243、3094399563，以便及时为您处理。
+    客服在线时间：8:00-22:00
+    </pre></span></li>
+  </ul>
+</div>
+</body></html>

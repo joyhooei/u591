@@ -61,7 +61,7 @@ if($mySign != $sign){
 
 if($code){
 	$conn = SetConn('88');
-	$sql = "select * from web_message where username='$username' order by id desc limit 1";
+	$sql = "select * from web_message where username='$username' and code='$code' order by id desc limit 1";
 	if(false == $query = mysqli_query($conn,$sql))
 		exit(json_encode(array('status'=>1, 'msg'=>'web sql error.')));
 	$rs = @mysqli_fetch_assoc($query);

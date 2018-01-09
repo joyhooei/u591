@@ -24,6 +24,42 @@ $key_arr = array(
         ),
     )
 );
+function getdbdata(){
+	$conn1 = ConnServer("203.66.13.158:3356","gameusertj","df,yyo67.yyo,ddjh","pokegametw");
+	$sql = 'select DBName,idserver1 from g_dbconfig';
+	$query_account = mysqli_query($conn1, $sql);
+	$dbdata = array();
+	while($v = @mysqli_fetch_assoc($query_account)){
+		$myservers = explode(',', $v['idserver1']);
+		if(empty($v['DBName'])){
+			foreach ($myservers as $value){
+				if(substr($value, 1,1) == 9){ //pk服
+					continue;
+				}
+				$myserver = explode('-', $value);
+				if(!isset($myserver[1])){
+					$myserver[1] = $myserver[0];
+				}
+				$dbdata[] = array($conn1,$myserver[0],$myserver[1]);
+			}
+			
+		}else{
+			$conn2 = ConnServer("203.66.13.158:3357","gameusertj","df,yyo67.yyo,ddjh","pokegametw2");
+			foreach ($myservers as $value){
+				if(substr($value, 1,1) == 9){ //pk服
+					continue;
+				}
+				$myserver = explode('-', $value);
+				if(!isset($myserver[1])){
+					$myserver[1] = $myserver[0];
+				}
+				$dbdata[] = array($conn2,$myserver[0],$myserver[1]);
+			}
+		}
+	}
+	return $dbdata;
+}
+
 function mydb($serverid){
 	$conn1 = ConnServer("203.66.13.158:3356","gameusertj","df,yyo67.yyo,ddjh","pokegametw");
 	$sql = 'select DBName,idserver1 from g_dbconfig';
@@ -51,12 +87,30 @@ function mydb($serverid){
 	write_log(ROOT_PATH."log","gangtai_getserver_error_","$serverid, 1库".date("Y-m-d H:i:s")."\r\n");
 	return $conn1;
 }
-/*function mydb($serverid){
-	if($serverid>=8100 && $serverid<=8170){
-		return ConnServer("203.66.13.158:3357","gameusertj","df,yyo67.yyo,ddjh","pokegametw2");
+function insert_batch($table,$savedatas)
+{
+	$conn = SetConn(88);
+	$sql = "insert into $table(".implode(',', array_keys($savedatas[0])).") values";
+	foreach ($savedatas as $key=>$value){
+		$sql .= "(".implode_new(',', array_values($value))."),";
 	}
-	return ConnServer("203.66.13.158:3356","gameusertj","df,yyo67.yyo,ddjh","pokegametw");
-}*/
+	$msql = rtrim($sql,',') . " ON DUPLICATE KEY UPDATE ";
+	foreach ($savedatas[0] as $k=>$v){
+		$msql .= "$k=values($k),";
+	}
+	$result = @mysqli_query($conn, rtrim($msql,','));
+	if($result){
+		return true;
+	}
+	return false;
+}
+function implode_new($sp , $data){
+	$str = '';
+	foreach ($data as $v){
+		$str .= "'{$v}'"."$sp";
+	}
+	return rtrim($str,"$sp");
+}
 function subTable($accountId, $table, $sum){
 	$suffix = $accountId%$sum;
 	$s = sprintf('%03d', $suffix);

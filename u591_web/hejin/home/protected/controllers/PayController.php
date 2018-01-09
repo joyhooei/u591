@@ -27,20 +27,15 @@ class PayController extends Controller{
     /**
      * 礼包直购
      */
-    public function recharge(){
-    	$userinfo = Yii::app()->session['userinfo'];
-    	$serverinfo = Yii::app()->session['serverinfo'];
-    	if(!$userinfo || !$serverinfo || !$serverinfo[8][$userinfo['server_id']]){
-    		exit('参数错误');
-    	}
+    public function actionRecharge(){
+    	
     	if(isset($_GET['pay']) && $_GET['pay'] == 'ali'){
     		$tinfo = Yii::app()->session['tinfo'];
     		if(!$tinfo){
-    			exit('没有这个档次的充值金额');
+    			exit('充值异常');
     		}
-    		$serverId = $userinfo['server_id'];
-    		$accountId = $userinfo['account_id'];
-    		$out_trade_no = $this->getOrderId('8_'.$serverId.'_'.$accountId.'_');
+    		$cpOrderId = $tinfo['cpOrderId'];
+    		$out_trade_no = $this->getOrderId($cpOrderId.'_');
     		//订单名称，必填
     		//付款金额，必填
     		$total_amount = intval($tinfo['money']);
@@ -59,15 +54,30 @@ class PayController extends Controller{
     		return ;
     	}
     
-    	$t = $_GET['t'];
-    	$tinfo = $this->menu[$t];
-    	if(!$tinfo){
-    		exit('没有这个档次的充值金额');
+    	$roleid = $_REQUEST['roleid'];
+    	$sid = $_REQUEST['serverid'];
+    	$ext = $_REQUEST['ext'];
+    	$desc = $_REQUEST['productname'];
+    	$money = intval($_REQUEST['money']);
+    	if(!$roleid || !$sid || !$ext || !$money || !$desc){
+    		exit('参数错误');
     	}
+    	$url = "http://gunweb.u591.com:83/interface/website/getOrderId.php";
+    	$array = array();
+    	$array['sid'] = $sid;
+    	$array['roleid'] = $roleid;
+    	$array['ext'] = $ext;
+    	$result = $this->https_post($url, $array);
+    	$result = json_decode($result,true);
+    	if($result['code'] == '1'){
+    		exit($result['data']);
+    	}
+    	$cpOrderId = $result['data'];
+    	$tinfo = array('cpOrderId'=>$cpOrderId,'money'=>$money,'desc'=>$desc);
     	Yii::app()->session['tinfo'] = $tinfo;
-    	$this->render('info', array(
-    			'title'=>'充值中心','server_name'=>$serverinfo[8][$userinfo['server_id']],'player_name'=>$userinfo['player_name'],'tinfo'=>$tinfo
-    			// 'gameServer' => $this->getServer(),
+    	
+    	$this->render('recharge', array(
+    			'title'=>'充值中心','server_name'=>$_REQUEST['servername'],'player_name'=>$_REQUEST['rolename'],'tinfo'=>$tinfo
     	));
     }
     public function actionIndex(){

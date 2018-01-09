@@ -10,7 +10,7 @@ $get = serialize($_GET);
 write_log(ROOT_PATH."log","yijie_info_log_","post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");
 
 
-$customData_arr = explode('_', $_GET['uid']);
+$customData_arr = explode('_', $_POST['uid']);
 $sdk = $customData_arr[1];
 $app = $customData_arr[0];
 $uin = urlencode($customData_arr[2]);

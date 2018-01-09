@@ -13,6 +13,25 @@
         		'onsubmit' => "getElementById('submitButton').disabled=true;return true;",
 			));?>   
             <table class="table table-hover">
+            	<tr>
+                    <th style="width:130px;line-height:30px;text-align:right">游戏</th>
+                    <td>
+                    	<select name="gameid" id="gameId" class="input-medium" required="required">
+                                <?php 
+                                	foreach ($game as $k => $v) {
+										$selected = '';
+										if(isset($_POST['gameid']) && $_POST['gameid'] == $k)
+											$selected = 'selected';
+                                		echo "<option value='$k' $selected>$v</option>";
+                                	}
+                                ?>
+                            </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:130px;line-height:30px;text-align:right">区服</th>
+                    <td id="serverId"></td>
+                </tr>
                 <tr class="action">
                     <th style="width:130px;line-height:30px;text-align:right">显示时间</th>
                     <td>
@@ -76,5 +95,28 @@
         	<?=CHtml::endForm(); ?>
     </div>
     <?php $this->renderPartial('/public/js');  ?>
+    <script type="text/javascript">	
+   		$(document).ready(function() {   	   		
+			var $gameId = $("#gameId");
+			var $serverId = $("#serverId");
+	        $gameId.change(function(){
+		        var val = $(this).val(); 
+		        if(val !=0 && val != ''){
+					$.ajax({
+						  type: 'POST',
+						  url: "<?=$this->createUrl('ajax/getCheckServerList')?>",
+						  data: {gameId: val},
+						  dataType: 'html',
+						  success: function($data){
+								$serverId.html($data);
+						   },
+						});
+		        } else {
+		        	$serverId.html('');
+			    }
+				
+		    });
+        });
+    </script>
 </body>
 </html>
