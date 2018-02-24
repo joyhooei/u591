@@ -134,7 +134,8 @@ class PayLogController extends Controller{
                 if(!$payMoney){
                 	break;
                 }
-                $rsCard = $this->writeCard($orderId, $accountId, $serverId, $payMoney);
+                $giftId = $v->packageName;
+                $rsCard = $this->writeCard($orderId, $accountId, $serverId, $payMoney,$giftId);
                 if($rsCard === null){
                     $payLog->updateByPk($id, array('IsUC'=>'0'));
                 } elseif ($rsCard === false){
@@ -170,7 +171,7 @@ class PayLogController extends Controller{
         if(isset($_REQUEST['orderid'])){
             $orderId = trim($_REQUEST['orderid']);
             $payLog = PayLog::model();
-            $sql = "select id,ServerID,PayType,PayID,OrderID,PayMoney,PayCode from {{pay_log}} where OrderID='$orderId' And rpCode in ('1','10')";
+            $sql = "select id,ServerID,PayType,PayID,OrderID,PayMoney,PayCode,packageName from {{pay_log}} where OrderID='$orderId' And rpCode in ('1','10')";
             $rs = $payLog->findBySql($sql);
             if(empty($rs))
                 $this->display('订单号不存在', 0);
@@ -193,7 +194,8 @@ class PayLogController extends Controller{
             elseif($rs->PayCode == 'CNY')
             	$payMoney = $rs->PayMoney;
             $payId = $rs->id;
-            $rsCard = $this->writeCard($orderId, $accountId, $serverId, $payMoney);
+            $giftId = $rs->packageName;
+            $rsCard = $this->writeCard($orderId, $accountId, $serverId, $payMoney,$giftId);
             if($rsCard === null){
                 $payLog->updateByPk($payId, array('IsUC'=>'0'));
                 $this->display('您的订单已存在，无需处理！', 1);
@@ -205,22 +207,31 @@ class PayLogController extends Controller{
         }
     }
     //批量补单
-    private function writeCard($orderId, $accountId, $serverId, $payMoney, $type = 8){
+    private function writeCard($orderId, $accountId, $serverId, $payMoney, $id_buygoods = 0){
+    	!$giftId && $giftId='0';
     	$sid = togetherServer($serverId);
         $conn = SetConn($sid);
         if($conn == false)
             return false;
         $table = subTable($sid, 'u_card', 1000);
+        $type = 8;
         $sql="select count(id) as count from $table where ref_id='$orderId' limit 1";
         $query = @mysqli_query($conn,$sql);
         $count = @mysqli_fetch_assoc($query);
         $msg = null;
         if ($count['count'] == 0) {
             $time_stamp=date('ymdHi');
-            $sql_insert="insert into $table(data, account_id, ref_id, time_stamp, used, type, server_id)";
-            $sql_insert=$sql_insert." values('$payMoney', $accountId, '$orderId',$time_stamp, 0, '$type', '$serverId')";
+            $sql="insert into $table(data, account_id, ref_id, time_stamp, used, type, server_id";
+            $mysql = " values('$payMoney', $accountId, '$orderId',$time_stamp, 0, '$type', '$serverId'";
+            if($id_buygoods){
+            	$sql .= ',id_buygoods';
+            	$mysql .= ",'$id_buygoods'";
+            }
+            $sql .= ')';
+            $mysql .= ')';
+            $sql = $sql . $mysql;
 
-            $msg = @mysqli_query($conn,$sql_insert) ? $orderId : false;
+            $msg = @mysqli_query($conn,$sql) ? $orderId : false;
             if($msg == false)
                 write_log (ROOT_PATH."log", "card_err_", "sql=$sql_insert, ".mysqli_error($conn)." ".date ("Y-m-d H:i:s")."\r\n");
 
