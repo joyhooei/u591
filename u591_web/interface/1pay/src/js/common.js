@@ -108,7 +108,7 @@ function isMobile() {
 
 function checkOrient(){
     if(window.orientation ==180||window.orientation ==0){
-        alert("为了更好的体验，请横屏浏览~");
+        alert("Vui lòng xoay ngang màn hình để trải nghiệm tốt hơn~");
     }
 }
 

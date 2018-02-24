@@ -51,6 +51,16 @@ $OperID = "hainwl";
 $OperPass = "hnsy47";
 $conn = SetConn('88');
 $code = rand(1000,9999);
+$starttime = strtotime(date('Ymd'));
+$endtime = $starttime+24*60*60-1;
+$sql = "select count(*) c from web_message where  username='$phone' and addtime between $starttime and $endtime limit 1";
+if(false == $query = mysqli_query($conn,$sql))
+	exit(json_encode(array('status'=>1, 'msg'=>'web server sql error.')));
+
+$rs = @mysqli_fetch_assoc($query);
+if(!empty($rs['c']) && $rs['c']>=5){
+	exit(json_encode(array('status'=>1, 'msg'=>'您当天已发送5条验证码，请明天再试.')));
+}
 
 $sql = "select * from web_message where game_id='$game_id' and username='$phone' limit 1";
 if(false == $query = mysqli_query($conn,$sql))

@@ -18,7 +18,7 @@ if(!$token || !$game_id || !$p){
     exit('2 0');
 }
 $pArr = explode('_', $p);
-//$type = (isset($pArr[2]) && $pArr[2] == 'android') ? 'android' : 'ios';
+$type = (isset($pArr[2]) && $pArr[2] == 'android') ? 'android' : 'ios';
 $uuid = $pArr[0];
 
 $url = 'http://sdk.gamemorefun.com/rest/v1/verify?token='.$token.'&uuid='.$uuid;

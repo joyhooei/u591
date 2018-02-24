@@ -86,8 +86,8 @@ if($result_count['id']){
     exit('SUCCESS'); //订单重复
 }
 $Add_Time= date('Y-m-d H:i:s', time());
-$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-$sql=$sql." VALUES (155,$accountId,'$PayName','$serverId','$amount','$orderid','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype',1)";
+$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+$sql=$sql." VALUES (155,$accountId,'$PayName','$serverId','$amount','$orderid','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype',1,'$isgoods')";
 if (mysqli_query($conn,$sql) == false){
     write_log(ROOT_PATH."log","kaijia_callback_error_", $sql."  ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
     exit('ERROR');

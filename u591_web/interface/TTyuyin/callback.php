@@ -28,7 +28,7 @@ if (empty($GLOBALS["HTTP_RAW_POST_DATA"])) {
 	$urldata = urldecode($GLOBALS["HTTP_RAW_POST_DATA"]);
 	//签名验证
 	$dataArr = json_decode($urldecodeData, true);
-	$exInfo = $dataArr['exInfo'];
+	$exInfo = $dataArr['cpOrderId'];
 	$exInfoArr = explode("_", $exInfo);
 	$game_id = $exInfoArr[0];
 	$server_id = $exInfoArr[1];
@@ -73,8 +73,8 @@ if (empty($GLOBALS["HTTP_RAW_POST_DATA"])) {
 			exit($msg);
 		}
 		$Add_Time=date('Y-m-d H:i:s');
-		$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-		$sql=$sql." VALUES (121,$account_id,'$PayName','$server_id','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype','1')";
+		$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+		$sql=$sql." VALUES (121,$account_id,'$PayName','$server_id','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype','1','$isgoods')";
 		if (mysqli_query($conn,$sql) == False){
 			write_log(ROOT_PATH."log","TTyuyin_callback_error_", $sql.", post=$post, get=$get, data=$urldecodeData, ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
 			exit('FAIL');

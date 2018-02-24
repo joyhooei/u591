@@ -15,10 +15,6 @@ $key_arr = array(
             'appId'     =>'scmnzv',
             'appKey'    =>'969e451355c44c1c8f67037af79b9515',
         ),
-        'android1' => array(
-            'appId'     =>'aru7dr',
-            'appKey'    =>'a3be3c383ea841d580d65f8ab13d2ebe',
-        ),
     )
 );
 

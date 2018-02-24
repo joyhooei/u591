@@ -106,6 +106,12 @@
 						<font color="red">国服选择RMB、台服港台根据货币类型选择美元或台币。</font>
                     </td>
                 </tr>
+                <tr>
+					<th style="width:35%; text-align:right;">礼包id</th>
+					<td>
+						<input type="text" placeholder="0" name="gift_id" value="0" class="input-large">
+					</td>
+				</tr>
 				<tr>
 					<th style="width:35%; text-align:right;">备注</th>
 					<td>

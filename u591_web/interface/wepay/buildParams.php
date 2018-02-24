@@ -6,6 +6,10 @@ ini_set('date.timezone','Asia/Shanghai');
 //error_reporting(E_ERROR);
 require_once "./lib/WxPay.Api.php";
 require_once 'log.php';
+include_once 'config.php';
+$post = serialize($_POST);
+$get = serialize($_GET);
+write_log(ROOT_PATH."log","wepay_params_all_","post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
 $body = $_POST['subject'];
 
 $fenbaoId = $_POST['fenbao_id'];
@@ -14,21 +18,24 @@ $bizContentArr = json_decode($bizContent, true);
 $gameId = $bizContentArr['game_id'];
 $serverId = $bizContentArr['server_id'];
 $accountId = $bizContentArr['account_id'];
+$giftId = $bizContentArr['gift_id'];
 
 //支付金额，单位：分
 $total_fee = $_POST['total_amount'] * 100;
 if (!$total_fee) $total_fee = 1;
 if (!$body) $body = 'test';
+
 //初始化日志
 $logHandler= new CLogFileHandler("../logs/".date('Y-m-d').'.log');
 $log = Log::Init($logHandler, 15);
 //②、统一下单
 $input = new WxPayUnifiedOrder();
 $input->SetBody($body);
-$input->SetAttach($body);
+$attach = $giftId;
+$input->SetAttach($attach);
 
 
-$outTradeNo = $gameId.'_'.$serverId.'_'.$accountId.'_'.date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+$outTradeNo = $gameId.'_'.$serverId.'_'.$accountId.'_'.time();
 
 $input->SetOut_trade_no($outTradeNo);
 $input->SetTotal_fee($total_fee);

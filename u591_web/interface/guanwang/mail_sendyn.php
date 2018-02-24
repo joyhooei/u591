@@ -98,8 +98,6 @@ function SendMail($address,$title,$message){
 	$mail->AddAddress($address);
 	// 设置邮件正文
 	$mail->Body=$message;
-	// 设置邮件头的From字段。
-	$mail->From='pokemon_vs@163.com';
 	// 设置发件人名字
 	$mail->FromName='Seacowgame';
 	// 设置邮件标题
@@ -109,8 +107,12 @@ function SendMail($address,$title,$message){
 	// 设置为"需要验证"
 	$mail->SMTPAuth=true;
 	// 设置用户名和密码。
-	$mail->Username='pokemon_vs@163.com';
-	$mail->Password='hainiu965';
+	/*$mail->From='pokemon_vs@163.com';
+	 $mail->Username='pokemon_vs@163.com';
+	 $mail->Password='hainiu965';*/
+	$mail->From='rmiswt@163.com';
+	$mail->Username='rmiswt@163.com';
+	$mail->Password='rmiswt123';
 	// 发送邮件。
 	return($mail->Send());
 }

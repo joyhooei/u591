@@ -13,7 +13,7 @@
 		"choosePlayId": "Chọn id",
 		"chooseServer": "Chọn nhà cung cấp",
 		"scale": "Tỉ lệ đổi",
-		"return": "Về",
+		"return": "Trở Về",
 		"charge": "Nạp",
 		"chargeSuccess": "Đã nạp",
 		"chargeFail": "Nạp thất bại",
@@ -24,7 +24,9 @@
 		"sureLogout": "Xác nhận thoát?",
 		"zoneFail": "Lấy danh sách server thất bại",
 		"roleFail": "Lấy danh sách nhân vật thất bại",
-		"lackParam": "Số thứ tự hoặc mật khẩu không thể trống"
+		"lackParam": "Số thứ tự hoặc mật khẩu không thể trống",
+		"serverName": "Máy chủ",
+		"playerName": "Tên nhân vật"
 	},
 	"login":{
 		"login": "Đăng nhập",
@@ -76,8 +78,8 @@
 		"bankCode": "Mã ngân hàng:",
 		"bankName": "Tên ngân hàng:",
 		"bankAccountName": "Bank Account:",
-		"bank": "Ngân hàng CTBC",
-		"company": "Công ty TNHH 88BOX",
+		"bank": "Ngân hàng",
+		"company": "Công ty ",
 		"bankAddress": "Địa chỉ ngân hàng:：",
 		"infoAccount": "Tài khoản gửi:",
 		"infoTime": "Thời gian gửi:",

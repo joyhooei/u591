@@ -64,8 +64,8 @@ if($result_count['id']){
     exit(json_encode(array('result'=>'0', 'result_desc'=>'ok')));
 }
 $Add_Time=date('Y-m-d H:i:s');
-$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-$sql=$sql." VALUES (138,$accountId,'$PayName','$serverId','$paymoney','$order_id','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype','2')";
+$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+$sql=$sql." VALUES (138,$accountId,'$PayName','$serverId','$paymoney','$order_id','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype','2','$isgoods')";
 if (mysqli_query($conn,$sql) == False){
     write_log(ROOT_PATH."log","kuaifa_callback_error_", "sql=$sql, post=$post, get=$get, ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
     exit(json_encode(array('result'=>'1', 'result_desc'=>'insert mysql error')));

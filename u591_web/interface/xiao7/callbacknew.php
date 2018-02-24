@@ -74,8 +74,8 @@ if(isset($arr['game_orderid']) && $arr['game_orderid']==$_POST['game_orderid']){
 
 		$conn = SetConn(88);
 		$Add_Time=date('Y-m-d H:i:s');
-		$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-		$sql=$sql." VALUES (118, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+		$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";
+		$sql=$sql." VALUES (118, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1','$isgoods')";
 	
 		if (mysqli_query($conn,$sql) == False){
 			write_log(ROOT_PATH."log","xiao7_callbacknew_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");

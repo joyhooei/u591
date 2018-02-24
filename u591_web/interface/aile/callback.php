@@ -88,8 +88,8 @@ if($result['rpCode']==1 || $result['rpCode']==10){
 }
 
 $Add_Time=date('Y-m-d H:i:s');
-$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-$sql=$sql." VALUES (145, $accountId,'$PayName','$serverId','$money','$order_id','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";
+$sql=$sql." VALUES (145, $accountId,'$PayName','$serverId','$money','$order_id','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1','$isgoods')";
 
 if (mysqli_query($conn,$sql) == false){
     write_log(ROOT_PATH."log","aile_callback_error_","sql=$sql, ".mysqli_error($conn)." ".date("Y-m-d H:i:s")."\r\n");

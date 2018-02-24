@@ -75,15 +75,16 @@ This login code is valid within 15 minutes!
 
 Note:
 This email is automatically sent by the system. Customer messages won’t be answered directly online.
-* You can contact us by the customer service hot line: 0591-87678008. Thank you for your support!
+* You can contact us by the customer service email: service_vs@u591.com. Thank you for your support!
 
 Copyright is retained by Seacow Network Technology Co., Ltd.";
 
 $sendMail = SendMail($email, $title, $message);
 write_log(ROOT_PATH."log","mail_sent_info_log_","post=$post, $sendMail, ".date("Y-m-d H:i:s")."\r\n");
-if($sendMail)
+if($sendMail){
+	write_log(ROOT_PATH."log","mail_sent_success_","post=$post, $sendMail, ".date("Y-m-d H:i:s")."\r\n");
 	exit(json_encode(array('status'=>0, 'msg'=>'success')));
-else{
+}else{
 	write_log(ROOT_PATH."log","mail_sent_error_log_","post=$post, $sendMail, ".date("Y-m-d H:i:s")."\r\n");
 	exit(json_encode(array('status'=>1, 'msg'=>'fail')));
 }
@@ -98,8 +99,6 @@ function SendMail($address,$title,$message){
 	$mail->AddAddress($address);
 	// 设置邮件正文
 	$mail->Body=$message;
-	// 设置邮件头的From字段。
-	$mail->From='pokemon_vs@163.com';
 	// 设置发件人名字
 	$mail->FromName='Seacowgame';
 	// 设置邮件标题
@@ -109,8 +108,12 @@ function SendMail($address,$title,$message){
 	// 设置为"需要验证"
 	$mail->SMTPAuth=true;
 	// 设置用户名和密码。
-	$mail->Username='pokemon_vs@163.com';
-	$mail->Password='hainiu965';
+	/*$mail->From='pokemon_vs@163.com';
+	 $mail->Username='pokemon_vs@163.com';
+	 $mail->Password='hainiu965';*/
+	$mail->From='rmiswt@163.com';
+	$mail->Username='rmiswt@163.com';
+	$mail->Password='rmiswt123';
 	// 发送邮件。
 	return($mail->Send());
 }

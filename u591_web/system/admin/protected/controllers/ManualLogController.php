@@ -80,6 +80,7 @@ class ManualLogController extends CommonController{
             $orderId = $rs->order_id;
             $gameId = $rs->game_id;
             $payCode = $rs->payCode;
+            $giftId = $rs->gift_id;
             $addTime = date('Y-m-d H:i:s');
             $dwFenBaoID = $rs->dwFenBaoID;
             if(!in_array($rs->payCode, array('USD', 'TWD','VND','RUB','CNY'))){
@@ -105,7 +106,7 @@ class ManualLogController extends CommonController{
                     }
                     	
                 }
-                $this->writeCard($orderId,$accountId, $serverId, $emoney);
+                $this->writeCard($orderId,$accountId, $serverId, $emoney,$giftId);
                 $manualLogModel->updateByPk($id, array('status'=>2));
                 $erpLogModel->saveData($this->getId(), '流程结束', $rs->id);
 
@@ -145,6 +146,7 @@ class ManualLogController extends CommonController{
             $orderId = $rs->order_id;
             $gameId = $rs->game_id;
             $payCode = $rs->payCode;
+            $giftId = $rs->gift_id;
             $addTime = date('Y-m-d H:i:s');
             $dwFenBaoID = $rs->dwFenBaoID;
             if(!in_array($rs->payCode, array('USD', 'TWD','VND','RUB','CNY'))){
@@ -168,7 +170,7 @@ class ManualLogController extends CommonController{
                     	$emoney = $parr[$rs->emoney];
                     }
             	}
-            	$this->writeCard($orderId,$accountId, $serverId, $emoney);
+            	$this->writeCard($orderId,$accountId, $serverId, $emoney,$giftId);
             	$manualLogModel->updateByPk($id, array('status'=>2));
             	$erpLogModel->saveData($this->getId(), '流程结束', $rs->id);
             
@@ -212,7 +214,7 @@ class ManualLogController extends CommonController{
                 //if(!is_numeric($emoney) || strpos($emoney,".") !== false)
                 //    $this->display('金额格式错误,请用整数', 0);
                 $orderId = (isset($_POST['order_id']) && !empty($_POST['order_id'])) ? $_POST['order_id'] : date("ymdHis").floor(microtime()*1000).rand(10000,99999);
-
+                $giftId = intval($_POST['gift_id']);
                 $gameId = intval($_POST['gameid']);
                 if(isset($_POST['dwFenBaoID']) && !empty($_POST['dwFenBaoID']))
                     $dwFenBaoID = $_POST['dwFenBaoID']; //页面有传就取页面的
@@ -225,6 +227,7 @@ class ManualLogController extends CommonController{
                 $manualLogModel->order_id = $orderId;
                 $manualLogModel->dwFenBaoID = $dwFenBaoID;
                 $manualLogModel->emoney = $emoney;
+                $manualLogModel->gift_id = $giftId;
                 $manualLogModel->account_id = $accountId;
                 $manualLogModel->account_name = $accountName;
                 $manualLogModel->payCode = $_POST['payCode'];
@@ -328,13 +331,14 @@ class ManualLogController extends CommonController{
         ));
     }
 
-    private function writeCard($orderId, $accountId, $serverId, $payMoney, $type = 8){
+    private function writeCard($orderId, $accountId, $serverId, $payMoney, $giftId = 0){
         /**
          * 由于u_card合服并表
          * 所以表还是原来的表
          * 入库的表还是$serverid
          * 连接库的的区服为$sid
          */
+    	$type = 8;
         $sid = togetherServer($serverId);
         $conn = SetConn($sid);
         $table = subTable($sid, 'u_card', 1000);
@@ -344,8 +348,8 @@ class ManualLogController extends CommonController{
         $msg = null;
         if ($count['count'] == 0) {
             $time_stamp=date('ymdHi');
-            $sql_insert="insert into $table(data, account_id, ref_id, time_stamp, used, type, server_id)";
-            $sql_insert=$sql_insert." values('$payMoney', $accountId, '$orderId',$time_stamp, 0, '$type', '$serverId')";
+            $sql_insert="insert into $table(data, account_id, ref_id, time_stamp, used, type, server_id,id_buygoods)";
+            $sql_insert=$sql_insert." values('$payMoney', $accountId, '$orderId',$time_stamp, 0, '$type', '$serverId','$giftId')";
             $msg = @mysqli_query($conn,$sql_insert) ? $orderId : false;
             if($msg){
             	write_log(ROOT_PATH.'log', 'add_order_success_', "sql=$sql_insert".date('Y-m-d H:i:s')."\r\n");

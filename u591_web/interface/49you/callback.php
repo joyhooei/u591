@@ -8,9 +8,6 @@
 include 'config.php';
 $post = serialize($_POST);
 $get = serialize($_GET);
-/*$post = 'a:6:{s:7:"orderId";s:22:"9201712240942209828810";s:3:"uid";s:9:"736616643";s:6:"amount";s:2:"30";s:8:"serverId";s:4:"8168";s:4:"sign";s:32:"2bd8e108bcb49bb0eccd90d55144ff01";s:9:"extraInfo";s:29:"8_8168_725972953_android_3_19";}';
-$_REQUEST = http_build_query(unserialize($post));
-echo $_REQUEST;die;*/
 write_log(ROOT_PATH."log","49you_callback_info_","post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");
 $orderId = $_REQUEST["orderId"];
 $uid = $_REQUEST["uid"];
@@ -29,6 +26,7 @@ $secret = $key_arr[$gameId][$type]['appSecret'];
 $signstr = "{$orderId}{$uid}{$myserverId}{$amount}{$extraInfo}";
 $signstr .= $secret;
 $mysign = strtolower(md5($signstr));
+
 if($sign != $mysign) {
     write_log(ROOT_PATH."log","49you_callback_error_",$signstr.",sign error,$secret, post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");
     exit('fail');
@@ -59,8 +57,8 @@ if(!$result){
     }
     $conn = SetConn(88);
     $Add_Time=date('Y-m-d H:i:s');
-    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-    $sql=$sql." VALUES (176, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";
+    $sql=$sql." VALUES (176, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1','$isgoods')";
     if (mysqli_query($conn,$sql) == False){
         write_log(ROOT_PATH."log","49you_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
         exit('fail');

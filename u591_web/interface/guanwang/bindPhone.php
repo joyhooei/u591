@@ -19,6 +19,7 @@ write_log(ROOT_PATH."log","guanwang_bindphone_log_","post=$post, ".date("Y-m-d H
 $accountId = trim($_POST['accountid']);
 $username = trim($_POST['username']);
 $code = trim($_POST['code']);
+$serverid = trim($_POST['serverid']);
 // $sign = trim($_POST['sign']);
 
 
@@ -26,6 +27,7 @@ $params = array(
 		'username',
 		'accountid',
 		'code',
+		'serverid',
 // 		'sign'
 );
 for ($i = 0; $i< count($params); $i++){
@@ -45,7 +47,7 @@ if (eregi('^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$', $username)){
 	//手机登陆
 	$phone = $username;
 } else
-	exit(json_encode(array('status'=>1, 'msg'=>'phone or email format error.')));
+	exit(json_encode(array('status'=>1, 'msg'=>'10022548')));
 
 /*$appKey = $key_arr['appKey'];
 $array['username'] = $username;
@@ -66,11 +68,11 @@ if($code){
 		exit(json_encode(array('status'=>1, 'msg'=>'web sql error.')));
 	$rs = @mysqli_fetch_assoc($query);
 	if(empty($rs))
-		exit(json_encode(array('status'=>1, 'msg'=>'code does not exist.')));
+		exit(json_encode(array('status'=>1, 'msg'=>'10022549')));
 	
 	$nowTime = time();
 	if($nowTime-$rs['addtime'] > 900)
-		exit(json_encode(array('status'=>1, 'msg'=>'code is invalid.')));
+		exit(json_encode(array('status'=>1, 'msg'=>'10022550')));
 }
 $gameId = 8;
 $bind_time=date('Y-m-d H:i:s');
@@ -81,12 +83,18 @@ $conn = SetConn($accountConn);
 $sql_game = "insert into mobile_bind (mobile,accountid,bindtime) VALUES ('$username','$accountId', '$bind_time')";
 if(false == mysqli_query($conn,$sql_game)){
 	write_log(ROOT_PATH."log","guanwang_bindphone_error_",$sql_game.','.mysqli_error($conn).",post=$post, ".date("Y-m-d H:i:s")."\r\n");
-	exit(json_encode(array('status'=>1, 'msg'=>'insert account sql error.')));
+	exit(json_encode(array('status'=>1, 'msg'=>'10022551')));
 }
 
 $insert_id = mysqli_insert_id($conn);
 if($insert_id){
 	write_log(ROOT_PATH."log","guanwang_bindphone_successs_",$insert_id.",post=$post, ".date("Y-m-d H:i:s")."\r\n");
+	$sql_game = "insert into g_phonebind (server_id,account_id,phone_id) VALUES ('$serverid','$accountId', '$username')";
+	$gconn = SetConn(substr($serverid, 0,strlen($serverid)-3).'001');
+	if(false == mysqli_query($gconn,$sql_game)){
+		write_log(ROOT_PATH."log","guanwang_bindphone_error_",$sql_game.','.mysqli_error($gconn).",post=$post, ".date("Y-m-d H:i:s")."\r\n");
+		exit(json_encode(array('status'=>1, 'msg'=>'10022551')));
+	}
 	exit(json_encode(array('status'=>0, 'msg'=>'success')));
 }
 else 

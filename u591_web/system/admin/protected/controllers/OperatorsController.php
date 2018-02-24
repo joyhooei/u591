@@ -198,7 +198,8 @@ class OperatorsController extends Controller{
 			if(!in_array($type, array(6, 66))){
 				$myconn = SetConn($serverid);
 			    $playerTable = subTable($serverid, 'u_player', '1000');
-				$sql = "select * from $playerTable where name='$playerName' and serverid='$serverid' limit 1";
+				//$sql = "select * from $playerTable where name='$playerName' and serverid='$serverid' limit 1";
+				$sql = "select * from $playerTable where id='$playerName' and serverid='$serverid' limit 1";
 				if(false == $query = mysqli_query($myconn,$sql))
 					$this->error('table u_player query error!');
 				$playerInfo = @mysqli_fetch_assoc($query);
@@ -524,12 +525,14 @@ class OperatorsController extends Controller{
         else
             $this->display('禁用公告失败', 0, $url);
     }
-	protected function bulletin($serverId, $type, $banTime, $message, $bulletinEndtime, $index_id){
+	protected function bulletin($serverId, $type, $banTime, $message, $bulletinEndtime, $index_id,$fenbaoids = ''){
 		$conn = SetConn($serverId);
 		if($conn == false )
 			return false;
 		$table = subTable($serverId, $this->gmtoolTable, 1000);
-		$sql = "insert into $table(index_id,type, serverid, param, message, award_type1) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime')";
+		//$sql = "insert into $table(index_id,type, serverid, param, message, award_type1) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime')";
+		$sql = "insert into $table(index_id,type, serverid, param, message, award_type1,fenbao_str) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime','$fenbaoids')";
+		
         if(false == mysqli_query($conn,$sql))
 			return false;
         return true;
@@ -547,6 +550,7 @@ class OperatorsController extends Controller{
 			$banTime = $_POST['banTime'];
             $index_id = $_POST['index_id'];
 			$bulletinEndtime = $_POST['bulletinEndtime'];
+			$fenbaoids = $_POST['fenbao_str'];
 			if(!$gameId)
 				$this->display('请选择游戏ID', 0);
 			if(empty($serverId) || !is_array($serverId))
@@ -558,7 +562,7 @@ class OperatorsController extends Controller{
 			$bulletinEndtime = strtotime($bulletinEndtime);
             //游戏区服已经合服 并不需要判断合服
 			foreach ($serverId as $v){
-				$rs = $this->bulletin($v, $type, $banTime, $message, $bulletinEndtime, $index_id);
+				$rs = $this->bulletin($v, $type, $banTime, $message, $bulletinEndtime, $index_id,$fenbaoids);
                 if($rs === false)
                     echo "<script>alert('$v 滚动消息发送失败.')</script>";
 			}
@@ -628,6 +632,7 @@ class OperatorsController extends Controller{
                 $info[$i]['index_id'] = $rows['index_id'];
                 $info[$i]['type'] = $rows['type'];
                 $info[$i]['serverid'] = $rows['serverid'];
+                $info[$i]['fenbao_str'] = $rows['fenbao_str'];
                 $info[$i]['award_type1'] = $rows['award_type1'];
                 if($type == 2){
                 	$myconn = SetConn($serverId);

@@ -1,0 +1,4 @@
+mysql connect error,Unknown database 'travel', 127.0.0.1,root,root,travel, 2018-02-06 16:15:10
+mysql connect error,Unknown database 'travel', 127.0.0.1,root,root,travel, 2018-02-06 16:15:10
+mysql connect error,Unknown database 'travel', 127.0.0.1,root,root,travel, 2018-02-06 16:15:31
+mysql connect error,Unknown database 'travel', 127.0.0.1,root,root,travel, 2018-02-06 16:15:39

@@ -67,8 +67,8 @@ if($result_count['id']){
     exit('{"status":"success"}');
 }
 $Add_Time=date('Y-m-d H:i:s');
-$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-$sql=$sql." VALUES (108,$account_id,'$PayName','$server_id','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype','1')";
+$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+$sql=$sql." VALUES (108,$account_id,'$PayName','$server_id','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype','1','$isgoods')";
 if (mysqli_query($conn,$sql) == False){
     write_log(ROOT_PATH."log","tongbu_callback_error_", $sql.", post=$post, get=$get, ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
     exit('{"status":"fail"}');

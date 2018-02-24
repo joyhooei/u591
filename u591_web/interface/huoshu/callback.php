@@ -29,6 +29,7 @@ $gameId = $extendsInfoArr[0];
 $serverId = $extendsInfoArr[1];
 $accountId = $extendsInfoArr[2];
 $type = $extendsInfoArr[3];
+$isgoods = $extendsInfoArr[4];
 global $key_arr;
 $cpid = 157;
 if(substr($type,0,7) == 'android'){
@@ -68,14 +69,14 @@ if(!$result){
     }
     $conn = SetConn(88);
     $Add_Time=date('Y-m-d H:i:s');
-    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-    $sql=$sql." VALUES ($cpid, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";
+    $sql=$sql." VALUES ($cpid, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1','$isgoods')";
     if (mysqli_query($conn,$sql) == False){
         write_log(ROOT_PATH."log","huoshu_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
         exit('FAILURE');
     }
     //write_log(ROOT_PATH."log","huoshu_callback_info_","OK".date("Y-m-d H:i:s")."\r\n");
-    WriteCard_money(1,$serverId, $payMoney,$accountId, $orderId);
+    WriteCard_money(1,$serverId, $payMoney,$accountId, $orderId,8,0,0,$isgoods);
     //统计数据
     global $tongjiServer;
     $tjAppId = $tongjiServer[$gameId];

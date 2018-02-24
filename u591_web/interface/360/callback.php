@@ -51,7 +51,7 @@ if($sign_my==$sign){//验证成功
     $query = mysqli_query($conn, $sql);
     $result = @mysqli_fetch_array($query);
     if($result['rpCode']==1 || $result['rpCode']==10){
-    	write_log(ROOT_PATH."log","xiaomi_callback_error_",$orderId."is pay success,  ".date("Y-m-d H:i:s")."\r\n");
+    	write_log(ROOT_PATH."log","360_callback_error_",$orderId."is pay success,  ".date("Y-m-d H:i:s")."\r\n");
     	exit($fail);
     }
     $payMoney = $data['amount']/100;
@@ -63,7 +63,7 @@ if($sign_my==$sign){//验证成功
     $query_account = mysqli_query($conn, $sql_account);
     $result_account = @mysqli_fetch_assoc($query_account);
     if(!$result_account['NAME']){
-        write_log(ROOT_PATH."log","xiaomi_callback_error_", "account is not exist.  ".date("Y-m-d H:i:s")."\r\n");
+        write_log(ROOT_PATH."log","360_callback_error_", "account is not exist.  ".date("Y-m-d H:i:s")."\r\n");
         exit($fail);
     }else{
         $PayName = $result_account['NAME'];
@@ -72,10 +72,10 @@ if($sign_my==$sign){//验证成功
     }
     $conn = SetConn(88);
     $Add_Time=date('Y-m-d H:i:s');
-    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-    $sql=$sql." VALUES (43, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";
+    $sql=$sql." VALUES (43, $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1','$isgoods')";
     if (mysqli_query($conn,$sql) == False){
-        write_log(ROOT_PATH."log","xiaomi_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
+        write_log(ROOT_PATH."log","360_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
         exit($fail);
     }
     WriteCard_money(1,$serverId, $payMoney,$accountId, $orderId,8,0,0,$isgoods);

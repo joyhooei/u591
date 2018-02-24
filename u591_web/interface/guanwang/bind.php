@@ -46,8 +46,11 @@ ksort($array);
 $appKey = $key_arr['appKey'];
 $md5Str = http_build_query($array);
 $mySign = md5(urldecode($md5Str).$appKey);
-if($mySign != $sign)
+if($mySign != $sign){
+	write_log(ROOT_PATH."log","guanwang_bind_all_log_","sign error,post=$post, ".date("Y-m-d H:i:s")."\r\n");
 	exit(json_encode(array('status'=>1, 'msg'=>'sign error.')));
+}
+
 
 $conn = SetConn($accountConn);
 $sql = "select id from account where NAME = '$username' limit 1";

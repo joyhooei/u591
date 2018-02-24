@@ -13,7 +13,7 @@ $returnarr =array();
 $returnarr['data'] = array();
 $conn = SetConn(88);
 //判断订单id情况
-$sql = "select account_id,server_name,name,elite_ranklev,elite_rankstar,elite_rankpoint from rank_tianti a,web_game_server b,(select max(logdate) mdate from rank_tianti limit 1) c where a.serverid=b.server_id and logdate=c.mdate order by elite_ranklev desc,elite_rankstar desc,elite_rankpoint desc limit 50;";
+$sql = "select account_id,server_name,name,elite_ranklev,elite_rankstar,elite_rankpoint from rank_tianti a,web_game_server b,(select max(logdate) mdate from rank_tianti limit 1) c where a.serverid=b.server_id and logdate=c.mdate order by elite_ranklev,elite_rankstar desc,elite_rankpoint desc limit 50;";
 $query=mysqli_query($conn,$sql);
 global $accountServer;
 $accountConn = $accountServer[8];

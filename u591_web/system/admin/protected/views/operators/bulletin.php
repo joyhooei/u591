@@ -32,6 +32,12 @@
                     <th style="width:130px;line-height:30px;text-align:right">区服</th>
                     <td id="serverId"></td>
                 </tr>
+                <tr class="controller">
+                    <th style="width:130px;line-height:30px;text-align:right">分包id（英文,隔开）</th>
+                    <td>
+                    	<input type="text" placeholder="" name="fenbao_str" value="">
+                    </td>
+                </tr>
                  <tr class="controller">
                     <th style="width:130px;line-height:30px;text-align:right">命令类型</th>
                     <td>

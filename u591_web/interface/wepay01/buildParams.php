@@ -27,7 +27,7 @@ $gameId = $bizContentArr['game_id'];
 $serverId = $bizContentArr['server_id'];
 $accountId = $bizContentArr['account_id'];
 $fenbaoId = $bizContentArr['fenbao_id'];
-
+$giftId = $bizContentArr['gift_id'];
 if(!isset($fenbao_arr[$fenbaoId])){
     write_log(ROOT_PATH."log","wepay_params_error_","fenbao_id must config. post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
     exit();
@@ -51,7 +51,7 @@ $obj->setReportLevel($reportLevel);
 $outTradeNo = $gameId.'_'.$serverId.'_'.$accountId.'_'.time();
 
 $obj->setBody($body);
-$obj->setAttach($fenbaoId);
+$obj->setAttach($fenbaoId.'_'.$giftId);
 $obj->setOutTradeNo($outTradeNo);
 $obj->setAmont($amount);
 $obj->setTimeStart();

@@ -16,6 +16,7 @@
 	            <th>订单号</th>
 	            <th>分包ID</th>
 	            <th>金额</th>
+	            <th>礼包id</th>
 	            <th>录入时间</th>
 	            <th>操作者</th>
 	            <th>备注</th>
@@ -41,6 +42,7 @@
 				<td><?=$v->order_id?></td>
 				<td><?=(isset($dwInfo[$v->dwFenBaoID]) && $v->dwFenBaoID) ? $dwInfo[$v->dwFenBaoID] : $v->dwFenBaoID; ?></td>
 	         	<td><?=$v->payCode;?>：<?=$v->emoney;?></td>
+	         	<td><?=$v->gift_id;?></td>
 	         	<td><?=$v->addtime ? date('Y-m-d H:i:s', $v->addtime) : '--';?></td>
 				<td><?=$v->operator;?></td>
 	         	<td><?=$v->remark;?></td>
@@ -101,6 +103,10 @@
             <small><i class="icon-info-sign"></i> 查询到了<strong><?=$count; ?></strong>条数据</small>
         </p>
 		<p><a href="<?=$this->createUrl('manualLog/add'); ?>" title="新增" class="btn"><i class="icon-plus"></i> 新增</a>
+			<?php if (showMenu('MANUALLOG.ONEKEYPASS')) { ?>
+				<a data-trigger="confirm" data-content="你确定要一键补单吗？" href="<?=$this->createUrl('manualLog/oneKeyPass'); ?>" title="一键补单" class="btn"><i class="icon-plus"></i> 一键补单</a>
+			<?php } ?>
+		</p>
 		<div id="tablelist">
 		</div>
 	    <div class="pagination pagination-centered">

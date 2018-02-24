@@ -51,9 +51,9 @@
                 </tr>
                 
                 <tr class="controller">
-                    <th style="width:130px;line-height:30px;text-align:right">角色名</th>
+                    <th style="width:130px;line-height:30px;text-align:right">角色ID</th>
                     <td>
-                    	<input type="text" placeholder="角色名" name="name" value="">
+                    	<input type="text" placeholder="角色ID" name="name" value="">
                     </td>
                 </tr>
                 

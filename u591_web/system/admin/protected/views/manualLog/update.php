@@ -101,6 +101,12 @@
                     	<input type="text" placeholder="金额" name="emoney" value="<?=isset($model->emoney)  ? $model->emoney : '';?>" class="input-medium" required=required>
                     </td>
                 </tr>
+                <tr>
+					<th style="width:35%; text-align:right;">礼包id</th>
+					<td>
+						<input type="text" placeholder="0" name="gift_id" value="<?=$model->gift_id ;?>" class="input-large">
+					</td>
+				</tr>
 				<tr>
 					<th style="width:35%; text-align:right;">备注</th>
 					<td>

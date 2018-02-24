@@ -7,9 +7,10 @@ $_POST['type'] = 'iosnm';*/
 $post = serialize($_POST);
 write_log(ROOT_PATH."log","tuisong_info_","post=$post, ".date("Y-m-d H:i:s")."\r\n");
 $reg_id = $_POST['regid'];
+$game_id = $_POST['game_id'];
 $message = $_POST['message'];
 $type = $_POST['type'];
-$apikey = $key_arr[8][$type]['apiKey'];
+$apikey = $key_arr[$game_id][$type]['apiKey'];
 if(send_notify($type,$reg_id,$message,$apikey)){
 	write_log(ROOT_PATH."log","tuisong_success_","post=$post ".date("Y-m-d H:i:s")."\r\n");
 	echo 'success';

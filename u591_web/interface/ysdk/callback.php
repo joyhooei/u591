@@ -115,8 +115,8 @@ if($ret['ret'] == 0){
  		$conn = SetConn(88);
  		$Add_Time=date('Y-m-d H:i:s');
  		$payMoney = $amt;
- 		$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
- 		$sql=$sql." VALUES (114,$accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype',1)";
+ 		$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+ 		$sql=$sql." VALUES (114,$accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype',1,'$isgoods')";
 		if(mysqli_query($conn,$sql)){
 			WriteCard_money(1, $serverId, $payMoney, $accountId, $orderId,8,0,0,$isgoods);
 			//统计数据

@@ -11,6 +11,27 @@ include_once ROOT_PATH.'inc/config_account.php';
 include_once ROOT_PATH."inc/function.php";
 
 $appleIdVal = array(
+		'appBuyItem_py_1'                 =>'6',
+		'appBuyItem_py_6'                =>'25',
+		'appBuyItem_py_2'                =>'30',
+		'appBuyItem_py_3'               =>'128',
+		'appBuyItem_py_4'               =>'328',
+		'appBuyItem_py_5'               =>'648',
+		
+		'sxdscw_6'                 =>'6',
+		'sgteg_25'                =>'25',
+		'sujebgh_30'                =>'30',
+		'sacfsd_128'               =>'128',
+		'sgtre_328'               =>'328',
+		'shtybhn_648'               =>'648',
+		
+		'kdjl_6'                 =>'6',
+		'kdjlyk_25'                =>'25',
+		'kdjl_30'                =>'30',
+		'kdjl_128'               =>'128',
+		'kdjl_328'               =>'328',
+		'kdjl_648'               =>'648',
+		
 		'256'                 =>'6',
 		'fgvrfs'                =>'25',
 		'bgf4'                =>'30',
@@ -310,6 +331,15 @@ $appleIdVal = array(
 		'nrtrn_25'               =>'36',
 
 
+		'sscdgbrb_60'     => array('0.99', 60	, 'USD'),
+		'stgrbhryny_300'    => array('4.99', 300,'USD'),
+		'synjunh_600'    => array('9.99', 600,'USD'),
+		'smyurmy_900'    => array('14.99', 900, 'USD'),
+		'sbhtrnsz_1500'   => array('24.99', 1500, 'USD'),
+		'shiutgyg_3000'   => array('49.99', 3000, 'USD'),
+		'ssrsegv_6000'   => array('99.99', 6000, 'USD'),
+		'sssskuykg_25'   => array('5.99', 360, 'USD'),
+		
 		'cdgbrb_60'     => array('0.99', 60	, 'USD'),
 		'tgrbhryny_300'    => array('4.99', 300,'USD'),
 		'ynjunh_600'    => array('9.99', 600,'USD'),

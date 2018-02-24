@@ -19,6 +19,7 @@ $serverId = isset($externArr[1]) ? $externArr[1] : 0;
 $accountId = isset($externArr[2]) ? $externArr[2] : 0;
 $type = isset($externArr[3]) ? $externArr[3] : 0;
 $isgoods = isset($externArr[4]) ? $externArr[4] : 0;
+//$isgoods = 0;
 
 if(empty($gameId) || empty($serverId) || empty($accountId) || empty($type)){
     write_log(ROOT_PATH."log","1pay_cardv5_error_","format error.post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");
@@ -60,7 +61,7 @@ if (isset($decode_cardCharging)) {
         exit(json_encode(array('code'=>"200",'description'=>$description)));
     }
 } else {
-	sleep(30);
+    sleep(30);
     $data_ep = "access_key=" . $access_key . "&pin=" . $pin . "&serial=" . $serial . "&transId=&transRef=" . $transRef . "&type=" . $type;
     $signature_ep = hash_hmac("sha256", $data_ep, $secret);
     $data_ep.= "&signature=" . $signature_ep;
@@ -69,7 +70,7 @@ if (isset($decode_cardCharging)) {
 
     write_log(ROOT_PATH."log","1pay_cardv5_result_","query=$query_api_ep,post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");
 
-    $decode_cardCharging=json_decode($json_cardCharging,true);  // decode json
+    $decode_cardCharging=json_decode($query_api_ep,true);  // decode json
     $description_ep = $decode_cardCharging["description"];   // transaction description
     $status_ep = $decode_cardCharging["status"];
     $amount_ep = $decode_cardCharging["amount"];       // card's amount

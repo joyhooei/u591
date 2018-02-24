@@ -63,8 +63,8 @@ if ($notify->verify($notify_data, $sign)) {
         exit("Success");//订单已存在
     }
     $Add_Time=date('Y-m-d H:i:s');
-    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype)";
-    $sql=$sql." VALUES (68,$account_id,'$PayName','$server_id','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype')";
+    $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,packageName)";
+    $sql=$sql." VALUES (68,$account_id,'$PayName','$server_id','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype','$isgoods')";
     if (mysqli_query($conn,$sql) == False){
         $str=$sql."  ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n";
         write_log(ROOT_PATH."log","itools_callback_error_",$str);

@@ -1767,3 +1767,36 @@ Stack trace:
 REQUEST_URI=/admin.php/gameEdition/1
 HTTP_REFERER=http://127.0.0.1:83/admin.php/gameEdition/actindex.html
 ---
+2018/01/29 11:01:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "getip".' in F:\wamp\www\newweb\u591_web\system\framework\web\CController.php:483
+Stack trace:
+#0 F:\wamp\www\newweb\u591_web\system\framework\web\CController.php(270): CController->missingAction('getip')
+#1 F:\wamp\www\newweb\u591_web\system\framework\web\CWebApplication.php(282): CController->run('getip')
+#2 F:\wamp\www\newweb\u591_web\system\framework\web\CWebApplication.php(141): CWebApplication->runController('GameServer/geti...')
+#3 F:\wamp\www\newweb\u591_web\system\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 F:\wamp\www\newweb\u591_web\admin.php(20): CApplication->run()
+#5 {main}
+REQUEST_URI=/admin.php/GameServer/getip.html
+HTTP_REFERER=http://127.0.0.1:83/admin.php/index/index.html
+---
+2018/01/29 11:01:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "getip".' in F:\wamp\www\newweb\u591_web\system\framework\web\CController.php:483
+Stack trace:
+#0 F:\wamp\www\newweb\u591_web\system\framework\web\CController.php(270): CController->missingAction('getip')
+#1 F:\wamp\www\newweb\u591_web\system\framework\web\CWebApplication.php(282): CController->run('getip')
+#2 F:\wamp\www\newweb\u591_web\system\framework\web\CWebApplication.php(141): CWebApplication->runController('GameServer/geti...')
+#3 F:\wamp\www\newweb\u591_web\system\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 F:\wamp\www\newweb\u591_web\admin.php(20): CApplication->run()
+#5 {main}
+REQUEST_URI=/admin.php/GameServer/getip.html
+HTTP_REFERER=http://127.0.0.1:83/admin.php/index/index.html
+---
+2018/02/01 15:46:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "view".' in F:\wamp\www\newweb\u591_web\system\framework\web\CController.php:483
+Stack trace:
+#0 F:\wamp\www\newweb\u591_web\system\framework\web\CController.php(270): CController->missingAction('view')
+#1 F:\wamp\www\newweb\u591_web\system\framework\web\CWebApplication.php(282): CController->run('view')
+#2 F:\wamp\www\newweb\u591_web\system\framework\web\CWebApplication.php(141): CWebApplication->runController('gameEdition/vie...')
+#3 F:\wamp\www\newweb\u591_web\system\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 F:\wamp\www\newweb\u591_web\admin.php(20): CApplication->run()
+#5 {main}
+REQUEST_URI=/admin.php/gameEdition/1
+HTTP_REFERER=http://192.168.1.92:83/admin.php/gameEdition/actindex.html
+---

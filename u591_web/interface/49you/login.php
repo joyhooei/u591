@@ -79,6 +79,7 @@ function http_post_data($url, $data_string) {
 	curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
 	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt ( $curl, CURLOPT_TIMEOUT, 10 ); // 设置超时限制防止死循环
 	$r = curl_exec($curl);
 	curl_close($curl);
 	return $r;

@@ -108,8 +108,8 @@ if(!$result){
     }
     $conn = SetConn(88);
     $Add_Time=date('Y-m-d H:i:s');
-    $sql="insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-    $sql=$sql." VALUES ('$cpid','$currency', $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+    $sql="insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";
+    $sql=$sql." VALUES ('$cpid','$currency', $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1','$isgoods')";
     if (mysqli_query($conn,$sql) == False){
         write_log(ROOT_PATH."log","quickgame_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
         exit('FAILURE');

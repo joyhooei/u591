@@ -131,6 +131,7 @@ function request_by_curl($remoteServer, $postData, $userAgent) {
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+	curl_setopt ( $ch, CURLOPT_TIMEOUT, 10 ); // 设置超时限制防止死循环
 	$data = urldecode(curl_exec($ch));
 	curl_close($ch);
 

@@ -1,0 +1,1 @@
+{"status":1,"msg":"select accountid from token_bind404 where token = '3be7227d799b884006a78fe89da14582292925cc@u591' and gameid='9' limit 1,"}, 2018-02-05 16:58:29

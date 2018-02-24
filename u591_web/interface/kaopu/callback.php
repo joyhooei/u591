@@ -88,8 +88,8 @@ if($result_count['rpCode']==1){
 }
 if($status == '1'){
 	$Add_Time=date('Y-m-d H:i:s');
-	$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-	$sql=$sql." VALUES ('112',$accountId,'$PayName','$serverId','$PayMoney','$orderid','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype','1')";
+	$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+	$sql=$sql." VALUES ('112',$accountId,'$PayName','$serverId','$PayMoney','$orderid','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype','1','$isgoods')";
 	if (mysqli_query($conn, $sql) == False){
 		$str=$sql."  ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n";
 		write_log(ROOT_PATH."log","kaopu_callback_error_log_",$str);

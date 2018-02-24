@@ -70,8 +70,8 @@ if($t_status == 1){
 		exit("success");//订单已存在
 	}
 	$Add_Time=date('Y-m-d H:i:s');
-	$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-	$sql=$sql." VALUES (127,$account_id,'$PayName','$server_id','$money','$o_orderid','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype',1)";
+	$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+	$sql=$sql." VALUES (127,$account_id,'$PayName','$server_id','$money','$o_orderid','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype',1,'$isgoods')";
 	if (mysqli_query($conn,$sql) == False){
 		write_log(ROOT_PATH."log","le8_callback_error_", $sql." ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
 		exit("fail");

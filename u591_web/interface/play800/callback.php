@@ -76,8 +76,8 @@ if($result_count['id']){
 $Add_Time=date('Y-m-d H:i:s');
 //payType为1的时候苹果支付 其他线下支付
 $CPID = $payType == 1 ? '134' : '153';
-$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-$sql=$sql." VALUES ('$CPID',$accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clientType', '1')";
+$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+$sql=$sql." VALUES ('$CPID',$accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clientType', '1','$isgoods')";
 if (mysqli_query($conn,$sql) == False){
     write_log(ROOT_PATH."log","play800_callback_error_", $sql.", post=$post, get=$get, ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
     exit('fail');

@@ -67,8 +67,8 @@ if($result_count['id']){
 }
 $Add_Time=date('Y-m-d H:i:s');
 $rpCode = ($array['order_status'] == 1) ? '1' : '2';
-$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-$sql=$sql." VALUES (140,$accountId,'$PayName','$serverId','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype','$rpCode')";
+$sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+$sql=$sql." VALUES (140,$accountId,'$PayName','$serverId','$PayMoney','$order_id','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype','$rpCode','$isgoods')";
 if (mysqli_query($conn,$sql) == False){
     write_log(ROOT_PATH."log","shunwan_callback_error_", "sql=$sql, post=$post, get=$get, ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
     exit('fail');

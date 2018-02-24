@@ -96,10 +96,11 @@ foreach ($orderInfo as $v){
     if($status==0 && $quantity>0 && $money){
         $Add_Time = date("Y-m-d H:i:s");
         $rpCode = 1;
-        $insert_sql = " insert into web_pay_log(CPID,PayCode,ServerID,PayMoney,PayName,dwFenBaoID,Add_Time,rpCode,PayID,OrderID,game_id) values('19','$currency','$server_id','$money','$PayName','$dwFenBaoID','$Add_Time','$rpCode','$account_id','$orderId','$game_id') ";
+        $insert_sql = " insert into web_pay_log(CPID,PayCode,ServerID,PayMoney,PayName,Add_Time,rpCode,PayID,OrderID,game_id,packageName)
+         values('19','$currency','$server_id','$money','$PayName','$Add_Time','$rpCode','$account_id','$orderId','$game_id','$isgoods') ";
         if(mysqli_query($conn, $insert_sql)){
             $gameMoney = $yuanbao;//转化为RMB
-            WriteCard_money(1,$server_id, $gameMoney,$account_id, $orderId,8,0,0,$isgoods);//写入游戏库
+            WriteCard_money(1,$server_id, $gameMoney,$account_id, $orderId,8,0,$isgoods);//写入游戏库
             //统计数据
             sendTongjiData($game_id,$account_id,$server_id,$dwFenBaoID,0,$money,$orderId,1,$tjAppId);
             appData(array('accountid'=>$account_id,'serverid'=>$server_id,'channel'=>$dwFenBaoID,'money'=>$money,'orderid'=>$orderId,'created_at'=>time(),'mac'=>$mac));
@@ -115,10 +116,9 @@ foreach ($orderInfo as $v){
     }
 }
 exit($returnMsg);
-
 //统计数据处理
 function appData($data){
-	$url = 'http://poketj.u591776.com:8080/index.php/ApiPay/ApplePaylog';
+	$url = 'http://pokeyntj.u591776.com:8080/index.php/ApiPay/ApplePaylog';
 	$jsonData = base64_encode(json_encode($data));
 	$postData = array();
 	$postData['data'] = $jsonData;

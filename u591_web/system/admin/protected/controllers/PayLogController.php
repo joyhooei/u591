@@ -26,6 +26,8 @@ class PayLogController extends Controller{
         	$condition[]="CPID = '$channelId'";
         }elseif($this->mangerInfo['channel_id']){
         	$condition[]="CPID in ({$this->mangerInfo['channel_id']})";
+        }else{
+        	$condition[]="CPID != '9'" ;
         }
 			
         if(!empty($this->mangerInfo['dwFenbao']))

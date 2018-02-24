@@ -12,6 +12,7 @@
 				<tr>
 					<th>类型</th>
 					<th>服务器ID</th>
+					<th>分包ID</th>
 					<th>标识</th>
 					<th>角色ID(角色名)</th>
 					<th>截至时间</th>
@@ -26,6 +27,7 @@
 					<tr>
 						<td><?=$typeList[$v['type']]; ?></td>
 						<td><?=$v['serverid'];?></td>
+						<td><?=$v['fenbao_str'];?></td>
 						<td><?=isset($v['index_id']) ? $v['index_id'] : '游服暂无'; ?></td>
 						<td><?=($v['type'] == 2) ? $v['param'] : '--';  ?></td>
 						<td><?=($v['award_type1'] == 0) ? '0' : date('Y-m-d H:i:s', $v['award_type1']);?></td>

@@ -28,7 +28,7 @@ class PayNotifyCallBack extends WxPayNotify {
             $game_id = $outTradeNoArr[0];
             $server_id = $outTradeNoArr[1];
             $account_id = $outTradeNoArr[2];
-
+            $isgoods = isset(explode('_', $result['attach'])[1])?explode('_', $result['attach'])[1]:0;
             $money = intval($result['total_fee']/100);
             global $accountServer;
             $accountConn = $accountServer[$game_id];
@@ -54,13 +54,13 @@ class PayNotifyCallBack extends WxPayNotify {
                 return false;
             }
             $Add_Time=date('Y-m-d H:i:s');
-            $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-            $sql=$sql." VALUES (129,$account_id,'$PayName','$server_id','$money','$out_trade_no','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype',1)";
+            $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode,packageName)";
+            $sql=$sql." VALUES (129,$account_id,'$PayName','$server_id','$money','$out_trade_no','$dwFenBaoID','$Add_Time','1','$game_id','$clienttype',1,'$isgoods')";
             if (mysqli_query($conn,$sql) == False){
                 write_log(ROOT_PATH."log","wepay_callback_error_","sql=$sql,mysql error:".mysqli_error($conn).", ".date("Y-m-d H:i:s")."\r\n");
                 return false;
             }
-            WriteCard_money(1,$server_id, $money,$account_id, $out_trade_no);
+            WriteCard_money(1,$server_id, $money,$account_id, $out_trade_no,8,0,0,$isgoods);
             //统计数据
             global $tongjiServer;
             $tjAppId = $tongjiServer[$game_id];
