@@ -48,19 +48,20 @@ if ($verifyOK) {
         exit('101');
     }
     //获取账号信息
-    $conn = SetConn($gameId);
-    $sql_account = " select NAME,dwFenBaoID,clienttype from account where id='$accountId' limit 1;";
-    $query_account = @mysqli_query($conn, $sql_account);
-    $result_account = @mysqli_fetch_assoc($query_account);
-
+    $snum = giQSModHash($accountId);
+    $conn = SetConn($gameId,$snum,1);//account分表
+    $acctable = betaSubTableNew($accountId,'account',999);
+    $sql = "select NAME,dwFenBaoID,clienttype from $acctable where id=$accountId limit 1;";
+    $query = mysqli_query($conn, $sql);
+    $result_account = @mysqli_fetch_array($query);
     if(!$result_account['NAME']){
-        write_log(ROOT_PATH."log","google_callback_error_", "account not exist. get=$get,".date("Y-m-d H:i:s")."\r\n");
-        exit();//账号不存在
-    }else{
-        $PayName = $result_account['NAME'];
-        $dwFenBaoID = $result_account['dwFenBaoID'];
-        $clienttype = $result_account['clienttype'];
+    	write_log(ROOT_PATH."log","google_callback_error_", "account not exist. get=$get,".date("Y-m-d H:i:s")."\r\n");
+    	exit();//账号不存在
     }
+    $PayName = $result_account['NAME'];
+    $dwFenBaoID = $result_account['dwFenBaoID'];
+    $clienttype = $result_account['clienttype'];
+   
     $EMoney = $google_id_value[$productId][1];//emoney
     $PayMoney= $google_id_value[$productId][0];
     $currency= isset($google_id_value[$productId][2]) ? $google_id_value[$productId][2] : 'USD';
@@ -74,18 +75,16 @@ if ($verifyOK) {
         exit('200');//订单已存在
     }
     $Add_Time=date('Y-m-d H:i:s');
-    $sql = "insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
-    $sql.= " VALUES (144,'$currency',$accountId,'$PayName','$serverId','$PayMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype',1)";
+    $sql = "insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,data,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype,rpCode)";
+    $sql.= " VALUES (144,'$currency',$accountId,'$PayName','$serverId','$PayMoney','$EMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype',1)";
     if (mysqli_query($conn, $sql) == false) {
        write_log(ROOT_PATH."log","google_callback_error_","105sql error,sql=$sql,".mysqli_error($conn)." ".date('Y-m-d H:i:s')."\r\n");
         exit('105');//sql异常
     }
     @mysqli_close($conn);
-    WriteCard_money(1,$serverId, $EMoney, $accountId, $orderId, 8, 0, $isgoods);
+    WriteCard_money(1,$serverId, $EMoney,$accountId, $orderId,8,0,0,$isgoods);//写入游戏库
     //统计数据
-    global $tongjiServer;
-    $tjAppId = $tongjiServer[$gameId];
-    sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$PayMoney,$orderId,1,$tjAppId);
+   sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$EMoney,$orderId,1);
     exit('200');
 } else {
    write_log(ROOT_PATH."log","google_callback_error_", "sign error. verifyOK=$verifyOK, post=$post, get=$get," .date('Y-m-d H:i:s')."\r\n");

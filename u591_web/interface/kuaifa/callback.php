@@ -52,6 +52,11 @@ if(!$result_account['NAME']){
     $dwFenBaoID = $result_account['dwFenBaoID'];
     $clienttype = $result_account['clienttype'];
 }
+$ch = explode('@', $PayName);
+$chname = $ch[1];
+if($chname != 'kuaifa'){
+	write_log(ROOT_PATH."log","name_kuaifa_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+}
 $order_id = $_POST['serial_number'];
 $paymoney = intval($_POST['amount']);
 $conn = SetConn(88);

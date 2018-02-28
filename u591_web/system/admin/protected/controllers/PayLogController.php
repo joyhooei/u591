@@ -208,7 +208,7 @@ class PayLogController extends Controller{
     }
     //批量补单
     private function writeCard($orderId, $accountId, $serverId, $payMoney, $id_buygoods = 0){
-    	!$giftId && $giftId='0';
+    	!$id_buygoods && $id_buygoods='0';
     	$sid = togetherServer($serverId);
         $conn = SetConn($sid);
         if($conn == false)

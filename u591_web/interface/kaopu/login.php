@@ -31,13 +31,21 @@ if(!$sid || !$game_id || !$token){
 }
 
 $exSid = explode('_', $sid);
+$le = count($exSid)-1;
 $devicetype = $exSid[0];
-$imei = $exSid[1];
-$r = intval($exSid[2]);
-$channelkey = $exSid[3];
-$openid = $exSid[4];  //用户id
-$sign = $exSid[5];
-$version = $exSid[6];
+$imei = $_REQUEST['imei'];
+$r = intval($exSid[$le-4]);
+$channelkey = $exSid[$le-3];
+$openid = $exSid[$le-2];  //用户id
+$sign = $exSid[$le-1];
+$version = $exSid[$le];
+/*$devicetype = $_REQUEST['devicetype'];
+$imei = $_REQUEST['imei'];
+$r = $_REQUEST['r'];
+$channelkey = $_REQUEST['channelkey'];
+$openid = $_REQUEST['openid'];
+$sign = $_REQUEST['sign'];
+$version = $_REQUEST['version'];*/
 if(preg_match("/[^\.]+\.kpzs\.com$/", $token)){//传的是url
 	$url = $token;
 }else{

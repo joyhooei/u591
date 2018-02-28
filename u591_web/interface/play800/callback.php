@@ -63,6 +63,11 @@ if(!$result_account['NAME']){
     $dwFenBaoID = $result_account['dwFenBaoID'];
     $clientType = $result_account['clienttype'];
 }
+$ch = explode('@', $PayName);
+$chname = $ch[1];
+if($chname != 'play800'){
+	write_log(ROOT_PATH."log","name_play800_", "account is $PayName !  post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");
+}
 $conn = SetConn(88);
 //判断订单id情况
 $payMoney = $orderMoney;

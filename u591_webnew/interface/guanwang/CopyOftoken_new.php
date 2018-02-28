@@ -3,7 +3,7 @@
 * ==============================================
 * Copyright (c) 2015 All rights reserved.
 * ----------------------------------------------
-* ERP管理系统
+* 新增返回is_new字段
 * ==============================================
 * @date: 2016-7-14
 * @author: luoxue
@@ -30,28 +30,28 @@ if(!empty($code)){
 	} else if(strlen($username) == 11 && preg_match('/^1[34578]{1}\d{9}$/', $username)){
 		//手机登陆
 	} else 
-		exit(json_encode(array('status'=>2, 'msg'=>'手机或邮箱格式错误.')));
+		exit(json_encode(array('status'=>2, 'msg'=>'phone or email error.')));
 }
 $sign = trim($_POST['sign']);
 
 $gameId = intval($_POST['game_id']);
 $array['game_id'] = $gameId;
-$accountConn = $accountServer[$gameId];
+$accountConn = $gameId;
 if(empty($accountConn) || empty($gameId))
-	exit(json_encode(array('status'=>2, 'msg'=>'游戏ID错误.')));
+	exit(json_encode(array('status'=>2, 'msg'=>'game id error.')));
 if(empty($array))
-	exit(json_encode(array('status'=>2, 'msg'=>'参数错误.')));
+	exit(json_encode(array('status'=>2, 'msg'=>'param error.')));
 $appKey = $key_arr['appKey'];
 $appSecret = $key_arr['appSecret'];
 if(!$appKey)
-	exit(json_encode(array('status'=>2, 'msg'=>'appKey错误.')));
+	exit(json_encode(array('status'=>2, 'msg'=>'appKey error.')));
 if(!$appSecret)
-	exit(json_encode(array('status'=>2, 'msg'=>'appSecret错误.')));
+	exit(json_encode(array('status'=>2, 'msg'=>'appSecret error.')));
 ksort($array);
 $md5Str = http_build_query($array);
 $mySign = md5(urldecode($md5Str).$appKey);
 if($mySign != $sign)
-	exit(json_encode(array('status'=>2, 'msg'=>'sign错误.')));
+	exit(json_encode(array('status'=>2, 'msg'=>'sign error.')));
 
 $isNew = 0;
 if(isset($code) && !empty($code)){
@@ -64,10 +64,10 @@ if(isset($code) && !empty($code)){
 	}
 	$rs = @mysqli_fetch_assoc($query);
 	if(empty($rs)){
-		exit(json_encode(array('status'=>2, 'msg'=>'验证码不存在.')));
+		exit(json_encode(array('status'=>2, 'msg'=>'verification code does not exist.')));
 	}
 	if(time()-$rs['addtime'] > 900){
-		exit(json_encode(array('status'=>2, 'msg'=>'验证码失效.')));
+		exit(json_encode(array('status'=>2, 'msg'=>'verification failed.')));
 	}
 	$conn = SetConn($accountConn);
 	$sql = "select id from account where NAME = '$username' limit 1";
@@ -99,10 +99,10 @@ if(isset($code) && !empty($code)){
 	}
 	$result = @mysqli_fetch_assoc($query);
 	if(!$result){
-		exit(json_encode(array('status'=>2, 'msg'=>'账号错误，请重新输入！')));
+		exit(json_encode(array('status'=>2, 'msg'=>'Account error, please enter again!')));
 	}
 	if($result['password'] != $password){
-		exit(json_encode(array('status'=>2, 'msg'=>'密码错误，请重新输入！')));
+		exit(json_encode(array('status'=>2, 'msg'=>'Wrong password, please enter again!')));
 	}
 	
 	$insert_id = intval($result['id']);
@@ -110,7 +110,7 @@ if(isset($code) && !empty($code)){
 	//快速登陆
 	$conn = SetConn($accountConn);
 	$channel_account = $username.'@u591';
-	$sql = " select id from account where channel_account = '$channel_account'";
+	$sql = "select id from account where channel_account = '$channel_account' limit 1;";
 	if(false == $query = mysqli_query($conn,$sql))
 		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
 	$result = @mysqli_fetch_assoc($query);
@@ -118,7 +118,7 @@ if(isset($code) && !empty($code)){
 		$insert_id = intval($result['id']);
 	} else {
 		$password = random_common();
-		$reg_time=date("ymdHi");
+		$reg_time = date("ymdHi");
 		$sql_game = "insert into account (NAME,password,reg_date,channel_account) VALUES ('$channel_account','$password','$reg_time','$channel_account')";
 		if(false == mysqli_query($conn,$sql_game))
 			exit(json_encode(array('status'=>1, 'msg'=>'insert account error.')));
@@ -144,7 +144,8 @@ write_log(ROOT_PATH."log","guanwang_token_log_","sql=$sql, ".date("Y-m-d H:i:s")
 
 if(mysqli_query($conn,$sql)){
 	$data['token'] = $token;
-    //$data['is_new'] = $isNew;
+    $data['is_new'] = $isNew;
+    $data['account_id'] = $insert_id;
 	exit(json_encode(array('status'=>0, 'msg'=>'success', 'data'=>$data)));
 }
-exit(json_encode(array('status'=>2, 'msg'=>'token错误.')));
+exit(json_encode(array('status'=>2, 'msg'=>'token error.')));

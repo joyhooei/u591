@@ -1,5 +1,5 @@
 <?php
-/*function  giQSAccountHash( $string,$sum = 999)
+function  giQSAccountHash( $string,$sum = 999)
 {
 	$string = "$string";
 	$length = strlen($string);
@@ -9,8 +9,8 @@
 	}
 	return $result+1;
 }
-echo giQSAccountHash(42);*/
-function  giQSAccountHash( $string )
+echo giQSAccountHash('13395000694');
+/*function  giQSAccountHash( $string )
 {
 	$length = strlen($string);
 	$result = 0;
@@ -29,4 +29,4 @@ function subTable($account_id, $table, $sum){
 $name = '青雪轶丽';
 $nameacc = giQSAccountHash( $name );
 $table = subTable($nameacc, 'u_playername', 200);
-print_r($table);die;
+print_r($table);die;*/

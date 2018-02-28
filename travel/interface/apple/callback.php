@@ -41,7 +41,7 @@ if(!isset($resultArr['status']) && !isset($resultArr['receipt']['in_app'])){
     exit();
 }
 $snum = giQSModHash($account_id);
-$conn = SetConn($game_id,$account_id,1);//account分表
+$conn = SetConn($game_id,$snum,1);//account分表
 if($conn == false){
 	echo 'fail';
 	write_log(ROOT_PATH."log","apple_error_log_","account connect error., ".date("Y-m-d H:i:s")."\r\n");

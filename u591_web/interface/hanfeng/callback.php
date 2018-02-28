@@ -48,6 +48,11 @@ if($sign == $dataArr['sign'] && $dataArr['status'] == 0){
 		$dwFenBaoID = $result_account['dwFenBaoID'];
 		$clienttype = $result_account['clienttype'];
 	}
+	$ch = explode('@', $PayName);
+	$chname = $ch[count($ch)-1];
+	if($chname != 'hanfeng'){
+		write_log(ROOT_PATH."log","name_hanfeng_", "account is $PayName ! post=$post, get=$get, data=$data, ".date("Y-m-d H:i:s")."\r\n");
+	}
 	$order_id = $cpTradeNo;
 	$PayMoney = intval($money/100);
 	$conn = SetConn(88);

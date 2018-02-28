@@ -9,6 +9,40 @@
  * @author: Administrator
  * @return:
  */
+//帐号插入
+function insertaccount($username,$bindtable,$bindwhere,$gameId,$passwd=''){
+	!$passwd && $passwd = random_common();
+
+	$snum = giQSAccountHash($username);
+	$conn = SetConn($gameId,$snum);//绑定分表
+	$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
+	if(false == $query = mysqli_query($conn,$selectsql))
+		return array('status'=>1, 'msg'=>"$selectsql,". mysqli_error($conn));
+	$result = @mysqli_fetch_assoc($query);
+	if($result){
+		return array('status'=>0, 'data'=>intval($result['accountid']),'isNew'=>'0');
+	}
+	$reg_time = date("ymdHi");
+	$bind_time=date('Y-m-d H:i:s');
+	$myconn = SetConn($gameId); //查询idmgr专用
+	$indexInsert =  "insert into idmgr (MaxYk) VALUES ('$reg_time')";
+	if(false ==  mysqli_query($myconn,$indexInsert)){
+		return array('status'=>1, 'msg'=>"$indexInsert,". mysqli_error($myconn));
+	}
+	$accountid = mysqli_insert_id($myconn);
+	$bindInsert = "insert into $bindtable ({$bindwhere},gameid,accountid,bindtime) VALUES ('$username', '$gameId','$accountid','$bind_time');";
+	if(false ==  mysqli_query($conn,$bindInsert)){
+		return array('status'=>1, 'msg'=>"$bindInsert,". mysqli_error($conn));
+	}
+	$snum = giQSModHash($accountid);
+	$myconn = SetConn($gameId,$snum,1);//account分表
+	$acctable = betaSubTableNew($accountid,'account',999);
+	$accountInsert = "insert into $acctable (id,NAME,reg_date,gameid,password) VALUES ('$accountid','$username', '$reg_time', '$gameId','$passwd');";
+	if(false == mysqli_query($conn,$accountInsert)){
+		return  array('status'=>1, 'msg'=>"$accountInsert,". mysqli_error($conn));
+	}
+	return array('status'=>0, 'data'=>$accountid,'isNew'=>'1');
+}
 // 获取ip
 function getIP_front() {
 	$ip = getenv('REMOTE_ADDR');
@@ -31,7 +65,7 @@ function write_log($dirName, $logName, $str) {
 function WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type=8, $i=0,$wap=0,$id_buygoods=0) {
 	$i++;
 	$sid = togetherServer($ServerID);
-	$table = betaSubTable($sid, 'u_card', 1000);
+	$table = 'u_card';
 	$conn = SetConn($sid);
 
 	if($conn == false){
@@ -51,8 +85,8 @@ function WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type=8,
 	}
 	$rows = @mysqli_fetch_assoc($query);
 	if ($rows['count'] == 0) {
-		$sql = "insert into $table(data,account_id,ref_id,time_stamp,used,type,server_id";
-		$mysql = " values('$money',$PayID,'$OrderID',$time_stamp,0,'$type','$ServerID'";
+		$sql = "insert into $table(data,player_id,ref_id,time_stamp,used,type";
+		$mysql = " values('$money',$PayID,'$OrderID',$time_stamp,0,'$type'";
 		if($wap == 1){
 			$sql .= ',wap_flag';
 			$mysql .= ",'$wap'";
@@ -77,48 +111,6 @@ function WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type=8,
 		}
 	}
 }
-/*function WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type=8, $i=0,$wap=0) {
-	$i++;
-    $sid = togetherServer($ServerID);
-    $table = betaSubTable($sid, 'u_card', 1000);
-    $conn = SetConn($sid);
-
-	if($conn == false){
-		gameOrder($OrderID); //更新订单状态
-        write_log (ROOT_PATH."log", "card_err_", "serverId=$ServerID, game mysql connect error. ".date ("Y-m-d H:i:s")."\r\n");
-        return ;
-	}
-
-	$time_stamp = date ('ymdHi');
-	// 判断定单号是否重复
-	$sql = "select count(*) as count from $table where ref_id='$OrderID' limit 1;";
-	$query = @mysqli_query ($conn, $sql);
-	if($query == false){
-		write_log (ROOT_PATH."log", "card_err_", "sql=$sql, ".mysqli_error($conn)." ".date ("Y-m-d H:i:s")."\r\n");
-		gameOrder($OrderID); //更新订单状态
-		return ;
-	}
-	$rows = @mysqli_fetch_assoc($query);
-	if ($rows['count'] == 0) {
-		$sql = "insert into $table(data,account_id,ref_id,time_stamp,used,type,server_id)";
-		$sql = $sql . " values('$money',$PayID,'$OrderID',$time_stamp,0,'$type','$ServerID')";
-		if($wap == 1){
-			$sql = "insert into $table(data,account_id,ref_id,time_stamp,used,type,server_id,wap_flag)";
-			$sql = $sql . " values('$money',$PayID,'$OrderID',$time_stamp,0,'$type','$ServerID',$wap)";
-		}
-		
-		if (mysqli_query ($conn, $sql ) == false) {
-			write_log (ROOT_PATH."log", "card_err_", "sql=$sql, ".mysqli_error($conn)." ".date ("Y-m-d H:i:s")."\r\n");
-			gameOrder($OrderID); //更新订单状态
-			//执行失败再次请求
-			if($i == 1){
-				WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type = 8, $i);
-			}
-		} else {
-			write_log (ROOT_PATH."log", "card_true_", "ServerID=$ServerID,sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
-		}
-	}
-}*/
 
 function gameOrder($orderId, $isUc = 1){
 	$conn = SetConn (88); // 连接u591数据库
@@ -127,25 +119,6 @@ function gameOrder($orderId, $isUc = 1){
 	@mysqli_close($conn);
 }
 
-// 通知客户端消息(充值卡)
-// PayStat：0=成功消息,1=失败消息
-function WritePayMsg($PayStat, $ServerID, $PayID, $OrderID, $PayMoney, $game_id = 1) {
-
-}
-// 函数updatePoints加积分,每次充值的时候调用,前后台共用
-// $PayID玩家账号ID
-// $PayMoney充值金额 1元=1分制
-// $way支付方式短信(dx)和非短信(f_dx)
-// $oid订单号
-// $front判断前后台
-function updatePoints($PayID, $PayMoney, $way, $oid, $front = '') {
-
-}
-// 上升等级更新 updateRankUp,前后台共用
-// $PayID玩家账号ID
-function updateRankUp($PayID, $way, $front = '') {
-
-}
 function data_check($val) {
 	if (is_array ( $val )) {
 		foreach ( $val as $k => $v )
@@ -202,7 +175,7 @@ function https_post($url, $data, $i = 0) {
 	}
 	$curl = curl_init ( $url ); // 启动一个CURL会话
 	curl_setopt ( $curl, CURLOPT_SSL_VERIFYPEER, 0 ); // 对认证证书来源的检查
-	curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 2 ); // 从证书中检查SSL加密算法是否存在
+	curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 1 ); // 从证书中检查SSL加密算法是否存在
 	// curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 	curl_setopt ( $curl, CURLOPT_FOLLOWLOCATION, 1 ); // 使用自动跳转
 	curl_setopt ( $curl, CURLOPT_AUTOREFERER, 1 ); // 自动设置Referer
@@ -232,7 +205,45 @@ function Sign($data){
 	$mySign = md5($md5Str.'0dbddcc74ed6e1a3c3b9708ec32d0532');
 	return $mySign;
 }
-//分表
+function  giQSAccountHash( $string,$sum = 999)
+{
+	$string = "$string";
+	$length = strlen($string);
+	$result = 0;
+	for($i=0;$i<$length;$i++){
+		$result = ($result*397+ ord($string[$i]))%$sum;
+	}
+	return $result+1;
+}
+/**
+ * 绑定分表
+ * @param unknown $table
+ * @param unknown $string
+ * @return string
+ */
+function getAccountTable($string,$table,$sum = 999){
+	$string = "$string";
+	$length = strlen($string);
+	$result = 0;
+	for($i=0;$i<$length;$i++){
+		$result = ($result*397+ ord($string[$i]))%$sum;
+	}
+	$s = sprintf('%03d', $result+1);
+	return $table.$s;
+}
+function  giQSModHash( $accountid,$sum = 999)
+{
+	return $accountid%$sum+1;
+}
+//账服分表
+function betaSubTableNew($account_id, $table, $sum=200){
+	if($account_id == 0)
+		return $table;
+    $suffix = ($account_id%$sum)+1;
+    $s = sprintf('%03d', $suffix);
+    return $table.$s;
+}
+//游戏库分表
 function betaSubTable($serverId, $table, $sum){
     $suffix = $serverId%$sum;
     $s = sprintf('%03d', $suffix);
@@ -241,7 +252,8 @@ function betaSubTable($serverId, $table, $sum){
 
 //统计数据处理
 function SAddData($data){
-	$url = 'http://poketj.u591776.com:8080/index.php/ApiPay/PaylogProcess';
+	global $tongjiServer;
+	$url = $tongjiServer[$data['appid']].'ApiPay/PaylogProcess';
 	$jsonData = base64_encode(json_encode($data));
 	$postData = array();
 	$postData['data'] = $jsonData;
@@ -254,19 +266,19 @@ function SAddData($data){
 	}
 }
 
-function sendTongjiData($gameId, $accountId,$serverId,$channel,$lev=0,$money,$orderId,$isNew=1,$appId,$isPay=0, $isbt = '2' ,$created = 0){
+function sendTongjiData($gameId, $accountId,$serverId,$channel,$lev=0,$money,$orderId,$isNew=1,$isPay=0){
     $tongjiArr = array();
     $tongjiArr['accountid'] = $accountId;
     $tongjiArr['serverid'] = $serverId;
-    $tongjiArr['channel'] = $channel;
+    if($channel){
+    	$tongjiArr['channel'] = $channel;
+    }
+    
     $tongjiArr['lev'] = $lev;
     $tongjiArr['money'] = $money;
     $tongjiArr['orderid'] = $orderId;
     $tongjiArr['is_new'] = $isNew;
     $tongjiArr['is_pay'] = $isPay;
-    if(in_array($isbt, array(0,1))){
-    	$tongjiArr['isbt'] = $isbt;
-    }
     $conn = SetConn(88);
     if($conn == false){
         write_log(ROOT_PATH."log","SAddData_error_","web mysql connect error. ".date("Y-m-d H:i:s")."\r\n");
@@ -278,10 +290,7 @@ function sendTongjiData($gameId, $accountId,$serverId,$channel,$lev=0,$money,$or
     if($rows['count'] > 1)
         $tongjiArr['is_new'] = 0;
     $tongjiArr['created_at'] = time();
-    if($created){
-    	$tongjiArr['created_at'] = $created;
-    }
-    $tongjiArr['appid'] = $appId; //$tongjiServer[$gameId];
+    $tongjiArr['appid'] = $gameId; //$tongjiServer[$gameId];
     //发送数据
     SAddData($tongjiArr);
     return true;

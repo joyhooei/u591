@@ -479,6 +479,11 @@ $key_arr = array(
     				'site'      =>'kdyg_ios106',
     				'key'       =>'111cbd27d4653c4acb387a7b06590761',
     		),
+    		'ios108'=>array(
+    				'gid'       =>'9100771542491581',
+    				'site'      =>'kdyg_ios107',
+    				'key'       =>'354a173683c4b2ff9dea754e5d9724bf',
+    		),
     		'ios110'=>array(
     				'gid'       =>'9100771542511581',
     				'site'      =>'kdyg_ios109',

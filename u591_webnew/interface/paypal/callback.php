@@ -29,12 +29,12 @@ if($resultstr == 'VERIFIED'){
 			exit("success");
 		}
 		$payMoney = $response['mc_gross'];
-		global $accountServer;
-		$accountConn = $gameId;
-		$conn = SetConn($accountConn);
-		$sql_account = "select  NAME,dwFenBaoID,clienttype  from account where id = '$accountId'";
-		$query_account = mysqli_query($conn, $sql_account);
-		$result_account = @mysqli_fetch_assoc($query_account);
+		$snum = giQSModHash($accountId);
+		$conn = SetConn($gameId,$snum,1);//account分表
+		$acctable = betaSubTableNew($accountId,'account',999);
+		$sql = "select NAME,dwFenBaoID,clienttype from $acctable where id=$accountId limit 1;";
+		$query = mysqli_query($conn, $sql);
+		$result_account = @mysqli_fetch_array($query);
 		if(!$result_account['NAME']){
 			write_log(ROOT_PATH."log","paypal_callback_error_", "account is not exist.  ".date("Y-m-d H:i:s")."\r\n");
 			exit("FAILURE");
@@ -43,15 +43,17 @@ if($resultstr == 'VERIFIED'){
 			$dwFenBaoID = $result_account['dwFenBaoID'];
 			$clienttype = $result_account['clienttype'];
 		}
+		
 		$conn = SetConn(88);
 		$Add_Time=date('Y-m-d H:i:s');
-		$sql="insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-		$sql=$sql." VALUES (179,'$currency', $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+		$EMoney = ceil($payMoney*60);//emoney
+		$sql="insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,data,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
+		$sql=$sql." VALUES (179,'$currency', $accountId,'$PayName','$serverId','$payMoney','$EMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
 		if (mysqli_query($conn,$sql) == False){
 			write_log(ROOT_PATH."log","paypal_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
 			exit('FAILURE');
 		}
-		$EMoney = ceil($payMoney*60);//emoney
+		
 		//write_log(ROOT_PATH."log","paypal_callback_info_","OK".date("Y-m-d H:i:s")."\r\n");
 		WriteCard_money(1,$serverId, $EMoney,$accountId, $orderId,8,0,0,$isgoods);
 		//统计数据

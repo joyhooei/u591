@@ -4,7 +4,7 @@ include_once ROOT_PATH.'inc/config.php';
 include_once ROOT_PATH.'inc/config_account.php';
 include_once ROOT_PATH."inc/function.php";
 $key_arr = array(
-		8=>array(
+		101=>array(
 				'ios'=>array(
 						'appid'       =>'6224623',
 						'appkey'       =>'m2Zld8cQ2lDzYwE95BMP',

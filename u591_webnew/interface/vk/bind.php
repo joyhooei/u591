@@ -48,9 +48,7 @@ if(!$channel_account){
 	write_log(ROOT_PATH.'log','vk_bind_error_'," channel_account is not exist. post=$post,get=$get,".date('Y-m-d H:i:s')."\r\n");
 	exit("3 0");
 }
-global $accountServer;
-$accountConn = $accountServer[$gameId];
-$conn = SetConn($accountConn);
+$conn = SetConn($gameId);
 if($conn == false){
     write_log(ROOT_PATH.'log','vk_bind_error_',"account mysql connect error.".date('Y-m-d H:i:s')."\r\n");
     exit("3 0");

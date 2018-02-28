@@ -23,21 +23,30 @@ $pass = trim($_POST['password']);
 if(!empty($pass))
 	$array['password'] = $pass;
 $code = trim($_POST['code']);
+$bindtable = $bindwhere = '';
 if(!empty($code)){
 	$array['code'] = $code;
+}
+if(!empty($code) || !empty($pass)){
 	if (eregi('^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$', $username)){
 		//邮箱登陆
+		$bindtable = getAccountTable($username,'mail_bind');
+		$bindwhere = 'mail';
 	} else if(strlen($username) == 11 && preg_match('/^1[34578]{1}\d{9}$/', $username)){
 		//手机登陆
-	} else 
+		$bindtable = getAccountTable($username,'mobile_bind');
+		$bindwhere = 'mobile';
+	} else
 		exit(json_encode(array('status'=>2, 'msg'=>'phone or email error.')));
+}else{
+	$username = $username.'@u591';
+	$bindtable = getAccountTable($username,'token_bind');
+	$bindwhere = 'token';
 }
 $sign = trim($_POST['sign']);
-
 $gameId = intval($_POST['game_id']);
 $array['game_id'] = $gameId;
-$accountConn = $gameId;
-if(empty($accountConn) || empty($gameId))
+if(empty($gameId) || empty($gameId))
 	exit(json_encode(array('status'=>2, 'msg'=>'game id error.')));
 if(empty($array))
 	exit(json_encode(array('status'=>2, 'msg'=>'param error.')));
@@ -55,11 +64,10 @@ if($mySign != $sign)
 
 $isNew = 0;
 if(isset($code) && !empty($code)){
+	$myconn = SetConn('88');
 	//手机验证码登陆
-	$conn = SetConn('88');
-	$sql = "select addtime from web_message where username='$username' and code='$code'  order by id desc limit 1";
-	if(false == $query = mysqli_query($conn,$sql)){
-		
+	$sql = "select addtime from web_message where username='$username' and code='$code' and game_id='$gameId'  order by id desc limit 1";
+	if(false == $query = mysqli_query($myconn,$sql)){
 		exit(json_encode(array('status'=>1, 'msg'=>'web server sql error.')));
 	}
 	$rs = @mysqli_fetch_assoc($query);
@@ -69,32 +77,33 @@ if(isset($code) && !empty($code)){
 	if(time()-$rs['addtime'] > 900){
 		exit(json_encode(array('status'=>2, 'msg'=>'verification failed.')));
 	}
-	$conn = SetConn($accountConn);
-	$sql = "select id from account where NAME = '$username' limit 1";
-	if(false == $query = mysqli_query($conn,$sql)){
-		
-		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
+	$insertinfo = insertaccount($username,$bindtable,$bindwhere,$gameId);
+	if($insertinfo['status'] == '1'){
+		write_log(ROOT_PATH."log","guanwang_token_error_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
+		exit(json_encode($insertinfo));
+	}else{
+		$insert_id = $insertinfo['data'];
+		$isNew = 1;
 	}
-	$result = @mysqli_fetch_assoc($query);
-	if(isset($result['id'])){
-		$insert_id = intval($result['id']);
-	} else {
-		$password = random_common();
-		$reg_time=date("ymdHi");
-		$sql_game = "insert into account (NAME, phone, password, reg_date) VALUES ('$username', '$username', '$password', '$reg_time')";
-		if(false == mysqli_query($conn,$sql_game)){
-			exit(json_encode(array('status'=>1, 'msg'=>'insert account error.')));
-		}
-		$insert_id = mysqli_insert_id($conn);
-        $isNew = 1;
-	}
+
 }  else if(isset($pass) && !empty($pass)){
 	//账号密码错误
-	$conn = SetConn($accountConn);
+	$snum = giQSAccountHash($username);
+	$conn = SetConn($gameId,$snum);
 	$password = md5($pass.$mdString);
-	$sql = "select id, password from account where NAME = '$username' limit 1";
+	$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
+	if(false == $query = mysqli_query($conn,$selectsql))
+		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
+	$result = @mysqli_fetch_assoc($query);
+	if(!$result){
+		exit(json_encode(array('status'=>2, 'msg'=>'Account error, please enter again!')));
+	}
+	$accountid = $result['accountid'];
+	$snum = giQSModHash($accountid);
+	$conn = SetConn($gameId,$snum,1);//account分表
+	$acctable = betaSubTable($accountid,'account',999);
+	$sql = "select id, password from $acctable where id = '$accountid' limit 1";
 	if(false == $query = mysqli_query($conn,$sql)){
-		
 		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
 	}
 	$result = @mysqli_fetch_assoc($query);
@@ -104,26 +113,16 @@ if(isset($code) && !empty($code)){
 	if($result['password'] != $password){
 		exit(json_encode(array('status'=>2, 'msg'=>'Wrong password, please enter again!')));
 	}
-	
 	$insert_id = intval($result['id']);
 } else {
 	//快速登陆
-	$conn = SetConn($accountConn);
-	$channel_account = $username.'@u591';
-	$sql = "select id from account where channel_account = '$channel_account' limit 1;";
-	if(false == $query = mysqli_query($conn,$sql))
-		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
-	$result = @mysqli_fetch_assoc($query);
-	if($result){
-		$insert_id = intval($result['id']);
-	} else {
-		$password = random_common();
-		$reg_time = date("ymdHi");
-		$sql_game = "insert into account (NAME,password,reg_date,channel_account) VALUES ('$channel_account','$password','$reg_time','$channel_account')";
-		if(false == mysqli_query($conn,$sql_game))
-			exit(json_encode(array('status'=>1, 'msg'=>'insert account error.')));
-		$insert_id = mysqli_insert_id($conn);
-        $isNew = 1;
+	$insertinfo = insertaccount($username,$bindtable,$bindwhere,$gameId);
+	if($insertinfo['status'] == '1'){
+		write_log(ROOT_PATH."log","guanwang_token_error_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
+		exit(json_encode($insertinfo));
+	}else{
+		$insert_id = $insertinfo['data'];
+		$isNew = 1;
 	}
 }
 if($pass)
