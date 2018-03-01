@@ -47,15 +47,18 @@ $my_sign = md5(urldecode($md5Str).$appKey);
 
 if($sign != $my_sign)
 	exit(json_encode(array('status'=>2, 'msg'=>'sign error.')));
-$conn = SetConn($accountConn);
-$sql = "select id from account where NAME = '$email' or email='$email' limit 1";
-if(false == $query = mysqli_query($conn,$sql)){
-	write_log(ROOT_PATH."log","checkemail_error_","sql=$sql, ".mysqli_error($conn).date("Y-m-d H:i:s")."\r\n");
+
+$username = $email;
+$gameId = $game_id;
+$bindtable = getAccountTable($username,'mail_bind');
+$bindwhere = 'mail';
+$snum = giQSAccountHash($username);
+$conn = SetConn($gameId,$snum);
+$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
+if(false == $query = mysqli_query($conn,$selectsql)){
+	write_log(ROOT_PATH."log","checkemail_error_","sql=$selectsql, ".mysqli_error($conn).date("Y-m-d H:i:s")."\r\n");
 	exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
 }
-
-
 $result = @mysqli_fetch_assoc($query);
-$msg = isset($result['id']) ? 'registered' : 'unregistered';
-
+$msg = $result ? 'registered' : 'unregistered';
 exit(json_encode(array('status'=>0, 'msg'=>$msg)));

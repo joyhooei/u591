@@ -37,17 +37,14 @@ for ($i = 0; $i< count($params); $i++){
 			exit(json_encode(array('status'=>1, 'msg'=>$params[$i].' should not be empty.')));
 	}
 }
-$email = $phone = '';
 if(!empty($code)){
 	$array['code'] = $code;
 	if (preg_match('/^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$/', $username)){
 		//邮箱登陆
-		$email = $username;
-	} else if(strlen($username) == 11 && preg_match('/^1[34578]{1}\d{9}$/', $username)){
-		//手机登陆
-		$phone = $username;
+		$bindtable = getAccountTable($username,'mail_bind');
+		$bindwhere = 'mail';
 	} else
-		exit(json_encode(array('status'=>1, 'msg'=>'phone or email format error.')));
+		exit(json_encode(array('status'=>1, 'msg'=>'email format error.')));
 } else { 
 	/*普通账号注册
 	 *用户名前两位包含yk,hn提醒已被注册，作为内部使用
@@ -55,21 +52,14 @@ if(!empty($code)){
 	*/
 	if (preg_match('/^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$/', $username)){
 		//邮箱登陆
-		$email = $username;
-	} else {
-		if(!ereg('^[0-9a-zA-Z\]*$',$username))
-			exit(json_encode(array('status'=>1, 'msg'=>'account format wrong.')));
-		
-		if(substr(trim(strtolower($username)),0,2)=='yk' || substr(trim(strtolower($username)),0,2)=='hn')
-			exit(json_encode(array('status'=>1, 'msg'=>'yk or hn already registered.')));
-		if(strlen($username) > 13)
-			exit(json_encode(array('status'=>1, 'msg'=>'can not account for more than 13 lengths.')));
-	}
+		$bindtable = getAccountTable($username,'mail_bind');
+		$bindwhere = 'mail';
+	} 
 	
 }
 
 if(!preg_match("/^[A-Za-z0-9]{6,16}$/", $password))
-	exit(json_encode(array('status'=>1, 'msg'=>'password length or wrong format.'))); //瀵嗙爜闀垮害鎴栬�呮牸寮忎笉瀵�
+	exit(json_encode(array('status'=>1, 'msg'=>'password length or wrong format.'))); 
 
 $appKey = $key_arr['appKey'];
 $array['username'] = $username;
@@ -93,26 +83,21 @@ if($code){
 	if($nowTime-$rs['addtime'] > 900)
 		exit(json_encode(array('status'=>1, 'msg'=>'code is invalid.')));
 }
-
 $password_my=md5($password.$mdString);
 $reg_time=date("ymdHi");
-$accountConn = $gameId;
 
-$conn = SetConn($accountConn);
-$sql = " select id from account where NAME = '$username'";
-if(false == $query = mysqli_query($conn,$sql))
-	exit(json_encode(array('status'=>1, 'msg'=>'account sql error.')));
-
+$snum = giQSAccountHash($username);
+$conn = SetConn($gameId,$snum);
+$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
+if(false == $query = mysqli_query($conn,$selectsql))
+	exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));
 $result = @mysqli_fetch_assoc($query);
-if(isset($result['id']))
+if($result){
 	exit(json_encode(array('status'=>1, 'msg'=>'account is registered.')));
-	
-$sql_game = "insert into account (NAME,phone,email,password,reg_date) VALUES ('$username','$phone', '$email', '$password_my', '$reg_time')";
-if(false == mysqli_query($conn,$sql_game))
-	exit(json_encode(array('status'=>1, 'msg'=>'insert account sql error.')));
-$insert_id = mysqli_insert_id($conn);
-if($insert_id)
-	exit(json_encode(array('status'=>0, 'msg'=>'success','data'=>array('account_id'=>$insert_id))));
-else 
-	exit(json_encode(array('status'=>0, 'msg'=>'fail')));
+}
+
+$insertinfo = insertaccount($username,$bindtable,$bindwhere,$gameId,$password_my);
+$insertinfo['data'] = array('account_id'=>$insertinfo['data']);
+write_log(ROOT_PATH."log","guanwang_register_result_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
+exit(json_encode($insertinfo));
 ?>

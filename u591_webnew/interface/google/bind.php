@@ -72,50 +72,14 @@ if($type == 'google'){
     }
     $channel_account = $resultArr['id'].'@fb';
 }
-$conn = SetConn($gameId);
-if($conn == false){
-    write_log(ROOT_PATH.'log','bind_login_error_',"account mysql connect error.".date('Y-m-d H:i:s')."\r\n");
-    exit("3 0");
-}
-//查询这个帐号是否绑定
-$channel_account = mysqli_real_escape_string($conn, $channel_account);
-$sql = "select account_id from account_ggp where channel_account='$channel_account' limit 1;";
-$query = @mysqli_query($conn, $sql);
-$result = @mysqli_fetch_assoc($query);
-
-if(isset($result['account_id'])){
-    $accountId = $result['account_id'];
-    write_log(ROOT_PATH.'log','bind_login_return_',"return:1 $accountId. post=$post,get=$get, ".date('Y-m-d H:i:s')."\r\n");
-    exit("1 $accountId");
-} else {
-    //判断是否是可绑定状态
-    $accountId = mysqli_real_escape_string($conn, $accountId);
-    $sql = "select id,channel_account from account where id='$accountId' limit 1";
-    $query = @mysqli_query($conn, $sql);
-    $result = @mysqli_fetch_assoc($query);
-    if(!$result['id']){
-        write_log(ROOT_PATH.'log','bind_login_error_'," account id is not exist. post=$post,get=$get,".date('Y-m-d H:i:s')."\r\n");
-        exit("2 0");
-    }
-    $channelAccountArr = explode("@", $result['channel_account']);
-    if(isset($channelAccountArr[1]) && $channelAccountArr[1] != "u591"){
-        write_log(ROOT_PATH.'log','bind_login_error_',"account id is not mac. post=$post,get=$get,".date('Y-m-d H:i:s')."\r\n");
-        exit("1000 $accountId");
-    }
-    //判断google fb是否已经注册帐号
-    $sql = "select id,channel_account from account where channel_account='$channel_account' limit 1";
-    $query = @mysqli_query($conn, $sql);
-    $result = @mysqli_fetch_assoc($query);
-    if(isset($result['id'])){
-        write_log(ROOT_PATH.'log','bind_login_error_',"google or fb alread registerd. post=$post,get=$get,".date('Y-m-d H:i:s')."\r\n");
-        exit("1000 $accountId");
-    }
-    $bind_time = time();
-    $insert_sql = "insert into account_ggp (ggp_account,account_id,bind_time) VALUES ('$channel_account','$accountId','$bind_time')";
-    if(!mysqli_query($conn, $insert_sql)){
-        write_log(ROOT_PATH.'log','bind_login_error_',"sql error.sql=$update_sql, ".mysqli_error($conn)." , ".date('Y-m-d H:i:s')."\r\n");
-        exit("3 0");
-    }
-    write_log(ROOT_PATH.'log','bind_login_return_',"return=0 $accountId. post=$post,get=$get, ".date('Y-m-d H:i:s')."\r\n");
-    exit("0 $accountId");
+$username = $channel_account;
+$bindtable = getAccountTable($username,'token_bind');
+$bindwhere = 'token';
+$result = bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,'channel_account');
+if($result['status'] == '0'){
+	write_log(ROOT_PATH.'log','third_bind_return_',"return={$result['noNew']} {$result['data']}. post=$post,get=$get, ".date('Y-m-d H:i:s')."\r\n");
+	exit("{$result['noNew']} {$result['data']}");
+}else{
+	write_log(ROOT_PATH.'log','third_bind_error_',"{$result['msg']} , ".date('Y-m-d H:i:s')."\r\n");
+	exit("1000 $accountId");
 }

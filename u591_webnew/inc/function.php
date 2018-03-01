@@ -9,6 +9,35 @@
  * @author: Administrator
  * @return:
  */
+//帐号绑定
+function bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,$type='email'){
+	$snum = giQSAccountHash($username);
+	$conn = SetConn($gameId,$snum);
+	$bind_time=date('Y-m-d H:i:s');
+	$selectsql = "select accountid from $bindtable where $bindwhere='$username' and gameid='$gameId' limit 1";
+	if(false == $query = mysqli_query($conn,$selectsql))
+		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error,'.mysqli_error($conn))));
+	$result = @mysqli_fetch_assoc($query);
+	if($result){
+		exit(json_encode(array('status'=>0, 'data'=>$result['accountid'],'noNew'=>'1')));
+	}
+	$sql_game = "insert into $bindtable ($bindwhere,accountid,bindtime,gameid) VALUES ('$username','$accountId', '$bind_time','$gameId')";
+	if(false == mysqli_query($conn,$sql_game)){
+		exit(json_encode(array('status'=>1, 'msg'=>'insert account error,'.mysqli_error($conn))));
+	}
+	$insert_id = mysqli_insert_id($conn);
+	if($insert_id){
+		$snum = giQSModHash($accountId);
+		$myconn = SetConn($gameId,$snum,1);//account分表
+		$acctable = betaSubTableNew($accountId,'account',999);
+		$accountInsert = "update $acctable set $type='$username' where id='$accountId';";
+		mysqli_query($myconn,$accountInsert);
+		exit(json_encode(array('status'=>0, 'noNew'=>'0','data'=>$accountId)));
+	}
+	else
+		exit(json_encode(array('status'=>1, 'msg'=>'fail')));
+}
+
 //帐号插入
 function insertaccount($username,$bindtable,$bindwhere,$gameId,$passwd=''){
 	!$passwd && $passwd = random_common();
@@ -65,7 +94,7 @@ function write_log($dirName, $logName, $str) {
 function WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type=8, $i=0,$wap=0,$id_buygoods=0) {
 	$i++;
 	$sid = togetherServer($ServerID);
-	$table = 'u_card';
+	$table = betaSubTable($sid, 'u_card', 1000);
 	$conn = SetConn($sid);
 
 	if($conn == false){
@@ -85,8 +114,8 @@ function WriteCard_money($tabType, $ServerID, $money, $PayID, $OrderID, $type=8,
 	}
 	$rows = @mysqli_fetch_assoc($query);
 	if ($rows['count'] == 0) {
-		$sql = "insert into $table(data,player_id,ref_id,time_stamp,used,type";
-		$mysql = " values('$money',$PayID,'$OrderID',$time_stamp,0,'$type'";
+		$sql = "insert into $table(data,account_id,ref_id,time_stamp,used,type,server_id";
+		$mysql = " values('$money',$PayID,'$OrderID',$time_stamp,0,'$type','$ServerID'";
 		if($wap == 1){
 			$sql .= ',wap_flag';
 			$mysql .= ",'$wap'";

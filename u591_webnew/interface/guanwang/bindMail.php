@@ -50,15 +50,6 @@ if (eregi('^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$', $username)){
 } else
 	exit(json_encode(array('status'=>1, 'msg'=>'mail format error.')));
 
-/*$appKey = $key_arr['appKey'];
-$array['username'] = $username;
-$array['accountid'] = $accountId;
-$array['code'] = $code;
-$mySign = httpBuidQuery($array, $appKey);
-if($mySign != $sign){
-	write_log(ROOT_PATH."log","guanwang_bindphone_error_",json_encode($array).",sign error,post=$post, ".date("Y-m-d H:i:s")."\r\n");
-	exit(json_encode(array('status'=>1, 'msg'=>'sign error.')));
-}*/
 	
 
 
@@ -75,19 +66,12 @@ if($code){
 	if($nowTime-$rs['addtime'] > 900)
 		exit(json_encode(array('status'=>1, 'msg'=>'code is invalid.')));
 }
-$bind_time=date('Y-m-d H:i:s');
-$accountConn = $gameId;
 
-$conn = SetConn($accountConn);
-
-$sql_game = "insert into mail_bind (mail,accountid,bindtime) VALUES ('$username','$accountId', '$bind_time')";
-if(false == mysqli_query($conn,$sql_game)){
-	write_log(ROOT_PATH."log","guanwang_bindphone_error_",$sql_game.','.mysqli_error($conn).",post=$post, ".date("Y-m-d H:i:s")."\r\n");
-	exit(json_encode(array('status'=>1, 'msg'=>'mail is bind.')));
-}
-
-$insert_id = mysqli_insert_id($conn);
-if($insert_id){
+$bindtable = getAccountTable($username,'mail_bind');
+$bindwhere = 'mail';
+$result = bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,'email');
+if($result['status'] == '0'){
+	$insert_id = $result['data'];
 	write_log(ROOT_PATH."log","guanwang_bindphone_successs_",$insert_id.",post=$post, ".date("Y-m-d H:i:s")."\r\n");
 	$sql_game = "insert into g_phonebind (server_id,account_id,phone_id) VALUES ('$serverid','$accountId', '$username')";
 	$gconn = SetConn(substr($serverid, 0,strlen($serverid)-3).'001');
