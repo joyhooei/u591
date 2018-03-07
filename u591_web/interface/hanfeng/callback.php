@@ -52,6 +52,7 @@ if($sign == $dataArr['sign'] && $dataArr['status'] == 0){
 	$chname = $ch[count($ch)-1];
 	if($chname != 'hanfeng'){
 		write_log(ROOT_PATH."log","name_hanfeng_", "account is $PayName ! post=$post, get=$get, data=$data, ".date("Y-m-d H:i:s")."\r\n");
+		exit($cpTradeNo);
 	}
 	$order_id = $cpTradeNo;
 	$PayMoney = intval($money/100);

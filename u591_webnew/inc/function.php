@@ -16,14 +16,14 @@ function bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,$type='e
 	$bind_time=date('Y-m-d H:i:s');
 	$selectsql = "select accountid from $bindtable where $bindwhere='$username' and gameid='$gameId' limit 1";
 	if(false == $query = mysqli_query($conn,$selectsql))
-		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error,'.mysqli_error($conn))));
+		return array('status'=>'1', 'msg'=>'account server sql error,'.mysqli_error($conn));
 	$result = @mysqli_fetch_assoc($query);
 	if($result){
-		exit(json_encode(array('status'=>0, 'data'=>$result['accountid'],'noNew'=>'1')));
+		return  array('status'=>'0', 'data'=>$result['accountid'],'noNew'=>'1');
 	}
 	$sql_game = "insert into $bindtable ($bindwhere,accountid,bindtime,gameid) VALUES ('$username','$accountId', '$bind_time','$gameId')";
 	if(false == mysqli_query($conn,$sql_game)){
-		exit(json_encode(array('status'=>1, 'msg'=>'insert account error,'.mysqli_error($conn))));
+		return  array('status'=>'1', 'msg'=>'insert account error,'.mysqli_error($conn));
 	}
 	$insert_id = mysqli_insert_id($conn);
 	if($insert_id){
@@ -32,10 +32,10 @@ function bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,$type='e
 		$acctable = betaSubTableNew($accountId,'account',999);
 		$accountInsert = "update $acctable set $type='$username' where id='$accountId';";
 		mysqli_query($myconn,$accountInsert);
-		exit(json_encode(array('status'=>0, 'noNew'=>'0','data'=>$accountId)));
+		return array('status'=>'0', 'noNew'=>'0','data'=>$accountId);
 	}
 	else
-		exit(json_encode(array('status'=>1, 'msg'=>'fail')));
+		return array('status'=>'1', 'msg'=>'fail');
 }
 
 //帐号插入

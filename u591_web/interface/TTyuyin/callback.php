@@ -62,9 +62,10 @@ if (empty($GLOBALS["HTTP_RAW_POST_DATA"])) {
 			$clienttype = $result_account['clienttype'];
 		}
 		$ch = explode('@', $PayName);
-		$chname = $ch[1];
+		$chname = $ch[count($ch)-1];
 		if($chname != 'TTyuyin'){
 			write_log(ROOT_PATH."log","name_TTyuyin_", "account is $PayName !  post=$post,get=$get, data=$urldecodeData, ".date("Y-m-d H:i:s")."\r\n");
+			exit($msg);
 		}
 		$order_id = $cpOrderId;
 		$PayMoney = intval($payFee);

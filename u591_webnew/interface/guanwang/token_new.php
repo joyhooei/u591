@@ -101,7 +101,7 @@ if(isset($code) && !empty($code)){
 	$accountid = $result['accountid'];
 	$snum = giQSModHash($accountid);
 	$conn = SetConn($gameId,$snum,1);//account分表
-	$acctable = betaSubTable($accountid,'account',999);
+	$acctable = betaSubTableNew($accountid,'account',999);
 	$sql = "select id, password from $acctable where id = '$accountid' limit 1";
 	if(false == $query = mysqli_query($conn,$sql)){
 		exit(json_encode(array('status'=>1, 'msg'=>'account server sql error.')));

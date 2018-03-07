@@ -77,9 +77,9 @@ $bindtable = getAccountTable($username,'token_bind');
 $bindwhere = 'token';
 $result = bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,'channel_account');
 if($result['status'] == '0'){
-	write_log(ROOT_PATH.'log','third_bind_return_',"return={$result['noNew']} {$result['data']}. post=$post,get=$get, ".date('Y-m-d H:i:s')."\r\n");
+	write_log(ROOT_PATH.'log','bind_success_',"result=".json_encode($result).date('Y-m-d H:i:s')."\r\n");
 	exit("{$result['noNew']} {$result['data']}");
 }else{
-	write_log(ROOT_PATH.'log','third_bind_error_',"{$result['msg']} , ".date('Y-m-d H:i:s')."\r\n");
+	write_log(ROOT_PATH.'log','bind_error_',"{$result['msg']} , ".date('Y-m-d H:i:s')."\r\n");
 	exit("1000 $accountId");
 }

@@ -56,6 +56,7 @@ $ch = explode('@', $PayName);
 $chname = $ch[1];
 if($chname != 'kuaifa'){
 	write_log(ROOT_PATH."log","name_kuaifa_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+	exit(json_encode(array('result'=>'0', 'result_desc'=>'ok')));
 }
 $order_id = $_POST['serial_number'];
 $paymoney = intval($_POST['amount']);

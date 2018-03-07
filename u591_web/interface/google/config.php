@@ -53,6 +53,11 @@ $key_arr = array(
     				'appSecret' =>'Mh9LE_aP7rLP5SCszXkSrGPU',
     				'public_key'=>'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAygijkhFdMHjFVeQAtE6uauEGDqeXOtnlxx+U/Zrs1v7TCAQ+x7LrLc0hRtz/R1pv7SBKwySTKtvkYNt2RykJYcB4tkczZN1NWFctLIppXcn2Cia0X63F8Y/yuHqODlhYIUq+gTacfOYMzMBzVeWxXeG9yBbbKFcSTbU1X3hOywbVhfpHG+QeLX5dtOx5qW4eb2OGGjZOW8x/oTnSc8EHgzBZQ7wINJuja2vVNTZPVW3JoDya0g7TlpwuG/dlYpVEkWq0CIsWN04W+PwMZC7OEDSPPjT97S0TZ0ui4yp9WTs7rHeOFpAe+nMBL1jXr7Ix3R4WgZm4rcKiRSI2lxKLKwIDAQAB',
     		),
+    		'androidyn7'=>array(
+    				'appId'     =>'4809783763-qhe6po5hsqj1i38m5j64q59320cer66m.apps.googleusercontent.com',
+    				'appSecret' =>'qzGDboSWYkuXqnRgLWSMXObl',
+    				'public_key'=>'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjkufks+qzo3lczXhErZsjPINMn2+WY6YUzsjHJVVqZyOHHtaIAb5MuuZiSi7BTkYEZctdtBO26v7h19jY+9SOBVV/lhpoprjLfKo9kRa+rlkGMaBuqZMPp800GtRitmnNlt/Z8MiLSzl67Ig9bQAcguu1R64/qkvASG1HPdwCpCwUpiRGn9ZPkmr7uGLQ6xbk8UWJ7NrxXCWl79L3bXkogVt+pwk589LEb7wfXMW6O80fL10f5HgGUDB933UbkLatT5tjLsYUXxMbZ/d5Cq2+9DOFQS+2E9fm/ld31k0KSi0Dutf0PXVZqbHgA0TPWta3C52iBUIIAULx+FU9FsOYQIDAQAB',
+    		),
         'xinma'=>array(
             'appId'     =>'409589426094-encph12ih4c21is76aiek88nkvi7t9dp.apps.googleusercontent.com',
             'appSecret' =>'ijt-WyyWhm8-2yqJT1tlGsj6',

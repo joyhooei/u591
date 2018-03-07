@@ -50,10 +50,14 @@ if($mySign != $sign){
 /*
  * 验证账号
  */
-$conn = SetConn($game_id);
-$sql = "select id from account where id='$accountId' limit 1";
+$gameId = $game_id;
+$accountid = $accountId;
+$snum = giQSModHash($accountid);
+$conn = SetConn($gameId,$snum,1);//account分表
+$acctable = betaSubTableNew($accountid,'account',999);
+$sql = "select id from $acctable where id = '$accountid' limit 1";
 if(false == $query = mysqli_query($conn,$sql)){
-	write_log(ROOT_PATH."log","storage_error_","$accountConn, sql=$sql, mysql error, ".mysqli_error($conn)." ".date("Y-m-d H:i:s")."\r\n");
+	write_log(ROOT_PATH."log","storage_error_","sql=$sql, mysql error, ".mysqli_error($conn)." ".date("Y-m-d H:i:s")."\r\n");
 	exit('3 0');
 }
 $info = @mysqli_fetch_assoc($query);

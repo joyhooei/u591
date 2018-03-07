@@ -7,7 +7,9 @@ include_once ROOT_PATH."inc/function.php";
 
 $key_arr = array(
     	'android'=>array('apiKey'=>'a7f532eb89e0569adc6bddb2','secret'=>'4a500fb687db6727315250eb'),
-    	'ios'=>array('apiKey'=>'pem/ios.pem'),
+    	'ioslxxm'=>array('apiKey'=>'pem/ioslxxm.pem'),
+		'iosxmgg'=>array('apiKey'=>'pem/iosxmgg.pem'),
+		'ioszgzl'=>array('apiKey'=>'pem/ioszgzl.pem'),
 );
 
 function send_notify($type,$reg_id,$message,$apikey,$secret,$num=1){

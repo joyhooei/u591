@@ -285,7 +285,6 @@ class PayLogController extends Controller{
 
 		if(isset($_POST['testServer']) && !empty($_POST['testServer']))
 			$condition[]="9 = SUBSTR(ServerID,-3,1)";
-		
         $model = PayLog::model();
 		$criteria = new CDbCriteria;
 		$condition=implode($condition,' and ');

@@ -25,34 +25,22 @@ $mySign = md5($md5Str.$appKey);
 if($sign != $mySign)
     exit(json_encode(array('status'=>2, 'msg'=>'sign error.')));
 
-global $accountServer;
-$accountConn = $array['game_id'];
-$conn = SetConn($accountConn);
-if($conn == false){
-    write_log(ROOT_PATH."log","bind_ggd_check_error_","mysql connect error. ".date("Y-m-d H:i:s")."\r\n");
-    exit(json_encode(array('status'=>1, 'msg'=>'mysql connect error.')));
-}
-$sql = "select ggp_account from account_ggp where account_id='{$array['account_id']}'";
+$accountid = $array['account_id'];
+$gameId = $array['game_id'];
+$snum = giQSModHash($accountid);
+$conn = SetConn($gameId,$snum,1);//account分表
+$acctable = betaSubTableNew($accountid,'account',999);
+$sql = "select channel_account from $acctable where id = '$accountid' limit 1";
 if(false == $query = mysqli_query($conn,$sql)){
-    write_log(ROOT_PATH."log","bind_ggd_check_error_",$sql."mysql query error. ".date("Y-m-d H:i:s")."\r\n");
-    exit(json_encode(array('status'=>1, 'msg'=>'mysql query error.')));
-
+	write_log(ROOT_PATH."log","bind_ggd_check_error_","mysql connect error, ".mysqli_error($conn).date("Y-m-d H:i:s")."\r\n");
+	exit(json_encode(array('status'=>1, 'msg'=>'mysql connect error.')));
 }
-$result = array();
-while ($row = mysqli_fetch_assoc($query)){
-    $result[] = $row;
-}
-$returnArr = array();
-if(!empty($result)){
-    foreach ($result as $v){
-        if(stripos($v['ggp_account'],'@google')){
-            $returnArr['google'] = 'google';
-        } elseif (stripos($v['ggp_account'],'@fb')){
-            $returnArr['fb'] = 'fb';
-        }elseif (stripos($v['ggp_account'],'@vk')){
-        	$returnArr['vk'] = 'vk';
-        }
-    }
+$result = @mysqli_fetch_assoc($query);
+$returnArr['bind'] = '';
+if($result['channel_account']){
+	$ch = explode('@', $result['channel_account']);
+	$chname = $ch[count($ch)-1];
+	$returnArr['bind'] = $chname;
 }
 exit(json_encode(array('status'=>0,'msg'=>'success','data'=>$returnArr)));
 
