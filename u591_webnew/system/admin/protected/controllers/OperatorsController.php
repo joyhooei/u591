@@ -15,14 +15,12 @@ require_once(ROOT_PATH.'inc/function.php');
 class OperatorsController extends Controller{
     private $gmtoolTable = 'u_gmtool';
 	//账号封解
-	private function checkAccount($account, $type, $gameId){
+	private function checkAccount($accountid, $gameId){
+		$snum = giQSModHash($accountid);
+		$conn = SetConn($gameId,$snum,1);//account分表
+		$acctable = betaSubTableNew($accountid,'account',999);
+		$sql = "select * from $acctable where id = '$accountid' limit 1";
 		$rs = false;
-		$where = ($type == 1) ? "NAME='$account'" :  "id='$account'";
-		global $accountServer;
-		$accountConn = $accountServer[$gameId];
-		$conn = SetConn($accountConn);
-		$sql = "SELECT * FROM account where $where limit 1";
-		
 		$query = @mysqli_query($conn,$sql);
 		$rows = @mysqli_fetch_assoc($query);
 		if($rows)
@@ -31,14 +29,12 @@ class OperatorsController extends Controller{
 		return $rs;
 	}
 	
-	private function updateAccount($accountId, $operate, $gameId){
-		global $accountServer;
-		$accountConn = $accountServer[$gameId];
-		$conn = SetConn($accountConn);
-        if($conn == false)
-            return false;
+	private function updateAccount($accountid, $operate, $gameId){
+		$snum = giQSModHash($accountid);
+		$conn = SetConn($gameId,$snum,1);//account分表
+		$acctable = betaSubTableNew($accountid,'account',999);
+		$sql = "update account set limitType='$operate' where id='$accountid'";
 		$rs = false;
-		$sql = "update account set limitType='$operate' where id='$accountId'";
 		if(mysqli_query($conn,$sql))
 			$rs = true;
 		write_log(ROOT_PATH.'log','limit_account_err', "sql=$sql,".mysqli_error($conn)." ".date('Y-m-d H:i:s')."\r\n");
@@ -105,7 +101,6 @@ class OperatorsController extends Controller{
         $gameServer = GameServer::model()->getInfo();
         $info = '';
         if(!empty($_POST)){
-            $type = intval($_POST['type']);
             $name = $_POST['name'];
             $operate = intval($_POST['operate']);
             $reason = trim($_POST['reason']);
@@ -116,12 +111,12 @@ class OperatorsController extends Controller{
                 $this->display('请选择区服', 0);
             $serverId = $_POST['serverId']; //array
             if(!$name)
-                $this->display('请填写账号或者账号ID', 0);
+                $this->display('请填写账号ID', 0);
             if($operate !=2 && $reason == '')
                 $this->display('请填写封号/解号原因', 0);
-            $info = $this->checkAccount($name, $type, $gameId);
+            $info = $this->checkAccount($name, $gameId);
             if($info == false)
-                $this->display('账号或者账号ID有误！', 0);
+                $this->display('账号ID有误！', 0);
 
             $accountId = $info['id'];
             $gamePlayerInfo = $this->getGamePlayerField($accountId, $serverId[0], 'id');
@@ -155,10 +150,7 @@ class OperatorsController extends Controller{
     }
 	//获取角色信息
 	private function getGamePlayerField($accountId, $serverId, $field='*' ){
-	    //获取合服[区服]
-	    //$sid = togetherServer($serverId);
-	    $sid = $serverId;
-		$conn = SetConn($sid);
+		$conn = SetConn($serverId);
         if($conn == false)
             return false;
 		$playerTable = subTable($serverId, 'u_player', 1000);
@@ -333,23 +325,13 @@ class OperatorsController extends Controller{
 	        if($type == 0 || $type == 1){
 	        	$where = ($type ==0) ? " name='$name' and serverid='$serverId'" : " id='$name'";
 	        } else if($type == 2){
-                $field = 'id,NAME,dwFenBaoID,channel_account,limitType,dwFenBaoUserID';
-                $where = "NAME='$name'";
-                $result = $this->getAccountField($where, $gameId, $field);
-                $accountId                  = intval($result['id']);
-                $info['id']                 = $accountId;
-                $info['NAME']               = $result['NAME'];
-                $info['dwFenBaoID']         = $result['dwFenBaoID'];
-                $info['channel_account']    = $result['channel_account'];
-                $info['limitType']	        = $result['limitType'];
-                $info['dwFenBaoUserID']     = $result['dwFenBaoUserID'];
+                $result = $this->getAccountField($name, $gameId);
+                $accountId = intval($result['accountid']);
                 $where = " account_id='$accountId' and serverid='$serverId'";
 	        }else {
 	        	$where = " account_id='$name' and serverid='$serverId'";
 	        }
-	        //$sid = togetherServer($serverId);
-	        $sid = $serverId;
-	        $conn = SetConn($sid);
+	        $conn = SetConn($serverId);
             $table = subTable($serverId, 'u_player', '1000');
 	        $sql = "select account_id,serverid,name,id from $table where $where limit 1";
             $querey = @mysqli_query($conn,$sql);
@@ -358,39 +340,48 @@ class OperatorsController extends Controller{
 	        $info['name'] = $rs_player['name'];
 	        $info['user_id'] = $rs_player['id'];
 	        @mysqli_close($conn);
-	        if(!isset($info['id'])){
-                $accountId = intval($rs_player['account_id']);
-                $field = 'id,NAME,dwFenBaoID,channel_account,limitType,dwFenBaoUserID';
-                $where = "id='$accountId'";
-                $result = $this->getAccountField($where, $gameId, $field);
-                $accountId                  = intval($result['id']);
-                $info['id']                 = $accountId;
-                $info['NAME']               = $result['NAME'];
-                $info['dwFenBaoID']         = $result['dwFenBaoID'];
-                $info['channel_account']    = $result['channel_account'];
-                $info['limitType']	        = $result['limitType'];
-                $info['dwFenBaoUserID']     = $result['dwFenBaoUserID'];
-	        }	
+	        
+	        $accountId = intval($rs_player['account_id']);
+	        $field = 'id,NAME,dwFenBaoID,channel_account,limitType,dwFenBaoUserID';
+	        $result = $this->getAccountInfo($accountId, $gameId, $field);
+	        $accountId                  = intval($result['id']);
+	        $info['id']                 = $accountId;
+	        $info['NAME']               = $result['NAME'];
+	        $info['dwFenBaoID']         = $result['dwFenBaoID'];
+	        $info['channel_account']    = $result['channel_account'];
+	        $info['limitType']	        = $result['limitType'];
+	        $info['dwFenBaoUserID']     = $result['dwFenBaoUserID'];
 		}	
 		$this->renderPartial('accountInfo', array(
 		    'title'=>'账号信息查询','gameId'=>$gameId,'info'=>$info,'type'=>$type,
             'game'=>$this->getGame(),'gameServer' =>$this->getServer(),
         ));
 	}
-    //获取帐号信息
-    private function getAccountField($where, $gameId, $field='*'){
-        global $accountServer;
-        $accountConn = $accountServer[$gameId];
-        if($accountConn == false)
-            return false;
-        $conn = SetConn($accountConn);
-        $sql = "select $field from account where $where limit 1";
-        $query = @mysqli_query($conn,$sql);
-        if($query == false)
-            return false;
+    //获取帐号id
+    private function getAccountField($username, $gameId, $field='accountid'){
+    	$snum = giQSAccountHash($username);
+    	$conn = SetConn($gameId,$snum);
+    	$bindtable = getAccountTable($username,'token_bind');
+		$bindwhere = 'token';
+    	$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
+    	if(false == $query = mysqli_query($conn,$selectsql))
+    		return false;
         $rs = @mysqli_fetch_assoc($query);
         @mysqli_close($conn);
         return $rs;
+    }
+    //获取帐号信息
+    private function getAccountInfo($accountId, $gameId, $field='*'){
+    	$snum = giQSAccountHash($username);
+    	$conn = SetConn($gameId,$snum);
+    	$bindtable = getAccountTable($username,'token_bind');
+    	$bindwhere = 'token';
+    	$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
+    	if(false == $query = mysqli_query($conn,$selectsql))
+    		return false;
+    	$rs = @mysqli_fetch_assoc($query);
+    	@mysqli_close($conn);
+    	return $rs;
     }
     /**
      *角色信息
@@ -409,9 +400,7 @@ class OperatorsController extends Controller{
 			if(!$name)
 				$this->display('请输入查询的角色！', 0);
             $where = ($type ==0) ? " name='$name' and serverid='$serverId'" : " id = '$name'";
-            //$sid = togetherServer($serverId);
-            $sid = $serverId;
-            $conn = SetConn($sid);
+            $conn = SetConn($serverId);
             if($conn == false)
                 $this->display('game database connect fail.', 0);
             $field = 'id,name,account_id,serverid,level,money';
@@ -450,9 +439,7 @@ class OperatorsController extends Controller{
 	}
     //获取角色信息
     private function getPlayerField($where, $serverId, $field){
-        //$sid = togetherServer($serverId);
-        $sid = $serverId;
-        $conn = SetConn($sid);
+        $conn = SetConn($serverId);
         if($conn == false)
             return false;
         @mysqli_query($conn,'set names utf8');
@@ -844,6 +831,27 @@ class OperatorsController extends Controller{
         $newAccount = isset($_POST['newAccount']) ? trim($_POST['newAccount']) : '';
         $accountInfo = array();
         if(!empty($oldAccount) && !empty($newAccount)){
+        	$old = $this->getAccountField($oldAccount, $gameId);
+        	$oldaccountid = isset($old['accountid'])?$old['accountid']:0;
+        	$new = $this->getAccountField($newAccount, $gameId);
+        	$newaccountid = isset($new['accountid'])?$new['accountid']:0;
+        	if($oldaccountid && $newaccountid){
+        		$snum = giQSModHash($newaccountid);
+        		$conn = SetConn($gameId,$snum,1);//account分表
+        		$acctable = betaSubTableNew($newaccountid,'account',999);
+        		$sql = "update $acctable set id = '$oldaccountid' where id='$newaccountid'";
+        		if(mysqli_query($conn,$sql)){
+        			$snum = giQSModHash($oldaccountid);
+        			$conn = SetConn($gameId,$snum,1);//account分表
+        			$acctable = betaSubTableNew($oldaccountid,'account',999);
+        			$sql = "update $acctable set id = '$newaccountid' where id='$oldaccountid'";
+        			if(mysqli_query($conn,$sql)){
+        				return true;
+        			}
+        			return false;
+        		}
+        		
+        	}
             global $accountServer;
             $accountConn = $accountServer[$gameId];
             $conn = SetConn($accountConn);

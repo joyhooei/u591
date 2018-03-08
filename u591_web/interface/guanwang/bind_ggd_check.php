@@ -42,15 +42,18 @@ $result = array();
 while ($row = mysqli_fetch_assoc($query)){
     $result[] = $row;
 }
-$returnArr = array();
+$returnArr['bind'] = '';
 if(!empty($result)){
     foreach ($result as $v){
         if(stripos($v['ggp_account'],'@google')){
             $returnArr['google'] = 'google';
+            $returnArr['bind'] = 'google';
         } elseif (stripos($v['ggp_account'],'@fb')){
             $returnArr['fb'] = 'fb';
+            $returnArr['bind'] = 'fb';
         }elseif (stripos($v['ggp_account'],'@vk')){
         	$returnArr['vk'] = 'vk';
+        	$returnArr['bind'] = 'vk';
         }
     }
 }

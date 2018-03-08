@@ -24,19 +24,6 @@ class CommonController extends Controller{
         return true;
     }
 
-    /**
-     * 获取表u_$this->gmtoolTable_id、u_compensate_id递增ID
-     */
-    protected function getIncrementId($table, $serverId){
-    	$sql = "insert into $table(serverid) values ('$serverId')";
-    	$conn = SetConn($serverId);
-    	@mysqli_query($conn,$sql);
-    	$inserId = mysqli_insert_id($conn);
-    	@mysqli_close($conn);
-    	if($inserId)
-    		return $inserId;
-    	return false;
-    }
 
     protected function checkPlayer($player, $type, $serverId){
         $rs = false;
@@ -103,14 +90,11 @@ class CommonController extends Controller{
         return array('-1'=>'退回','0'=>'有效','1'=>'作废','2'=>'结束');
     }
 
-    protected function checkAccount($username, $field = false, $gameId = 8){
-        global $accountServer;
-        $accountConn = $accountServer[$gameId];
-        $conn = SetConn($accountConn);
-        if($conn == false)
-            return false;
-        $where = ($field == false) ? "NAME='$username'" : "id='$username'";
-        $sql = "select id,NAME,dwFenBaoID from account where $where limit 1";
+    protected function checkAccount($accountid,  $gameId ){
+    	$snum = giQSModHash($accountid);
+    	$conn = SetConn($gameId,$snum,1);//account分表
+    	$acctable = betaSubTableNew($accountid,'account',999);
+    	$sql = "select id,NAME,dwFenBaoID from $acctable where id = '$accountid' limit 1";
         $msg = false;
         if(false != $query = mysqli_query($conn,$sql)){
             $rs = @mysqli_fetch_array($query);

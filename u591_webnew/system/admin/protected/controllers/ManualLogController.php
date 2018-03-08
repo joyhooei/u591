@@ -193,12 +193,12 @@ class ManualLogController extends CommonController{
                 $this->display('账号或角色名任填一个！', 0);
 
             if($type == 0){
-                $accountInfo = $this->checkAccount($username, false, $gameId);
+                $accountInfo = $this->checkAccount($username, $gameId);
             } else {
                 $palyerInfo = $this->checkPlayer($username, 0 , $serverId);
                 if($palyerInfo == false)
                     $this->display('角色不存在！', 0);
-                $accountInfo = $this->checkAccount($palyerInfo['account_id'], true, $gameId);
+                $accountInfo = $this->checkAccount($palyerInfo['account_id'], $gameId);
             }
             if($accountInfo == false)
                 $this->display('账号不存在！', 0);
