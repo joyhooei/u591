@@ -117,21 +117,7 @@ class PayLogController extends Controller{
                 $orderId = $v->OrderID;
                 $serverId = $v->ServerID;
                 $accountId = $v->PayID;
-                if($v->PayCode == 'TWD') //台湾币
-                    $payMoney = $v->PayMoney*2;
-                elseif($v->PayCode == 'USD') //美元
-                    $payMoney = round($v->PayMoney)*60;
-                elseif($v->PayCode == 'VND') //越南盾
-                	$payMoney = round($v->PayMoney/250);
-                elseif($v->PayCode == 'RUB'){
-                	$parr = [75=>80, 379=>390, 1490=>1690, 3790=>4290, 7490=>8500, 299=>200];
-                	$payMoney = $parr[$v->PayMoney];
-                }
-                elseif($v->PayCode == 'CNY') 
-                    $payMoney = $v->PayMoney;
-                if(!$payMoney){
-                	break;
-                }
+                $payMoney = $v->data;
                 $rsCard = $this->writeCard($orderId, $accountId, $serverId, $payMoney);
                 if($rsCard === null){
                     $payLog->updateByPk($id, array('IsUC'=>'0'));

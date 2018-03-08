@@ -76,20 +76,19 @@ if ($notify_sig == $check_sig) {
 	}
 	$conn = SetConn(88);
 	$Add_Time=date('Y-m-d H:i:s');
-	$sql="insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
-	$sql=$sql." VALUES ('$cpid','$currency', $accountId,'$PayName','$serverId','$payMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
+	$EMoney = ceil($payMoney*60);//emoney
+	$sql="insert into web_pay_log (CPID,PayCode,PayID,PayName,ServerID,PayMoney,data,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode)";
+	$sql=$sql." VALUES ('$cpid','$currency', $accountId,'$PayName','$serverId','$payMoney','$EMoney','$orderId','$dwFenBaoID','$Add_Time','1','$gameId','$clienttype', '1')";
 	if (mysqli_query($conn,$sql) == False){
 		write_log(ROOT_PATH."log","payssion_callback_error_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
 		header('HTTP/1.1 501 other error');
 		exit('FAILURE');
 	}
-	$EMoney = ceil($payMoney*60);//emoney
+	
 	//write_log(ROOT_PATH."log","payssion_callback_info_","OK".date("Y-m-d H:i:s")."\r\n");
 	WriteCard_money(1,$serverId, $EMoney,$accountId, $orderId,8,0,0,$isgoods);
 	//统计数据
-	global $tongjiServer;
-	$tjAppId = $tongjiServer[$gameId];
-	sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$payMoney,$orderId,1,$tjAppId);
+	sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$EMoney,$orderId);
 
 }else{
 	write_log(ROOT_PATH."log","payssion_callback_error_",$check_msg.',sign error,'.$notify_sig.",post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");

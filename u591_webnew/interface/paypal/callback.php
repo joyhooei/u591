@@ -57,9 +57,7 @@ if($resultstr == 'VERIFIED'){
 		//write_log(ROOT_PATH."log","paypal_callback_info_","OK".date("Y-m-d H:i:s")."\r\n");
 		WriteCard_money(1,$serverId, $EMoney,$accountId, $orderId,8,0,0,$isgoods);
 		//统计数据
-		global $tongjiServer;
-		$tjAppId = $tongjiServer[$gameId];
-		sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$payMoney,$orderId,1,$tjAppId);
+		sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$EMoney,$orderId);
 		exit("success");
 	}else{
 		exit("fail");

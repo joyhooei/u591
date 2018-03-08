@@ -28,7 +28,7 @@ $url = "https://oauth.vk.com/access_token?client_id=$appid&client_secret=$appkey
 $rdata = https_post($url, $data);
 $rdata= json_decode($rdata,true);
 $token = $rdata['access_token'];
-$url = "https://api.vk.com/method/secure.checkToken?token=$userToken&client_secret=$appkey&access_token=$token";
+$url = "https://api.vk.com/method/secure.checkToken?token=$userToken&client_secret=$appkey&access_token=$token&v=5.1";
 $rdata = https_post($url, $data);
 
 write_log(ROOT_PATH."log","vk_result_log_",$url.",result=".$rdata.", post=$post,get=$get, ".date("Y-m-d H:i:s")."\r\n");

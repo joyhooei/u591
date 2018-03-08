@@ -1,5 +1,4 @@
 <?php
-// echo $_SERVER['HTTP_USER_AGENT'];die;
 function  giQSAccountHash( $string,$sum = 999)
 {
 	$string = "$string";
@@ -10,7 +9,7 @@ function  giQSAccountHash( $string,$sum = 999)
 	}
 	return $result+1;
 }
-echo giQSAccountHash('222324361644946@fb');
+echo giQSAccountHash('15659375687');
 /*function  giQSAccountHash( $string )
 {
 	$length = strlen($string);

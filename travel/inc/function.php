@@ -38,7 +38,7 @@ function insertaccount($username,$bindtable,$bindwhere,$gameId,$passwd=''){
 	$myconn = SetConn($gameId,$snum,1);//account分表
 	$acctable = betaSubTable($accountid,'account',999);
 	$accountInsert = "insert into $acctable (id,NAME,reg_date,gameid,password) VALUES ('$accountid','$username', '$reg_time', '$gameId','$passwd');";
-	if(false == mysqli_query($conn,$accountInsert)){
+	if(false == mysqli_query($myconn,$accountInsert)){
 		return  array('status'=>1, 'msg'=>"$accountInsert,". mysqli_error($conn));
 	}
 	return array('status'=>0, 'data'=>$accountid);
