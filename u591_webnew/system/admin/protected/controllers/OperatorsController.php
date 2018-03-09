@@ -831,57 +831,27 @@ class OperatorsController extends Controller{
         $newAccount = isset($_POST['newAccount']) ? trim($_POST['newAccount']) : '';
         $accountInfo = array();
         if(!empty($oldAccount) && !empty($newAccount)){
-        	$old = $this->getAccountField($oldAccount, $gameId);
-        	$oldaccountid = isset($old['accountid'])?$old['accountid']:0;
-        	$new = $this->getAccountField($newAccount, $gameId);
-        	$newaccountid = isset($new['accountid'])?$new['accountid']:0;
-        	if($oldaccountid && $newaccountid){
-        		$snum = giQSModHash($newaccountid);
-        		$conn = SetConn($gameId,$snum,1);//account分表
-        		$acctable = betaSubTableNew($newaccountid,'account',999);
-        		$sql = "update $acctable set id = '$oldaccountid' where id='$newaccountid'";
-        		if(mysqli_query($conn,$sql)){
-        			$snum = giQSModHash($oldaccountid);
-        			$conn = SetConn($gameId,$snum,1);//account分表
-        			$acctable = betaSubTableNew($oldaccountid,'account',999);
-        			$sql = "update $acctable set id = '$newaccountid' where id='$oldaccountid'";
-        			if(mysqli_query($conn,$sql)){
-        				return true;
-        			}
-        			return false;
-        		}
-        		
-        	}
-            global $accountServer;
-            $accountConn = $accountServer[$gameId];
-            $conn = SetConn($accountConn);
-            if($conn == false)
-                $this->display('account connect errer.', 0);
+            $oldRs = $this->getAccountField($oldAccount, $gameId);
+            $accountInfo[] = array('type'=>'停用','NAME'=>$oldAccount, 'id'=>$oldRs['accountid'], 'channel_account'=>'');
 
-            $oldSql = "select id,NAME,channel_account from account where NAME='$oldAccount' limit 1;";
-            $oldQuery = @mysqli_query($conn, $oldSql);
-            $oldRs = @mysqli_fetch_assoc($oldQuery);
-            $accountInfo[] = array('type'=>'停用','NAME'=>$oldRs['NAME'], 'id'=>$oldRs['id'], 'channel_account'=>$oldRs['channel_account']);
-
-            $newSql = "select id,NAME,channel_account,dwFenBaoID from account where NAME='$newAccount' limit 1;";
-            $newQuery = @mysqli_query($conn, $newSql);
-            $newRs = @mysqli_fetch_assoc($newQuery);
-            $accountInfo[] = array('type'=>'启用','NAME'=>$newRs['NAME'], 'id'=>$newRs['id'], 'channel_account'=>$newRs['channel_account']);
+            $newRs = $this->getAccountField($newAccount, $gameId,'id,accountid');
+            $accountInfo[] = array('type'=>'启用','NAME'=>$newAccount, 'id'=>$newRs['accountid'], 'channel_account'=>'');
 
             if(isset($_POST['action']) && $_POST['action'] == 'change' ) {
-                $oldId = intval($_POST['oldId']);
-                $newId = intval($_POST['newId']);
+                $oldId = $oldRs['accountid'];
+                $newId = $newRs['id'];
 
                 if($oldId && $newId){
-                    $oldName = $oldRs['NAME'];
-                    $oldChannlAccount = $oldRs['channel_account'];
-                    $newName = $newRs['NAME'];
-                    $newChannlAccount = $newRs['channel_account'];
-                    $newDwFenBaoID = $newRs['dwFenBaoID'];
-                    //启用的账号被停用
-                    $sql1 = " update account set  name='$oldName@tingyong',channel_account='$oldChannlAccount@tingyong' where id ='$newId';";
-                    //停用的账号被启用
-                    $sql2 = " update account set  name='$newName',channel_account='$newChannlAccount',dwFenBaoID='$newDwFenBaoID'  where id ='$oldId';";
+                	$snum = giQSModHash($oldaccountid);
+                	$conn = SetConn($gameId,$snum,1);//account分表
+                	$acctable = betaSubTableNew($oldaccountid,'account',999);
+                	$sql1 = "update $acctable set channel_account = '$newAccount' where id='$oldaccountid'";
+                	
+                	$snum = giQSAccountHash($newAccount);
+                	$myconn = SetConn($gameId,$snum);
+                	$bindtable = getAccountTable($newAccount,'token_bind');
+                	$sql2 = "update $bindtable set accountid='$oldId' where id = '$newId' limit 1";
+                    
                     $adminName = Yii::app()->user->name;
                     if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2)){
                         write_log(ROOT_PATH."log","account_change_log_", "result=success,$sql1=$sql1, sql2=$sql2,$adminName ".date("Y-m-d H:i:s")."\r\n");
