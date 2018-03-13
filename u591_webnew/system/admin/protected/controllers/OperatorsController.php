@@ -33,7 +33,7 @@ class OperatorsController extends Controller{
 		$snum = giQSModHash($accountid);
 		$conn = SetConn($gameId,$snum,1);//account分表
 		$acctable = betaSubTableNew($accountid,'account',999);
-		$sql = "update account set limitType='$operate' where id='$accountid'";
+		$sql = "update $acctable set limitType='$operate' where id='$accountid'";
 		$rs = false;
 		if(mysqli_query($conn,$sql))
 			$rs = true;
@@ -372,12 +372,11 @@ class OperatorsController extends Controller{
     }
     //获取帐号信息
     private function getAccountInfo($accountId, $gameId, $field='*'){
-    	$snum = giQSAccountHash($username);
-    	$conn = SetConn($gameId,$snum);
-    	$bindtable = getAccountTable($username,'token_bind');
-    	$bindwhere = 'token';
-    	$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
-    	if(false == $query = mysqli_query($conn,$selectsql))
+    	$snum = giQSModHash($accountId);
+    	$conn = SetConn($gameId,$snum,1);//account分表
+    	$acctable = betaSubTableNew($accountId,'account',999);
+    	$sql = "select $field from $acctable where id='$accountId'";
+    	if(false == $query = mysqli_query($conn,$sql))
     		return false;
     	$rs = @mysqli_fetch_assoc($query);
     	@mysqli_close($conn);
@@ -838,19 +837,21 @@ class OperatorsController extends Controller{
             $accountInfo[] = array('type'=>'启用','NAME'=>$newAccount, 'id'=>$newRs['accountid'], 'channel_account'=>'');
 
             if(isset($_POST['action']) && $_POST['action'] == 'change' ) {
-                $oldId = $oldRs['accountid'];
+                $oldaccountid = $oldRs['accountid'];
+                $newaccountid = $newRs['accountid'];
                 $newId = $newRs['id'];
 
                 if($oldId && $newId){
+                	$result = $this->getAccountInfo($newaccountid, $gameId, $field='dwFenBaoID');
                 	$snum = giQSModHash($oldaccountid);
                 	$conn = SetConn($gameId,$snum,1);//account分表
                 	$acctable = betaSubTableNew($oldaccountid,'account',999);
-                	$sql1 = "update $acctable set channel_account = '$newAccount' where id='$oldaccountid'";
+                	$sql1 = "update $acctable set NAME = '$newAccount',dwFenBaoID='{$result['dwFenBaoID']}' where id='$oldaccountid'";
                 	
                 	$snum = giQSAccountHash($newAccount);
                 	$myconn = SetConn($gameId,$snum);
                 	$bindtable = getAccountTable($newAccount,'token_bind');
-                	$sql2 = "update $bindtable set accountid='$oldId' where id = '$newId' limit 1";
+                	$sql2 = "update $bindtable set accountid='$oldaccountid' where id = '$newId' limit 1";
                     
                     $adminName = Yii::app()->user->name;
                     if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2)){

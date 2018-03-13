@@ -9,7 +9,7 @@ function  giQSAccountHash( $string,$sum = 999)
 	}
 	return $result+1;
 }
-echo giQSAccountHash('15659375687');
+echo giQSAccountHash('13459405424');
 /*function  giQSAccountHash( $string )
 {
 	$length = strlen($string);

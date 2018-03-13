@@ -19,7 +19,7 @@ function bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,$type='e
 		return array('status'=>1, 'msg'=>'account server sql error,'.mysqli_error($conn));
 	$result = @mysqli_fetch_assoc($query);
 	if($result){
-		return  array('status'=>0, 'data'=>$result['accountid'],'noNew'=>'1');
+		return  array('status'=>0, 'data'=>$result['accountid'],'noNew'=>'1','msg'=>"$username");
 	}
 	$sql_game = "insert into $bindtable ($bindwhere,accountid,bindtime,gameid) VALUES ('$username','$accountId', '$bind_time','$gameId')";
 	if(false == mysqli_query($conn,$sql_game)){
@@ -32,7 +32,7 @@ function bindaccount($username,$bindtable,$bindwhere,$gameId,$accountId,$type='e
 		$acctable = betaSubTableNew($accountId,'account',999);
 		$accountInsert = "update $acctable set $type='$username' where id='$accountId';";
 		mysqli_query($myconn,$accountInsert);
-		return array('status'=>0, 'noNew'=>'0','data'=>$accountId);
+		return array('status'=>0, 'noNew'=>'0','data'=>$accountId,'msg'=>"$username");
 	}
 	else
 		return array('status'=>1, 'msg'=>'fail');

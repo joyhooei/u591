@@ -28,6 +28,7 @@ if($type == 'android')
     $url = "http://kdygvs-android.88box.com:8091/pocketgames/";
 else
     $url = "http://kdygvs-ios.88box.com:8091/pocketgames/"; //ios url
+//$url = "http://sdk-android.kdygko.pocketgamesol.com:8091/pocketgames/";
 $url .= "client/user/verifyToken/$appId/$appUserId/$token/$sign";
 $result = https_post($url, array());
 $resultArr = json_decode($result, true);

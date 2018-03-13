@@ -193,7 +193,6 @@ class ManualLogController extends CommonController{
                 $this->display('服务器ID不能为空！', 0);
             if(empty($username))
                 $this->display('账号或角色名任填一个！', 0);
-
             if($type == 0){
                 $accountInfo = $this->checkAccount($username, false, $gameId);
             } else {
@@ -211,32 +210,57 @@ class ManualLogController extends CommonController{
 
             if(isset($_POST['action']) && $_POST['action'] == 'pay' ) {
                 $emoney = $_POST['emoney'];
-                //if(!is_numeric($emoney) || strpos($emoney,".") !== false)
-                //    $this->display('金额格式错误,请用整数', 0);
-                $orderId = (isset($_POST['order_id']) && !empty($_POST['order_id'])) ? $_POST['order_id'] : date("ymdHis").floor(microtime()*1000).rand(10000,99999);
+                $ordernum = intval($_POST['order_num']);
                 $giftId = intval($_POST['gift_id']);
                 $gameId = intval($_POST['gameid']);
+                $payCode = $_POST['payCode'];
+                $remark = $_POST['remark'];
+                $level = $this->mangerInfo['level'];
                 if(isset($_POST['dwFenBaoID']) && !empty($_POST['dwFenBaoID']))
-                    $dwFenBaoID = $_POST['dwFenBaoID']; //页面有传就取页面的
-
-                $manualLogModel = new ManualLog;
-                $manualLogModel->server_id = $serverId;
-                $manualLogModel->game_id = $gameId;
-                $manualLogModel->type = $type;
-                $manualLogModel->name = $username;
-                $manualLogModel->order_id = $orderId;
-                $manualLogModel->dwFenBaoID = $dwFenBaoID;
-                $manualLogModel->emoney = $emoney;
-                $manualLogModel->gift_id = $giftId;
-                $manualLogModel->account_id = $accountId;
-                $manualLogModel->account_name = $accountName;
-                $manualLogModel->payCode = $_POST['payCode'];
-                $manualLogModel->verify_level = $this->mangerInfo['level'];;
-                $manualLogModel->remark = $_POST['remark'];
-                if($manualLogModel->save())
-                    $this->display('手工充值提交成功.', 1, $this->createUrl('manualLog/index'));
-                $this->display('手工充值提交失败.'.CHtml::errorSummary($manualLogModel), 0, $this->createUrl('manualLog/index'));
-
+                	$dwFenBaoID = $_POST['dwFenBaoID']; //页面有传就取页面的
+                if($ordernum>1){
+                	for($i=1;$i<=$ordernum;$i++){
+                		$orderId = date("ymdHis").floor(microtime()*1000).rand(10000,99999);
+                		$manualLogModel = new ManualLog;
+                		$manualLogModel->server_id = $serverId;
+                		$manualLogModel->game_id = $gameId;
+                		$manualLogModel->type = $type;
+                		$manualLogModel->name = $username;
+                		$manualLogModel->order_id = $orderId;
+                		$manualLogModel->dwFenBaoID = $dwFenBaoID;
+                		$manualLogModel->emoney = $emoney;
+                		$manualLogModel->gift_id = $giftId;
+                		$manualLogModel->account_id = $accountId;
+                		$manualLogModel->account_name = $accountName;
+                		$manualLogModel->payCode = $payCode;
+                		$manualLogModel->verify_level = $level;
+                		$manualLogModel->remark = $remark;
+                		if(!$manualLogModel->save()){
+                			$this->display('手工充值提交失败.'.CHtml::errorSummary($manualLogModel), 0, $this->createUrl('manualLog/index'));
+                		}
+                		if($i == $ordernum)
+                			$this->display('手工充值提交成功.', 1, $this->createUrl('manualLog/index'));
+                	}
+                }else{
+                	$orderId = (isset($_POST['order_id']) && !empty($_POST['order_id'])) ? $_POST['order_id'] : date("ymdHis").floor(microtime()*1000).rand(10000,99999);
+                	$manualLogModel = new ManualLog;
+                	$manualLogModel->server_id = $serverId;
+                	$manualLogModel->game_id = $gameId;
+                	$manualLogModel->type = $type;
+                	$manualLogModel->name = $username;
+                	$manualLogModel->order_id = $orderId;
+                	$manualLogModel->dwFenBaoID = $dwFenBaoID;
+                	$manualLogModel->emoney = $emoney;
+                	$manualLogModel->gift_id = $giftId;
+                	$manualLogModel->account_id = $accountId;
+                	$manualLogModel->account_name = $accountName;
+                	$manualLogModel->payCode = $payCode;
+                	$manualLogModel->verify_level = $level;
+                	$manualLogModel->remark = $remark;
+                	if($manualLogModel->save())
+                		$this->display('手工充值提交成功.', 1, $this->createUrl('manualLog/index'));
+                	$this->display('手工充值提交失败.'.CHtml::errorSummary($manualLogModel), 0, $this->createUrl('manualLog/index'));
+                }
             } else {
                 /**
                  * 由于u_player合服并未合表

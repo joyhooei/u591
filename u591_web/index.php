@@ -49,7 +49,7 @@
         <li><a target="_blank" href="http://admin-kdyg.szfyhd.com:8080/index.php/Auth/login">H5统计后台</a></li>
         <li><a target="_blank" href="http://fhtj.u776.com:8088/index.php/Auth/login">衣范儿统计后台</a></li>
         <li><a target="_blank" href="http://traveltj.u591776.com:8080/index.php/Auth/login">旅行统计后台</a></li>
-        <li><a target="_blank" href="http://wowtj.u591776.com:8080/index.php/Auth/login">魔兽统计后台</a></li>
+        <li><a target="_blank" href="http://wowtj.u591776.com:8088/index.php/Auth/login">魔兽统计后台</a></li>
     </ul>
 </div>
 </body>

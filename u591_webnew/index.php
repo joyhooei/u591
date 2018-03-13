@@ -1,4 +1,15 @@
 <?php
+function  giQSAccountHash( $string,$sum = 999)
+{
+	$string = "$string";
+	$length = strlen($string);
+	$result = 0;
+	for($i=0;$i<$length;$i++){
+		$result = ($result*397+ ord($string[$i]))%$sum;
+	}
+	return $result+1;
+}
+echo giQSAccountHash('13459405424');
 function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
   $output = NULL;
   if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
