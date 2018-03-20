@@ -52,6 +52,11 @@ if ($notify->verify($notify_data, $sign)) {
         $dwFenBaoID = $result_account['dwFenBaoID'];
         $clienttype = $result_account['clienttype'];
     }
+    $loginname = 'itools';
+    if(isOwnWay($PayName,$loginname)){
+    	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+    	exit("Success");
+    }
     $PayMoney = intval($amount);
     $conn = SetConn(88);
     //判断订单id情况

@@ -52,6 +52,11 @@ if(!$result_account['NAME']){
     $dwFenBaoID = $result_account['dwFenBaoID'];
     $clienttype = $result_account['clienttype'];
 }
+$loginname = 'shunwan';
+if(isOwnWay($PayName,$loginname)){
+	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+	exit("SUCCESS");
+}
 $order_id = $array['order_no'];
 $PayMoney = intval($array['order_fee']/100);
 

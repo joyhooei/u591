@@ -55,6 +55,11 @@ if(!$result){
         $dwFenBaoID = $result_account['dwFenBaoID'];
         $clienttype = $result_account['clienttype'];
     }
+    $loginname = '07073';
+    if(isOwnWay($PayName,$loginname)){
+    	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+    	exit("success");
+    }
     $conn = SetConn(88);
     $Add_Time=date('Y-m-d H:i:s');
     $sql="insert into web_pay_log (CPID,PayID,PayName,ServerID,PayMoney,OrderID,dwFenBaoID,Add_Time,SubStat,game_id,clienttype, rpCode,packageName)";

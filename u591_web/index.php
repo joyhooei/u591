@@ -33,8 +33,8 @@
           <li><a target="_blank" href="http://pokenmweb.u776hainiu.com/admin.php/public/login.html">南美web后台</a></li>
           <li><a target="_blank" href="http://login-kdyg.szfyhd.com/admin.php/public/login.html">H5web后台</a></li>
           <li><a target="_blank" href="http://fhweb.u776.com:86/admin.php/public/login.html">衣范儿web后台</a></li>
-          <li><a target="_blank" href="http://travelweb.u591776.com/admin.php/public/login.html">旅行web后台</a></li>
-          <li><a target="_blank" href="http://wowweb.u591776.com/admin.php/public/login.html">魔兽web后台</a></li>
+          <li><a target="_blank" href="http://travelweb.u776.com/admin.php/public/login.html">旅行web后台</a></li>
+          <li><a target="_blank" href="http://wowweb.u776.com:83/admin.php/public/login.html">魔兽web后台</a></li>
           <li><a target="_blank" href="http://www.u776.com/public/index.php/admin">官网编辑后台</a></li>
           
       </ul>

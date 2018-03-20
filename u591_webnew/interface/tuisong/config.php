@@ -12,7 +12,8 @@ $key_arr = array(
     			'androidels2'=>array('apiKey'=>'AAAAPUCRPZU:APA91bF4_l_QuhmDeINKphVyPx27ENw_8FNEkyLJyvAl_IttVIl83johaMarrl5hUWeuaO556_whDm3hdE4z9XU3mH2rrp-STH9s907yR3_pTWTS3jBjqFO8fMKEkLF19FeBeKQXmmF9'),
     			'androidels3'=>array('apiKey'=>'AAAA6T-qdI0:APA91bFwpLq0I34_T_2oiloT4uzz88VDRmS2RhiYjSIwMqrot-gyaH_LOqn2wYyG4HZRLv0sdG2mQyrs4Fo0aKqK5zDY_2NArKvQcjyOh9R-Rtr0Za_mIy88Iz_dqv7SQrsR9LFfur9L'),
     			'androidar'=>array('apiKey'=>'AAAAAwblpDU:APA91bE1l2npmXEBJTg-o_KNU-cBqs-hClQPEooBfPHum-VWBwlyMWfbAnlAIxSL88yGdr7yCSJA4xIO8iTa2wVrihDWl-xXRkI3tdh8typME-R0rG6kt0QwbaE1z57-iVard1GXFJvJ'),
-    			
+    			'androidar1'=>array('apiKey'=>'AAAABdQdnTs:APA91bE9G9woXJPN8FMOdeQ2j6vrb2grt0ZUeYxzdP-WjXb1mtoEcxFlcco_btk-3EvnKt8TPDXJipEDhxe2Z_o6yqfFxhqtRMcda0PZsxpJAihg0O6KgwefgSvekGK9k-ktaIs55n9J'),
+    			 
     	),
 );
 

@@ -7,10 +7,12 @@
  */
 include_once 'config.php';
 $accountid = $_REQUEST['accountid']; 
-write_log(ROOT_PATH."log","close_log_","post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
-if(!$accountid)
+$serverid = $_REQUEST['serverid'];
+write_log(ROOT_PATH."log","close_log_","request=$_REQUEST, ".date("Y-m-d H:i:s")."\r\n");
+if(!$accountid || !$serverid)
     exit(0);
 $conn = SetConn(88);
-$sql = "insert into  acc_close(accountid) values($accountid)";
+$updateTime = date("Y-m-d H:i:s");
+$sql = "insert into  g_acc_close(accountId,serverId,updateTime) values($accountid,$serverid,'$updateTime')";
 @mysqli_query($conn,$sql);
 exit(1);

@@ -79,7 +79,7 @@ foreach ($orderInfo as $v){
     $money = $appleIdVal[$productId][0];
     $yuanbao = $appleIdVal[$productId][1];
     $currency = $appleIdVal[$productId][2];
-    $sql = " select count(id) count from web_pay_log where OrderID='$orderId' limit 1;";
+    $sql = " select count(id) count from web_pay_log where OrderID='$orderId' and game_id='$game_id' limit 1;";
     $query = @mysqli_query($conn, $sql);
     $result_count = @mysqli_fetch_assoc($query);
     if($result_count['count']){

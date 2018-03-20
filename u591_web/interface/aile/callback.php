@@ -73,7 +73,11 @@ if(!$result_account['NAME']){
     $dwFenBaoID = $result_account['dwFenBaoID'];
     $clienttype = $result_account['clienttype'];
 }
-
+$loginname = 'aile';
+if(isOwnWay($PayName,$loginname)){
+	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+	exit($success);
+}
 $conn = SetConn(88);
 if($conn == false){
     write_log(ROOT_PATH."log","aile_callback_error_","web mysql connect error, ".date("Y-m-d H:i:s")."\r\n");

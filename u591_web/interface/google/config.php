@@ -186,6 +186,15 @@ $google_id_value = array(
 		'vszhandou_138'   => array('19.99', 1820, 'USD'),
 		'vszhandou_348'   => array('49.99', 4540, 'USD'),
 		'vszhandou_698'   => array('99.99', 9090, 'USD'),
+		
+		'zalo_me_nbxxjlzd_099'     => array('0.99', 90	, 'USD'),
+		'zalo_me_nbxxjlzd_199'    => array('1.99', 180,'USD'),
+		'zalo_me_nbxxjlzd_399'    => array('3.99', 360,'USD'),
+		'zalo_me_nbxxjlzd_499'    => array('4.99', 450, 'USD'),
+		'zalo_me_nbxxjlzd_999'   => array('9.99', 910, 'USD'),
+		'zalo_me_nbxxjlzd_1999'   => array('19.99', 1820, 'USD'),
+		'zalo_me_nbxxjlzd_4999'   => array('49.99', 4540, 'USD'),
+		'zalo_me_nbxxjlzd_9999'   => array('99.99', 9090, 'USD'),
 
 		'skypay_60'     => array('0.99', 60	, 'USD'),
 		'skypay_300'    => array('4.99', 300,'USD'),

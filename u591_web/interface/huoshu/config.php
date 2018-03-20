@@ -43,6 +43,8 @@ $key_arr = array(
 				'ios33'=>array('appId'=>'60073','appSecret'=>'200c73ff9bbdb30efda0973cf6664fa7'),
 				'ios34'=>array('appId'=>'60089','appSecret'=>'804859b10d1b17ecb03db916dae19690'),
 				'ios35'=>array('appId'=>'60090','appSecret'=>'1c8e9d05ad950254607b14fdb9857c4f'),
+				'ios36'=>array('appId'=>'60102','appSecret'=>'417ca61e491f49ccc34c8455d2929ed8'),
+				'ios37'=>array('appId'=>'60103','appSecret'=>'ff030972aa42f8205b2005a7581d181f'),
 				'android'=>array('appId'=>'60011','appSecret'=>'93f35bd538761f5fbe2329dafe20c6e3'),
 		),
 );

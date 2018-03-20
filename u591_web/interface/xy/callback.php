@@ -52,7 +52,11 @@ if(!$result_account['NAME']){
     $dwFenBaoID = $result_account['dwFenBaoID'];
     $clienttype = $result_account['clienttype'];
 }
-
+$loginname = 'xy';
+if(isOwnWay($PayName,$loginname)){
+	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+	exit(json_encode(array("ret"=>0,"msg"=>"")));
+}
 $order_id = $orderid;
 $PayMoney = intval($amount);
 $conn = SetConn(88);

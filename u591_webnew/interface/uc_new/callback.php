@@ -45,7 +45,7 @@ if($sign != $sign_check){
 }
 
 $conn = SetConn(88);
-$sql = "select rpCode from web_pay_log where OrderID = '$orderId' limit 1;";
+$sql = "select rpCode from web_pay_log where OrderID = '$orderId' and game_id='$game_id' limit 1;";
 $query = mysqli_query($conn, $sql);
 $result = @mysqli_fetch_array($query);
 
@@ -70,6 +70,12 @@ if(!$result){
         $PayName = $result_account['NAME'];
         $dwFenBaoID = $result_account['dwFenBaoID'];
         $clienttype = $result_account['clienttype'];
+    }
+    $ch = explode('@', $PayName);
+    $chname = $ch[count($ch)-1];
+    if(!in_array($chname, array('pp','ali','wdj','uc'))){
+    	write_log(ROOT_PATH."log","name_ali_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+    	exit("SUCCESS");
     }
     $conn = SetConn(88);
     $Add_Time=date('Y-m-d H:i:s');

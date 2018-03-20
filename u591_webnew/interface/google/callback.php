@@ -67,7 +67,7 @@ if ($verifyOK) {
     $currency= isset($google_id_value[$productId][2]) ? $google_id_value[$productId][2] : 'USD';
     $conn = SetConn(88);
     //判断订单id情况
-    $sql = "SELECT COUNT(id) count FROM web_pay_log WHERE OrderID ='$orderId' limit 1; ";
+    $sql = "SELECT COUNT(id) count FROM web_pay_log WHERE OrderID ='$orderId' and game_id='$gameId' limit 1; ";
     $query = @mysqli_query($conn, $sql);
     $result_count = @mysqli_fetch_assoc($query);
     if($result_count['count']){
