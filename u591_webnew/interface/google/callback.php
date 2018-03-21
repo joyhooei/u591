@@ -84,7 +84,8 @@ if ($verifyOK) {
     @mysqli_close($conn);
     WriteCard_money(1,$serverId, $EMoney,$accountId, $orderId,8,0,0,$isgoods);//写入游戏库
     //统计数据
-   sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$EMoney,$orderId,1);
+    $tmoney = round($PayMoney/$exrateUS[$currency],2);
+   sendTongjiData($gameId,$accountId,$serverId,$dwFenBaoID,0,$tmoney,$orderId);
     exit('200');
 } else {
    write_log(ROOT_PATH."log","google_callback_error_", "sign error. verifyOK=$verifyOK, post=$post, get=$get," .date('Y-m-d H:i:s')."\r\n");

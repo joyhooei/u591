@@ -180,9 +180,12 @@ class GameEditionController extends Controller{
     	$this->renderPartial('actadd', array('title' =>'运营活动', 'game' => $game,'startTime'=>$startTime,'endTime'=>$endTime));
     }
     public function actionActupdate($id){
+    	$game = Game::model()->getGame($this->mangerInfo['game_id'], '游戏');
     	$model = Act::model();
     	$act = $model->findByPk($id);
     	if(!empty($_POST)){
+    		$serverId = implode(',', $_POST['serverId']);
+    		$act->serverid = $serverId;
     		$act->starttime = $_POST['starttime'];
     		$act->endtime = $_POST['endtime'];
     		$act->textureResPath = $_POST['textureResPath'];
@@ -201,6 +204,6 @@ class GameEditionController extends Controller{
     			$this->display(CHtml::errorSummary($act), 0);
     		}
     	}
-    	$this->renderPartial('actupdate', array('title' =>'运营活动', 'info' => $act));
+    	$this->renderPartial('actupdate', array('title' =>'运营活动', 'game' => $game, 'info' => $act));
     }
 }

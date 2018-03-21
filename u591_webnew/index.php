@@ -14,6 +14,7 @@ $con->close ();
 
 $dbsdk = $this->load->database ( 'sdk', true );*/
 /*$handle = fopen ( "C:\\Users\\Administrator\\Desktop\\apple_all_log_180317.txt", "r" );
+set_time_limit(0);
 $i = 0;
 if ($handle) {
 	while ( ! feof ( $handle ) ) {
@@ -23,9 +24,8 @@ if ($handle) {
 		$data = unserialize($sarr[0]);
 		$url = "http://pokeynweb.u591776.com/interface/apple/callback.php";
 		echo $i++;
-		echo $data['ext'];
+		echo $data['ext'].PHP_EOL;
 		https_post($url, $data);
-		
 	}
 	fclose ( $handle );
 }
@@ -39,7 +39,7 @@ function https_post($url, $data, $i = 0) {
 	}
 	$curl = curl_init ( $url ); // 启动一个CURL会话
 	curl_setopt ( $curl, CURLOPT_SSL_VERIFYPEER, 0 ); // 对认证证书来源的检查
-	curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 1 ); // 从证书中检查SSL加密算法是否存在
+	curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 2 ); // 从证书中检查SSL加密算法是否存在
 	// curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 	curl_setopt ( $curl, CURLOPT_FOLLOWLOCATION, 1 ); // 使用自动跳转
 	curl_setopt ( $curl, CURLOPT_AUTOREFERER, 1 ); // 自动设置Referer
@@ -62,8 +62,8 @@ function https_post($url, $data, $i = 0) {
 	}
 	curl_close ($curl);
 	return $tmpInfo;
-}
-die ();*/
+}*/
+die ();
 function giQSAccountHash($string, $sum = 999) {
 	$string = "$string";
 	$length = strlen ( $string );

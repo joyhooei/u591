@@ -8,6 +8,7 @@
  * @return:
  */
 include("inc/config.php");
+include("inc/config_account.php");
 include("inc/function.php");
 /*$clientIp = getIP_front();
 write_log("log","unityOrder_info_","ip=$clientIp, ".date("Y-m-d H:i:s")."\r\n");
@@ -17,15 +18,16 @@ if($clientIp != '121.43.39.108'){
 set_time_limit(1000);
 $conn = SetConn(88);
 $nowDate = date('Y-m-d', time());
-$nowDate = '2017-12-01';
+$nowDate = '2018-01-01';
+$endDate = '2018-03-21';
 $startDate = $_REQUEST['startDate'] ? $_REQUEST['startDate'] : $nowDate;
-$endDate = $_REQUEST['endDate'] ? $_REQUEST['endDate'] : $nowDate;
+$endDate = $_REQUEST['endDate'] ? $_REQUEST['endDate'] : $endDate;
 
 $startTime = $startDate.' 00:00:00';
 $endTime = $endDate.' 23:59:59';
 if(strtotime($startTime) >= strtotime($endTime))
     exit(json_encode(array('status'=>1,'msg'=>'date error.')));
-$sql = "select * from web_pay_log where Add_Time BETWEEN '$startTime' and '$endTime'";
+$sql = "select * from web_pay_log where Add_Time BETWEEN '$startTime' and '$endTime' and game_id=100";
 $query = @mysqli_query($conn,$sql);
 while (@$rows = mysqli_fetch_assoc($query)){
     $orderId = $rows['OrderID'];
@@ -33,7 +35,7 @@ while (@$rows = mysqli_fetch_assoc($query)){
     $accountId = $rows['PayID'];
     $serverId = $rows['ServerID'];
     $dwFenBaoID = $rows['dwFenBaoID'];
-    $payMoney = $rows['PayMoney'];
+    $payMoney = round($rows['PayMoney']/$exrateUS[$rows['PayCode']],2);
     $isPay = ($rows['rpCode'] ==1) ? 0 : 1;
     $addTime = strtotime($rows['Add_Time']);
     $isNew = countOrderId($conn, $accountId, $gameId);
@@ -56,7 +58,7 @@ function countOrderId($conn, $accountId, $gameId){
 }
 
 function setMs ($gameId,$accountId,$serverId,$fenbaoId,$lev=0,$money, $orderId,$isNew,$isPay,$addTime){
-    $conn = ConnServer2('10.26.94.88', 'payor', 'u591*hainiu', 'sdk');
+    $conn = ConnServer2('18.194.139.138', 'payor', 'u591*hainiu', 'sdk');
     if($conn == false)
         return false;
     $sql2 = "select id from u_paylog where orderid='$orderId' limit 1";
@@ -64,24 +66,12 @@ function setMs ($gameId,$accountId,$serverId,$fenbaoId,$lev=0,$money, $orderId,$
     $result = @mysqli_fetch_assoc($query2);
     if(!isset($result['id'])) {
         //统计数据
-        global $tongjiServer;
-        $tjAppId = $tongjiServer[$gameId];
         $sql = "insert into u_paylog (accountid,serverid,channel,lev,money,orderid,is_new,is_pay,created_at,appid)";
-        $sql .= " values('$accountId','$serverId','$fenbaoId','$lev','$money','$orderId','$isNew','$isPay','$addTime','$tjAppId')";
+        $sql .= " values('$accountId','$serverId','$fenbaoId','$lev','$money','$orderId','$isNew','$isPay','$addTime','$gameId')";
         if(@mysqli_query($conn, $sql))
             return true;
         return true;
     }
-    return true;
-}
-
-function updateDate($orderId, $addTime){
-    $conn = ConnServer2('10.26.94.88', 'payor', 'u591*hainiu', 'sdk');
-    if($conn == false)
-        return false;
-    $time = strtotime($addTime);
-    $sql = "update u_paylog set created_at='$time' where orderid='$orderId'";
-    @mysqli_query($conn, $sql);
     return true;
 }
 

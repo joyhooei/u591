@@ -95,8 +95,9 @@ foreach ($orderInfo as $v){
         if(mysqli_query($conn, $insert_sql)){
             WriteCard_money(1,$server_id, $yuanbao,$account_id, $orderId,8,0,0,$isgoods);//写入游戏库
             //统计数据
-            sendTongjiData($game_id,$account_id,$server_id,$dwFenBaoID,0,$yuanbao,$orderId,1);
-            appData(array('accountid'=>$account_id,'serverid'=>$server_id,'channel'=>$dwFenBaoID,'money'=>$money,'orderid'=>$orderId,'created_at'=>time(),'mac'=>$mac));
+            $tmoney = round($money/$exrateUS[$currency],2);
+            sendTongjiData($game_id,$account_id,$server_id,$dwFenBaoID,0,$tmoney,$orderId,1);
+            appData(array('accountid'=>$account_id,'serverid'=>$server_id,'channel'=>$dwFenBaoID,'money'=>$tmoney,'orderid'=>$orderId,'created_at'=>time(),'mac'=>$mac));
             $returnMsg = 'success';
         }else{
             write_log(ROOT_PATH."log","apple_error_log_","sql error,sql=$insert_sql, ".date("Y-m-d H:i:s")."\r\n");
