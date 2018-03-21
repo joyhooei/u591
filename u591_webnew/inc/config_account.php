@@ -14,4 +14,8 @@ function isOwnWay($PayName,$loginname){
 	}else
 		return 0;
 }
+$exrateUS = array(
+		'RUB'=>57.5,
+		'USD'=>1,
+)
 ?>
