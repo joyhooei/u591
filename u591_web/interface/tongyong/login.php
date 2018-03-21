@@ -610,6 +610,14 @@ switch ($sdkType) {
 		$rs = https_post ( $url, $data );
 		echo $rs;
 		break;
+	case 248 : // 华为国际
+		$url = $webHost . "/interface/huaweiInt/login.php";
+		$data ['user_token'] = $p;
+		$data ['uid'] = $token;
+		$data ['game_id'] = $gameId;
+		$rs = https_post ( $url, $data );
+		echo $rs;
+		break;
 	case 1001 : // h5
 		$url = $webHost . '/interface/h5/login.php';
 		$data ['user_token'] = $p;

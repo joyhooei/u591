@@ -54,11 +54,11 @@ $appleIdVal = array(
 		'uitgy_648'   => array('99.99', 5940, 'USD'),
 		'bvhb_36'   => array('5.99', 360, 'USD'),
 		
-		'acfrewfc_80'      => array('75','80', 'RUB'), //
-		'apndfb_390'      => array('379','390', 'RUB'), //
-		'ahrwgr_1690'     => array('1490', '1690', 'RUB'),
-		'asdgtry_4290'     => array('3790', '4290', 'RUB'),
-		'aythtgdf_8500'    => array('7490', '8500', 'RUB'),
-		'adgbety_299'    => array('299', '200', 'RUB'),
+		'ccfrewfc_80'      => array('75','80', 'RUB'), //
+		'cpndfb_390'      => array('379','390', 'RUB'), //
+		'chrwgr_1690'     => array('1490', '1690', 'RUB'),
+		'csdgtry_4290'     => array('3790', '4290', 'RUB'),
+		'cythtgdf_8500'    => array('7490', '8500', 'RUB'),
+		'cdgbety_299'    => array('299', '200', 'RUB'),
 
 );

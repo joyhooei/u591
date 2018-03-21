@@ -116,11 +116,11 @@
                                 ?>
                             </select>
                             
-                            <select name="gamefenbao" class="input-medium">
+                            <!-- <select name="gamefenbao" class="input-medium">
                                 <option value="0" <?=(isset($_POST['gamefenbao']) && $_POST['gamefenbao'] == 0) ? 'selected' : ''?>>全部游戏</option>
                              	<option value="1" <?=(isset($_POST['gamefenbao']) && $_POST['gamefenbao'] == 1) ? 'selected' : ''?>>口袋进化</option>
                              	<option value="2" <?=(isset($_POST['gamefenbao']) && $_POST['gamefenbao'] == 2) ? 'selected' : ''?>>精灵世界</option>
-                            </select>
+                            </select> -->
                             
                             <select name="rpCode" class="input-medium">
                                 <option value="0" <?=(isset($_POST['rpCode']) && $_POST['rpCode'] == 0) ? 'selected' : ''?>>充值状态</option>

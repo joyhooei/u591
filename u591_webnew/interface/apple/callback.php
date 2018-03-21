@@ -96,7 +96,7 @@ foreach ($orderInfo as $v){
             WriteCard_money(1,$server_id, $yuanbao,$account_id, $orderId,8,0,0,$isgoods);//写入游戏库
             //统计数据
             $tmoney = round($money/$exrateUS[$currency],2);
-            sendTongjiData($game_id,$account_id,$server_id,$dwFenBaoID,0,$tmoney,$orderId,1);
+            sendTongjiData($game_id,$account_id,$server_id,$dwFenBaoID,0,$tmoney,$orderId);
             appData(array('accountid'=>$account_id,'serverid'=>$server_id,'channel'=>$dwFenBaoID,'money'=>$tmoney,'orderid'=>$orderId,'created_at'=>time(),'mac'=>$mac));
             $returnMsg = 'success';
         }else{

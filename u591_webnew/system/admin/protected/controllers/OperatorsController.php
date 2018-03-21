@@ -165,7 +165,7 @@ class OperatorsController extends Controller{
      *客服命令
      */
 	public function actionServiceCommand(){
-		$typeList = array(''=>'请选择...', 1=>'强制下线', 2=>'禁言', 3=>'禁言解封', 6=>'游戏公告',8=>'给玩家发送邮件', /*66=>'取消游戏公告'*/);
+		$typeList = array(''=>'请选择...', 1=>'强制下线', 2=>'禁言', 3=>'禁言解封', 6=>'游戏公告',8=>'给玩家发送邮件', 11=>'自动喊话');
 		if($this->mangerInfo['login_name'] == 'admin')
 		    $typeList['7'] = '模拟充值';
         $gameId = isset($_POST['gameId']) ? intval($_POST['gameid']) : $this->mangerInfo['game_id'];
@@ -224,6 +224,20 @@ class OperatorsController extends Controller{
 				$sql = "insert into $table(type, serverid, param, message) values('$type', '$serverid', '$playerId', '$message')";
 				
 				$tag = "玩家发邮件  玩家:$playerName($playerId) 区服:$serverid 消息:$message";
+			} elseif($type == 11) {
+				if($banTime>60)
+					$this->error('循环分钟数不能超过60！');
+				if(!$message)
+					$this->error('聊天内容不能为空！');
+				$talkStarttime = strtotime($_POST['talkStarttime']);
+				$talkEndtime = strtotime($_POST['talkEndtime']);
+				if(!$talkStarttime || $talkEndtime)
+					$this->error('喊话时间范围不能为空！');
+				$talkStarttime = date('ymdHis',strtotime($talkStarttime));
+				$talkEndtime = date('ymdHis',strtotime($talkEndtime));
+				$sql = "insert into $table(type, serverid, param, message, award_type1,award_param1,award_amount1)
+				 values('$type','$serverid', '$playerId', '$message', '$talkStarttime','$talkEndtime','$banTime')";
+				$tag = "自动喊话 $playerName($playerId) 区服:$serverid 间隔时间(分):$banTime 开始时间: $talkStarttime 截至时间:$talkEndtime 消息:$message";
 			} else if($type == 7){
 				if($awardType1 <=0)
 					$this->error('充值金额不能小等于0');

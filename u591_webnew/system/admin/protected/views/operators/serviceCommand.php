@@ -65,15 +65,20 @@
                 </tr>
                 
                  <tr class="controller">
-                    <th style="width:130px;line-height:30px;text-align:right">时间(单位分)</th>
+                    <th style="width:130px;line-height:30px;text-align:right">间隔时间(单位分)</th>
                     <td>
                     	<input type="text" placeholder="" name="banTime" value="60">
                     </td>
                 </tr>
                  
-                 
                  <tr class="controller">
-                    <th style="width:130px;line-height:30px;text-align:right">禁言截至时间</th>
+                    <th style="width:130px;line-height:30px;text-align:right">禁言/喊话开始时间</th>
+                    <td>
+                    	<input type="text" placeholder="" name="talkStarttime" value="" class="form_datetime" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})">
+                    </td>
+                </tr>
+                 <tr class="controller">
+                    <th style="width:130px;line-height:30px;text-align:right">禁言/喊话截止时间</th>
                     <td>
                     	<input type="text" placeholder="" name="talkEndtime" value="" class="form_datetime" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})">
                     </td>
@@ -112,6 +117,7 @@
    	   		var $banTime = $("input[name='banTime']");
    	   	   	var $awardType1 = $("input[name='awardType1']");
    	   	   	var $message = $("textarea[name='message']");
+   	   		var $talkStarttime = $("input[name='talkStarttime']");
    	   	   	var $talkEndtime = $("input[name='talkEndtime']");
    	   	   	var $bulletinEndtime = $("input[name='bulletinEndtime']");
    	   	   	
@@ -121,6 +127,7 @@
 				$message.parents("tr").hide();
 				$talkEndtime.parents("tr").hide();
 				$bulletinEndtime.parents("tr").hide();
+				$talkStarttime.parents("tr").hide();
 				if(val == 2){//禁言
 					$talkEndtime.parents("tr").show();
 					$banTime.parents("tr").hide();
@@ -136,6 +143,11 @@
 				} else if(val == 8){
 					$banTime.parents("tr").hide();
 					$(this).parents("tr").next(".controller").show();
+					$message.parents("tr").show();
+				} else if(val == 11){
+					$banTime.parents("tr").show();
+					$talkStarttime.parents("tr").show();
+					$talkEndtime.parents("tr").show();
 					$message.parents("tr").show();
 				} else {
 					$banTime.parents("tr").hide();
