@@ -16,7 +16,7 @@ write_log(ROOT_PATH."log","google_callback_info_all_","post=$post,get=$get, ".da
 $google_wallet_data = base64_decode(str_replace(' ', '+', $_REQUEST['sinedData']));
 $sinature = base64_decode($_REQUEST['sinature']);
 $time = date('Y-m-d H:i:s');
-
+write_log(ROOT_PATH."log","google_callback_log_","$google_wallet_data, sign=$sinature, ".date("Y-m-d H:i:s")."\r\n");
 if (empty($google_wallet_data) || empty($sinature)) {
     write_log(ROOT_PATH."log","google_callback_error_","106验证信息为空,post=$post,get=$get, ". date('Y-m-d H:i:s')."\r\n");
     exit('106');//验证信息为空

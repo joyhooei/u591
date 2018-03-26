@@ -31,83 +31,12 @@
                 <ul class="recharge-type">
                     <li class="I18N" onclick="javascript:void(0);" style="display: none;">public.bankAuto</li>
                     <li class="I18N" onclick="javascript:void(0);" style="display: none;">public.bankHuman</li>
-                    <li class="active I18N" onclick="javascript:window.location.href='#/card'">public.card</li>
                     <li class="I18N" onclick="javascript:window.location.href='#/bankonline'">public.bankOnline</li>
+                    <li class="active I18N" onclick="javascript:window.location.href='#/card'" style="display: none;">public.card</li>
                     <li class="I18N" onclick="javascript:void(0);" style="display: none;">public.sms</li>
                 </ul>
             </div>
-
-<div class="box-card  page">
-                <input type="hidden" name="extern" value="<?=isset($_REQUEST['extern']) ? $_REQUEST['extern'] : ''; ?>">
-                <div class="title-line">
-                    <div><img src="./src/img/icon-bank.png"></div>
-                    <div><p class="I18N">public.card</p></div>
-                </div>
-
-                <div class="box-select">
-                    <div class="zoneId">
-                        <h4 class="I18N">public.serverName</h3>
-                        <button class="sel-zoneId">
-                            <span class="target"><?=isset($_REQUEST['server_name']) ? $_REQUEST['server_name'] : ''; ?></span>
-                        </button>
-                    </div>
-
-                    <div class="playId">
-                        <h4 class="I18N">public.playerName</h3>
-                        <button class="sel-playId">
-                            <span class="target"><?=isset($_REQUEST['player_name']) ? $_REQUEST['player_name'] : ''; ?></span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="providers">
-                    <h3 class="I18N">public.chooseServer</h3>
-                    <ul class="list-provider">
-                        <li class="">
-                            <img src="./src/img/provider-1.png" alt="" data-id="0" data-exinfo="mobifone">
-                        </li>
-                        <li>
-                            <img src="./src/img/provider-2.png" alt="" data-id="1" data-exinfo="vinaphone">
-                        </li>
-                        <li class="active">
-                            <img src="./src/img/provider-3.png" alt="" data-id="2" data-exinfo="viettel">
-                        </li>
-
-                        <!--<li>-->
-                        <!--<img src="./src/img/provider-4.png" alt="" data-id="3">-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<img src="./src/img/provider-5.png" alt="" data-id="4">-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<img src="./src/img/provider-6.png" alt="" data-id="5">-->
-                        <!--</li>-->
-                    </ul>
-                </div>
-                <div class="icon-tab">
-                    <div>
-                        <img src="./src/img/icon-question.png">
-                    </div>
-                    <div>
-                        <a href="javascript:void(0)" class="scale">*<span class="I18N">public.scale</span></a>
-                    </div>
-                </div>
-                <div class="line-tab">
-                    <div><hr/></div>
-                    <div class="tab-title">
-                        <p class="I18N">others.cardCharge</p>
-                    </div>
-                    <div><hr/></div>
-                </div>
-                <div class="box-card-charge">
-                    <input type="text" placeholder="Seri thẻ" class="card-number">
-                    <input type="text" placeholder="Mã thẻ" class="card-password">
-                </div>
-
-                <button class="btn-card-charge I18N">public.charge</button>
-            </div>
-
-            <div class="bank-online page">
+<div class="bank-online page" style="display: block">
                 <div class="title-line">
                     <div><img src="./src/img/icon-atm.png"></div>
                     <div><p class="I18N">public.bankOnline</p></div>
@@ -261,7 +190,77 @@
                     </div>
                 </div>
             </div>
+<div class="box-card  page">
+                <input type="hidden" name="extern" value="<?=isset($_REQUEST['extern']) ? $_REQUEST['extern'] : ''; ?>">
+                <div class="title-line">
+                    <div><img src="./src/img/icon-bank.png"></div>
+                    <div><p class="I18N">public.card</p></div>
+                </div>
 
+                <div class="box-select">
+                    <div class="zoneId">
+                        <h4 class="I18N">public.serverName</h3>
+                        <button class="sel-zoneId">
+                            <span class="target"><?=isset($_REQUEST['server_name']) ? $_REQUEST['server_name'] : ''; ?></span>
+                        </button>
+                    </div>
+
+                    <div class="playId">
+                        <h4 class="I18N">public.playerName</h3>
+                        <button class="sel-playId">
+                            <span class="target"><?=isset($_REQUEST['player_name']) ? $_REQUEST['player_name'] : ''; ?></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="providers">
+                    <h3 class="I18N">public.chooseServer</h3>
+                    <ul class="list-provider">
+                        <li class="">
+                            <img src="./src/img/provider-1.png" alt="" data-id="0" data-exinfo="mobifone">
+                        </li>
+                        <li>
+                            <img src="./src/img/provider-2.png" alt="" data-id="1" data-exinfo="vinaphone">
+                        </li>
+                        <li class="active">
+                            <img src="./src/img/provider-3.png" alt="" data-id="2" data-exinfo="viettel">
+                        </li>
+
+                        <!--<li>-->
+                        <!--<img src="./src/img/provider-4.png" alt="" data-id="3">-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--<img src="./src/img/provider-5.png" alt="" data-id="4">-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--<img src="./src/img/provider-6.png" alt="" data-id="5">-->
+                        <!--</li>-->
+                    </ul>
+                </div>
+                <div class="icon-tab">
+                    <div>
+                        <img src="./src/img/icon-question.png">
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" class="scale">*<span class="I18N">public.scale</span></a>
+                    </div>
+                </div>
+                <div class="line-tab">
+                    <div><hr/></div>
+                    <div class="tab-title">
+                        <p class="I18N">others.cardCharge</p>
+                    </div>
+                    <div><hr/></div>
+                </div>
+                <div class="box-card-charge">
+                    <input type="text" placeholder="Seri thẻ" class="card-number">
+                    <input type="text" placeholder="Mã thẻ" class="card-password">
+                </div>
+
+                <button class="btn-card-charge I18N">public.charge</button>
+            </div>
+
+            
         </div>
     </div>
 </div>

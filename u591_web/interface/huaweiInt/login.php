@@ -13,11 +13,12 @@ write_log ( ROOT_PATH . "log", "huaweiInt_login_log_", "post=$post,get=$get, " .
 $userToken = $_REQUEST ['user_token'];
 $appUid = $_REQUEST ['uid'];
 $gameId = $_REQUEST ['game_id'];
-$appUidArr = explode ( '_', $userToken );
+$appUidArr = explode ( '_', $appUid );
 $data ['uin'] = $appUidArr [0];
 $data ['nonce'] = $appUidArr [1];
 $data ['timestamp'] = $appUidArr [2];
-$sign = urldecode ( $appUid );
+$type = isset( $appUidArr [3])?$appUidArr [3]:'android';
+$sign = urldecode ( $userToken );
 $sign = str_replace ( ' ', '+', $sign );
 
 if (! $data ['uin']  || ! $data ['timestamp'] || ! $sign) {
@@ -33,8 +34,8 @@ ksort ( $data );
 $content = http_build_query ( $data );
 $pubKey = $key_arr [$gameId] [$type] ['publicKey'];
 $openssl_public_key = @openssl_get_publickey ( $pubKey );
-write_log ( ROOT_PATH . "log", "huawei_login_log_", "content={$content},sign={$sign},openssl_public_key={$openssl_public_key},post=$post,get=$get, " . date ( "Y-m-d H:i:s" ) . "\r\n" );
-$ok = @openssl_verify ( $content, base64_decode ( $sign ), $openssl_public_key, OPENSSL_ALGO_SHA256 );
+write_log ( ROOT_PATH . "log", "huaweiInt_login_log_", "content={$content},sign={$sign},openssl_public_key={$openssl_public_key},post=$post,get=$get, " . date ( "Y-m-d H:i:s" ) . "\r\n" );
+$ok = @openssl_verify ( $content, base64_decode ( $sign ), $openssl_public_key, OPENSSL_ALGO_SHA1 );
 @openssl_free_key ( $openssl_public_key );
 if ($ok) {
 	

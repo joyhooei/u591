@@ -6,7 +6,8 @@
  * Time: 上午10:02
  */
 include 'config.php';
-$post = file_get_contents ( 'php://input' );
+$post = serialize($_POST);
+$get = serialize($_GET);
 write_log ( ROOT_PATH . "log", "huaweiInt_callback_info_", "post=$post,get=$get, " . date ( "Y-m-d H:i:s" ) . "\r\n" );
 
 $success = array(
@@ -20,12 +21,12 @@ $fail = array(
 $data = $_REQUEST;
 $status = $data ['TradeStatus'];
 if ($status != '0') {
-	write_log ( ROOT_PATH . "log", "huaweiInt_callback_error_", "pay status is not 0 ,post=$post" . date ( "Y-m-d H:i:s" ) . "\r\n" );
+	write_log ( ROOT_PATH . "log", "huaweiInt_callback_error_", "pay status is not 0 ,post=$post,get=$get," . date ( "Y-m-d H:i:s" ) . "\r\n" );
 	exit(json_encode($fail));
 }
 
 $orderId = $data ['ConsumeStreamId'];
-$extendsInfo = $data ['tradeNo']; // 提取拓展信息
+$extendsInfo = $data ['TradeNo']; // 提取拓展信息
 $extendsInfoArr = explode ( '_', $extendsInfo );
 $gameId = $extendsInfoArr [0];
 $serverId = $extendsInfoArr [1];
@@ -38,12 +39,12 @@ $isgoods = $extendsInfoArr[1];
 $sign = $_REQUEST ["Signature"];
 unset ( $data ['Signature'] );
 ksort ( $data );
-$content = http_build_query ( $data );
+$content = urldecode(http_build_query ( $data ));
 
 $pubKey = $key_arr [$gameId] [$type] ['publicKey'];
 $openssl_public_key = @openssl_get_publickey ( $pubKey );
-write_log ( ROOT_PATH . "log", "huaweiInt_callback_result_", "content={$content},sign={$sign},openssl_public_key={$pubKey},post=$post,get=$get, " . date ( "Y-m-d H:i:s" ) . "\r\n" );
-$ok = @openssl_verify ( $content, base64_decode ( $sign ), $openssl_public_key, OPENSSL_ALGO_SHA256 );
+write_log ( ROOT_PATH . "log", "huaweiInt_callback_result_", "content={$content},sign={$sign},openssl_public_key={$openssl_public_key},post=$post,get=$get, " . date ( "Y-m-d H:i:s" ) . "\r\n" );
+$ok = @openssl_verify ( $content, base64_decode ( $sign ), $openssl_public_key, OPENSSL_ALGO_SHA1 );
 @openssl_free_key ( $openssl_public_key );
 
 $result = "";
@@ -56,7 +57,7 @@ if ($ok) {
 	if ($result ['rpCode'] == 1 || $result ['rpCode'] == 10) {
 		exit ( $success );
 	}
-	$payMoney =  $valueMap ['Amount'] ;
+	$payMoney =  $data ['Amount'] ;
 	if (! $result) {
 		global $accountServer;
 		$accountConn = $accountServer [$gameId];
@@ -81,8 +82,9 @@ if ($ok) {
 			write_log ( ROOT_PATH . "log", "huaweiInt_callback_error_", "sql=$sql, " . date ( "Y-m-d H:i:s" ) . "\r\n" );
 			exit ( $fail );
 		}
+		$Emoney = ceil($payMoney*60);
 		// write_log(ROOT_PATH."log","huawei_callback_info_","OK".date("Y-m-d H:i:s")."\r\n");
-		WriteCard_money ( 1, $serverId, $payMoney, $accountId, $orderId, 8, 0, 0, $isgoods );
+		WriteCard_money ( 1, $serverId, $Emoney, $accountId, $orderId, 8, 0, 0, $isgoods );
 		// 统计数据
 		global $tongjiServer;
 		$tjAppId = $tongjiServer [$gameId];
@@ -91,7 +93,7 @@ if ($ok) {
 	}
 	exit ( $success );
 } else {
-	write_log ( ROOT_PATH . "log", "huaweiInt_callback_error_", "sign error ,post=$post" . date ( "Y-m-d H:i:s" ) . "\r\n" );
+	write_log ( ROOT_PATH . "log", "huaweiInt_callback_error_", "sign error ,post=$post,get=$get," . date ( "Y-m-d H:i:s" ) . "\r\n" );
 	exit ( $fail );
 }
 

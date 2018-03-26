@@ -14,7 +14,8 @@ if($conn == false){
 $Add_Time=date('Y-m-d H:i:s',time()-30*60);
 $sql = "select * from  web_bank_order where status=0 and Add_Time<'$Add_Time'";
 $query = mysqli_query($conn, $sql);
-$url = 'http://api.1pay.vn/bank-charging/service/v2';
+//$url = 'http://api.1pay.vn/bank-charging/service/v2';
+$url = 'https://api.pay.truemoney.com.vn/bank-charging/service/v2';
 while ($row = mysqli_fetch_array($query,MYSQL_ASSOC)){
 	$command = 'get_transaction_detail';
 	$id = $row['id'];

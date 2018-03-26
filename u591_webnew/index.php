@@ -13,7 +13,7 @@ $result->close ();
 $con->close ();
 
 $dbsdk = $this->load->database ( 'sdk', true );*/
-/*$handle = fopen ( "C:\\Users\\Administrator\\Desktop\\apple_all_log_180317.txt", "r" );
+$handle = fopen ( "C:\\Users\\Administrator\\Desktop\\google_callback_info_all_180323.txt", "r" );
 set_time_limit(0);
 $i = 0;
 if ($handle) {
@@ -22,14 +22,22 @@ if ($handle) {
 		$sarr = explode ( 'post=', $buffer );
 		$sarr = explode ( ',get=a:0:{}, ', $sarr[1] );
 		$data = unserialize($sarr[0]);
-		$url = "http://pokeynweb.u591776.com/interface/apple/callback.php";
+		$data = base64_decode($data['sinedData']);
+		$google_wallet_data = str_replace('PurchaseInfo(type:inapp):', '', $data);
+		$walletData = json_decode($google_wallet_data, true);
+		$developerPayloadArr = explode('_', $walletData['developerPayload']);
+		$accountId = $developerPayloadArr[2];
+		if($accountId == '4751101'){
+			echo $sarr[1].'   '.$google_wallet_data.PHP_EOL;
+			echo '<br/>';
+		}
+		
 		echo $i++;
-		echo $data['ext'].PHP_EOL;
-		https_post($url, $data);
+		
 	}
 	fclose ( $handle );
-}
-function https_post($url, $data, $i = 0) {
+}die;
+/*function https_post($url, $data, $i = 0) {
 	$i++;
 	$str = '';
 	if ($data) {

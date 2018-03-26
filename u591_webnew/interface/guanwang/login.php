@@ -33,7 +33,7 @@ if(isset($parseArr['username']) && isset($parseArr['account_id']) && isset($pars
 	$accountId = intval($parseArr['account_id']);
 	$gameId = intval($gameId);
 	$conn = SetConn('88');
-	$sql = "select token,addtime from web_token where account_id='$accountId' and game_id='$gameId'  order by id desc limit 1";
+	$sql = "select id,token,addtime,isnew from web_token where account_id='$accountId' and game_id='$gameId'  order by id desc limit 1";
 	if(false == $query = mysqli_query($conn,$sql)){
 		write_log(ROOT_PATH."log","guanwang_login_error_log_"," sql error!, sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
 		exit('3 0');
@@ -42,8 +42,14 @@ if(isset($parseArr['username']) && isset($parseArr['account_id']) && isset($pars
 	if($rs){
 		//if(time() - $rs['addtime'] > 300)
 		//	exit('5 0');
-		if($rs['token'] == $token)
-			exit("0 $accountId");
+		if($rs['token'] == $token){
+			if($rs['isnew'] == 1){
+				$upsql = "update web_token set isnew=0 where id='{$rs['id']}'";
+				mysqli_query($conn,$upsql);
+			}
+			exit("{$rs['isnew']} $accountId");
+		}
+			
 	}else{
 		write_log(ROOT_PATH."log","guanwang_login_error_log_"," sql null!, sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
 	}

@@ -11,7 +11,7 @@ include_once ROOT_PATH.'inc/config_account.php';
 include_once ROOT_PATH."inc/function.php";
 $key_arr = array(
     8=>array(
-        'android'=>array(
+      /*  'android'=>array(
             'access_key' =>'uzc5r6mjo1myb3skppam',
             'secret'=>'4axe31lz16g22u5fhpg3gi8eurcb4rie'
         ),
@@ -22,6 +22,18 @@ $key_arr = array(
     		'yn'=>array(
     				'access_key' =>'uzc5r6mjo1myb3skppam',
     				'secret'=>'4axe31lz16g22u5fhpg3gi8eurcb4rie'
+    		),*/
+    		'android'=>array(
+    				'access_key' =>'pfu7xt8qqhporomgkbc1',
+    				'secret'=>'jho4bxj9ue8qwzn3iqsda0209351y4ug'
+    		),
+    		'ios'=>array(
+    				'access_key' =>'pfu7xt8qqhporomgkbc1',
+    				'secret'=>'jho4bxj9ue8qwzn3iqsda0209351y4ug'
+    		),
+    		'yn'=>array(
+    				'access_key' =>'pfu7xt8qqhporomgkbc1',
+    				'secret'=>'jho4bxj9ue8qwzn3iqsda0209351y4ug'
     		),
     ),
 );
