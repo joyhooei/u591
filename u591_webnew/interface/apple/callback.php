@@ -41,17 +41,7 @@ if(!isset($resultArr['status']) && !isset($resultArr['receipt']['in_app'])){
     echo 'fail';
     exit();
 }
-$snum = giQSModHash($account_id);
-$conn = SetConn($game_id,$snum,1);//account分表
-if($conn == false){
-	echo 'fail';
-	write_log(ROOT_PATH."log","apple_error_log_","account connect error., ".date("Y-m-d H:i:s")."\r\n");
-	exit();
-}
-$acctable = betaSubTableNew($account_id,'account',999);
-$sql = "select NAME,dwFenBaoID,clienttype from $acctable where id=$account_id limit 1;";
-$query = mysqli_query($conn, $sql);
-$rs = @mysqli_fetch_array($query);
+$rs = getaccountinfo($game_id,$account_id);
 if(!isset($rs['NAME'])){
 	echo 'fail';
 	write_log(ROOT_PATH."log","apple_error_log_","account not exist. sql=$sql, ".date("Y-m-d H:i:s")."\r\n");

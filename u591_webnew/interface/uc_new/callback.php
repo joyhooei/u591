@@ -57,12 +57,7 @@ $PayMoney = intval($amount);
 if(!$result){
 	$gameId = $game_id;
 	$accountId = $pay_id;
-	$snum = giQSModHash($accountId);
-	$conn = SetConn($gameId,$snum,1);//account分表
-	$acctable = betaSubTableNew($accountId,'account',999);
-	$sql_account = "select NAME,dwFenBaoID,clienttype from $acctable where id=$accountId limit 1;";
-    $query_account = mysqli_query($conn, $sql_account);
-    $result_account = @mysqli_fetch_assoc($query_account);
+	$result_account = getaccountinfo($gameId,$accountId);
     if(!$result_account['NAME']){
         write_log(ROOT_PATH."log","wdj_callback_error_", "account is not exist.  ".date("Y-m-d H:i:s")."\r\n");
         exit("FAILURE");

@@ -11,12 +11,12 @@
 */
 include_once 'config.php';
 $post = serialize($_POST);
-write_log(ROOT_PATH."log","duanxin_sent_all_log_","post=$post, ".date("Y-m-d H:i:s")."\r\n");
+write_log(ROOT_PATH."log","api_duanxin_sent_log_","post=$post, ".date("Y-m-d H:i:s")."\r\n");
 
 $game_id = intval($_REQUEST['game_id']);
 $sign = trim($_REQUEST['sign']);
 $phone = $_REQUEST['phone'];
-$appKey = $key_arr['appKey'];
+$appKey = $key_arr[$game_id]['appKey'];
 
 if(strlen($phone) != 11 || !preg_match('/^1[34578]{1}\d{9}$/', $phone))
 	exit(json_encode(array('status'=>1, 'msg'=>'phone format error.')));
@@ -44,7 +44,7 @@ $md5Str = http_build_query($array);
 $my_sign = md5($md5Str.$appKey);
 
 if($sign != $my_sign){
-	write_log(ROOT_PATH."log","duanxin_sent_error_log_",$md5Str.$appKey.",sign=$sign, mySign=$my_sign, ".date("Y-m-d H:i:s")."\r\n");
+	write_log(ROOT_PATH."log","api_duanxin_sent_error_",$md5Str.$appKey.",sign=$sign, mySign=$my_sign, ".date("Y-m-d H:i:s")."\r\n");
 	exit(json_encode(array('status'=>1, 'msg'=>'sign error.')));
 }
 $OperID = "hainwl";
@@ -82,7 +82,7 @@ $content = urlencode($content);
 $url = "http://124.251.7.68:8000/QxtSms/QxtFirewall?OperID=$OperID&OperPass=$OperPass&SendTime=&ValidTime=&AppendID=&DesMobile=$phone&Content=$content&ContentType=8";
 $data = array();
 $result =  https_post($url, $data);
-write_log(ROOT_PATH."log","duanxin_sent_result_log_"," result=$result, post=$post, ".date("Y-m-d H:i:s")."\r\n");
+write_log(ROOT_PATH."log","api_duanxin_sent_result_"," result=$result, post=$post, ".date("Y-m-d H:i:s")."\r\n");
 
 $xml_arr = simplexml_load_string($result);
 $code = $xml_arr->code;

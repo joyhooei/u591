@@ -95,6 +95,7 @@ class CommonController extends Controller{
 46=>'充值积分',
 47=>'魔晶',
             		48=>'洛托姆能量石',
+            		49=>'皮卡币',
             );
         }
     }

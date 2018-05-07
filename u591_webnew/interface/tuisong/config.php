@@ -7,14 +7,18 @@ include_once ROOT_PATH."inc/function.php";
 
 $key_arr = array(
     	100=>array(
-    			'androidels'=>array('apiKey'=>'AAAAseXPhnk:APA91bGlI9q_tOyaSJlXEZHRQUpEGFVbV-ZkZ2cLKOeFZ3-HguGXoET_eMeMJmUsAdceF_FAZaIKwK8iT6kTkXPdt1X1mmyE61mEpVPXT6hUO4Ti6rmIQlMbjj5Y-QuGX6G1vCMYP8Bu'),
-    			'iosels'=>array('apiKey'=>'pem/els.pem'),
-    			'androidels2'=>array('apiKey'=>'AAAAPUCRPZU:APA91bF4_l_QuhmDeINKphVyPx27ENw_8FNEkyLJyvAl_IttVIl83johaMarrl5hUWeuaO556_whDm3hdE4z9XU3mH2rrp-STH9s907yR3_pTWTS3jBjqFO8fMKEkLF19FeBeKQXmmF9'),
-    			'androidels3'=>array('apiKey'=>'AAAA6T-qdI0:APA91bFwpLq0I34_T_2oiloT4uzz88VDRmS2RhiYjSIwMqrot-gyaH_LOqn2wYyG4HZRLv0sdG2mQyrs4Fo0aKqK5zDY_2NArKvQcjyOh9R-Rtr0Za_mIy88Iz_dqv7SQrsR9LFfur9L'),
     			'androidar'=>array('apiKey'=>'AAAAAwblpDU:APA91bE1l2npmXEBJTg-o_KNU-cBqs-hClQPEooBfPHum-VWBwlyMWfbAnlAIxSL88yGdr7yCSJA4xIO8iTa2wVrihDWl-xXRkI3tdh8typME-R0rG6kt0QwbaE1z57-iVard1GXFJvJ'),
     			'androidar1'=>array('apiKey'=>'AAAABdQdnTs:APA91bE9G9woXJPN8FMOdeQ2j6vrb2grt0ZUeYxzdP-WjXb1mtoEcxFlcco_btk-3EvnKt8TPDXJipEDhxe2Z_o6yqfFxhqtRMcda0PZsxpJAihg0O6KgwefgSvekGK9k-ktaIs55n9J'),
-    			 
     	),
+		101=>array(
+				'androidels'=>array('apiKey'=>'AAAAseXPhnk:APA91bGlI9q_tOyaSJlXEZHRQUpEGFVbV-ZkZ2cLKOeFZ3-HguGXoET_eMeMJmUsAdceF_FAZaIKwK8iT6kTkXPdt1X1mmyE61mEpVPXT6hUO4Ti6rmIQlMbjj5Y-QuGX6G1vCMYP8Bu'),
+				'androidels4'=>array('apiKey'=>'AAAAEd-Zy7U:APA91bHDlZYBPPNxGBnUgmous55DetKuVc-NJkrNDQIJSlyHtEWISnQnhRefrj76CIwjMHig4_b1HMHw4dqHQZR5gFY4YO-yWr7XmP5DG56s1D1moukc2DYpQnM9F8rqjVhnjmmixubm'),
+				
+				'iosels'=>array('apiKey'=>'pem/els.pem'),
+		),
+		102=>array(
+				'androidth'=>array('apiKey'=>'AAAAEd-Zy7U:APA91bHDlZYBPPNxGBnUgmous55DetKuVc-NJkrNDQIJSlyHtEWISnQnhRefrj76CIwjMHig4_b1HMHw4dqHQZR5gFY4YO-yWr7XmP5DG56s1D1moukc2DYpQnM9F8rqjVhnjmmixubm'),
+		),
 );
 
 function send_gcm_notify($reg_id,$message,$apikey,$title) {

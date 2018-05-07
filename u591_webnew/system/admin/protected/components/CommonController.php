@@ -46,10 +46,10 @@ class CommonController extends Controller{
     }
 
     protected function getGoodsType($gameId = 8){
-        if($gameId == 9){
+        if($gameId == 12){
             return array(
-                '' =>'请选择', 0=>'物品', 1=>'体力', 2=>'金钱',
-                3=>'钻石', 7=>'VIP等级',
+                '' =>'请选择', 0=>'物品', 1=>'金钱', 2=>'vip经验',6=>'精灵', 7=>'钻石',8=>'活跃度', 9=>'体力',
+            		10=>'技能卷轴碎片',11=>'抽奖积分',15=>'竞技币',17=>'全球币',18=>'潜力点',46=>'充值积分',
             );
         } else {
             return array(

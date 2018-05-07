@@ -24,7 +24,7 @@ $gameId = 8;
 $serverId = $data["serverid"];
 $accountId = $data["accountid"];
 $cpid = $data["channel"];
-$giftId = $data["giftId"];
+$giftId = $data["giftid"];
 $orderId = $data['orderid'].'_'.$cpid;
 $conn = SetConn(88);
 $sql = "select rpCode from web_pay_log where OrderID = '$orderId' limit 1;";

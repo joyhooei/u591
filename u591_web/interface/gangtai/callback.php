@@ -29,6 +29,7 @@ $gameId = $gameOrderIdArr[0];
 $serverId = $gameOrderIdArr[1];
 $accountId = $gameOrderIdArr[2];
 $type = $gameOrderIdArr[3];
+$isgoods = $gameOrderIdArr[4];
 global $key_arr;
 $appSecret = $key_arr[$gameId][$type]['appsecret'];
 
@@ -74,7 +75,7 @@ if (mysqli_query($conn,$sql) == False){
     write_log(ROOT_PATH."log","gangtai_callback_error_", "sql=$sql, post=$post, get=$get, ".mysqli_error($conn)."  ".date("Y-m-d H:i:s")."\r\n");
     exit(json_encode(array('code'=>'0', 'error_msg'=>'insert mysql error.')));
 } else {
-    WriteCard_money(1,$serverId, $yuanbao,$accountId, $order_id);
+    WriteCard_money(1,$serverId, $yuanbao,$accountId, $order_id,8,0,0,$isgoods);
     //统计数据
     global $tongjiServer;
     $tjAppId = $tongjiServer[$gameId];

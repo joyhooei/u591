@@ -229,12 +229,12 @@ class OperatorsController extends Controller{
 					$this->error('循环分钟数不能超过60！');
 				if(!$message)
 					$this->error('聊天内容不能为空！');
-				$talkStarttime = strtotime($_POST['talkStarttime']);
-				$talkEndtime = strtotime($_POST['talkEndtime']);
-				if(!$talkStarttime || $talkEndtime)
+				$talkStarttime = $_POST['talkStarttime'];
+				$talkEndtime = $_POST['talkEndtime'];
+				if(!$talkStarttime || !$talkEndtime)
 					$this->error('喊话时间范围不能为空！');
-				$talkStarttime = date('ymdHis',strtotime($talkStarttime));
-				$talkEndtime = date('ymdHis',strtotime($talkEndtime));
+				$talkStarttime = date('ymdHi',strtotime($talkStarttime));
+				$talkEndtime = date('ymdHi',strtotime($talkEndtime));
 				$sql = "insert into $table(type, serverid, param, message, award_type1,award_param1,award_amount1)
 				 values('$type','$serverid', '$playerId', '$message', '$talkStarttime','$talkEndtime','$banTime')";
 				$tag = "自动喊话 $playerName($playerId) 区服:$serverid 间隔时间(分):$banTime 开始时间: $talkStarttime 截至时间:$talkEndtime 消息:$message";
@@ -530,8 +530,11 @@ class OperatorsController extends Controller{
 			return false;
 		$table = subTable($serverId, $this->gmtoolTable, 1000);
 		$sql = "insert into $table(index_id,type, serverid, param, message, award_type1) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime')";
-        if(false == mysqli_query($conn,$sql))
-			return false;
+        if(false == mysqli_query($conn,$sql)){
+        	write_log(ROOT_PATH.'log', 'bulletin_error', "$sql, ".mysqli_error($conn).date('Y-m-d H:i:s')."\r\n");
+        	return false;
+        }
+        write_log(ROOT_PATH.'log', 'bulletin_error', "$sql, ".mysqli_error($conn).date('Y-m-d H:i:s')."\r\n");
         return true;
 	}
     /**

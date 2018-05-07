@@ -22,6 +22,11 @@ $key_arr = array(
             'appkey' =>'31864c672441491990170507af676d70',
             'appsecret'=>'b9eb9e62742740e1811b59ffd913b371',
         ),
+    		'test' => array(
+    				'appid'=>'10086',
+    				'appkey' =>'31864c672441491990170507af676d70',
+    				'appsecret'=>'b9eb9e62742740e1811b59ffd913b371',
+    		),
     )
 );
 function getdbdata(){

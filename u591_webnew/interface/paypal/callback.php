@@ -28,12 +28,7 @@ if ($resultstr == 'VERIFIED') {
 			exit ( "success" );
 		}
 		$payMoney = $response ['mc_gross'];
-		$snum = giQSModHash ( $accountId );
-		$conn = SetConn ( $gameId, $snum, 1 ); // account分表
-		$acctable = betaSubTableNew ( $accountId, 'account', 999 );
-		$sql = "select NAME,dwFenBaoID,clienttype from $acctable where id=$accountId limit 1;";
-		$query = mysqli_query ( $conn, $sql );
-		$result_account = @mysqli_fetch_array ( $query );
+		$result_account = getaccountinfo($gameId,$accountId);
 		if (! $result_account ['NAME']) {
 			write_log ( ROOT_PATH . "log", "paypal_callback_error_", "account is not exist.  " . date ( "Y-m-d H:i:s" ) . "\r\n" );
 			exit ( "FAILURE" );

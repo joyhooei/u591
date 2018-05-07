@@ -93,6 +93,11 @@ $key_arr = array(
     				'appSecret' =>'Eb4FXxIHjqH3V3Eifhp1aLL4',
     				'public_key'=>'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5udRUD7MjZr/ij0HGdqjQ7mKKDBg1JVYuQZOxkkBnYe9ebIkfVyxjT5Bl0Zh2Xh0YDpANi9I3D5vjyEkeWK38eRmGo7Hll0bmVEsYBKemAvR6W/yqOrpTCJln4F1ThcUoxssODo71JY+9J+z7Vax93eqmuTmJVODyWlWYvAfEZjjG+dR/0rShf+5If25API+Lg4Ekojpn86nstnxt74X4F8RxZqd3a4mOAWNKdfsiyG2HWN2hbqtLlPUk/ykK8uGB4r0mKchVNRLjjDMEPRdSEPIcUPtZjDoZA1nIbz1ttCnX7IuWn59ajknTAdXZb+VXDl3FPazv+B3OpW+qtgd5wIDAQAB',
     		),
+    		'androidnm4'=>array(
+    				'appId'     =>'606840666087-kgr7skfrrcg1hbf8gd3t8rkpcj4d39r4.apps.googleusercontent.com',
+    				'appSecret' =>'QuCCIJey8Ut6QGDpkNACLmHb',
+    				'public_key'=>'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAup7aMrK3Es0vGogbQaGC07aEpW6tTnDpOqrDfqDWYrq/zAfzEcYOozYLAqx7Bdmz0tse20bYtvFz9FbSv5+XnK6bzIu7igqHNQAm9K7ml/95PqzRptiB4TjNUVZRapuSmuUDm7ShB8Ar2ngzDZerRRJe9iLeVOEAx+9ODmeHZN4imiZTrULyrgYS5n8kmRWoZo1rLJ2r0e4zAejbU0N11Lfm4VoYnh3hqqD6aXdD4AaRkr4kL8XA22LDsuNIAxCiJz/q5snlQe8l/p3qLgSaLMH03/8JHeQVp954D6iR/0SAULvOB7uSOqODmS4e2CDNBhv+W9pDWgdPhivi3OQhIQIDAQAB',
+    		),
     		'iosels'=>array(
     				'appId'     =>'756425793624-7cr2t3j83q90msvukff9kc81v0d6ainl.apps.googleusercontent.com',
     				'appSecret' =>'GYQVWA25Glvv6etiePAo_ePk',
@@ -204,6 +209,15 @@ $google_id_value = array(
 		'skypay_3000'   => array('49.99', 3000, 'USD'),
 		'skypay_6000'   => array('99.99', 6000, 'USD'),
 		'skypay_card'   => array('5.99', 360, 'USD'),
+		
+		'pay_60'     => array('0.99', 60	, 'USD'),
+		'pay_300'    => array('4.99', 300,'USD'),
+		'pay_600'    => array('9.99', 600,'USD'),
+		'pay_900'    => array('14.99', 900, 'USD'),
+		'pay_1500'   => array('24.99', 1500, 'USD'),
+		'pay_3000'   => array('49.99', 3000, 'USD'),
+		'pay_6000'   => array('99.99', 6000, 'USD'),
+		'pay_card'   => array('5.99', 360, 'USD'),
 		
 		'ksmdgsepay_75'      => array('75','80', 'RUB'), //
 		'ksmdgsepay_379'      => array('379','390', 'RUB'), //

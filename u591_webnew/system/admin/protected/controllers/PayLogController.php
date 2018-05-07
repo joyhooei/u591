@@ -47,17 +47,6 @@ class PayLogController extends Controller{
 		if(isset($_POST['rpCode']) && !empty($_POST['rpCode']))
 			$condition[]="rpCode = '{$_POST['rpCode']}'";
 		
-		if(isset($_POST['gamefenbao']) && !empty($_POST['gamefenbao'])){
-			if($_POST['gamefenbao'] == 1){
-				$isnewgame  = 1;
-			}else{
-				$isnewgame  = 0;
-			}
-			$sql = "SELECT GROUP_CONCAT(fenbao_id) as fenbaoids FROM `web_dwFenbao` where isnewgame=$isnewgame;";
-			$command = Yii::app()->db->createCommand($sql);
-			$result = $command->queryAll();
-			$condition[]=" dwFenBaoID in({$result[0]['fenbaoids']})";
-		}
 		
 		if(isset($_POST['IsUC']) && !empty($_POST['IsUC']))
 			$condition[]="IsUC = '{$_POST['IsUC']}'";
@@ -223,17 +212,7 @@ class PayLogController extends Controller{
 		if(!empty($gameId))
 			$condition[] =  "game_id = '$gameId'";
 		
-		if(isset($_POST['gamefenbao']) && !empty($_POST['gamefenbao'])){
-			if($_POST['gamefenbao'] == 1){
-				$isnewgame  = 1;
-			}else{
-				$isnewgame  = 0;
-			}
-			$sql = "SELECT GROUP_CONCAT(fenbao_id) as fenbaoids FROM `web_dwFenbao` where isnewgame=$isnewgame;";
-			$command = Yii::app()->db->createCommand($sql);
-			$result = $command->queryAll();
-			$condition[]=" dwFenBaoID in({$result[0]['fenbaoids']})";
-		}
+		
 		if(isset($_POST['serverid']) && !empty($_POST['serverid']))
 			$condition[]="ServerID = '{$_POST['serverid']}'";
         if(isset($_POST['payCode']) && !empty($_POST['payCode']))

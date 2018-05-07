@@ -60,5 +60,14 @@ $appleIdVal = array(
 		'csdgtry_4290'     => array('3790', '4290', 'RUB'),
 		'cythtgdf_8500'    => array('7490', '8500', 'RUB'),
 		'cdgbety_299'    => array('299', '200', 'RUB'),
+		
+		'tgkdyg_75'     => array('0.99', 75, 'USD'),
+		'tgkdyg_385'    => array('4.99', 385,'USD'),
+		'tgkdyg_600'    => array('9.99', 660,'USD'),
+		'tgkdyg_1050'   => array('14.99', 1050, 'USD'),
+		'tgkdyg_1750'   => array('24.99', 1750, 'USD'),
+		'tgkdyg_3500'   => array('49.99', 3500, 'USD'),
+		'tgkdyg_7000'   => array('99.99', 7000, 'USD'),
+		'tgkdyg_card'   => array('5.99', 360, 'USD'),
 
 );

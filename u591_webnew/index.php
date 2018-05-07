@@ -12,7 +12,7 @@ $result->close ();
 // 关闭连接
 $con->close ();
 
-$dbsdk = $this->load->database ( 'sdk', true );*/
+$dbsdk = $this->load->database ( 'sdk', true );
 $handle = fopen ( "C:\\Users\\Administrator\\Desktop\\google_callback_info_all_180323.txt", "r" );
 set_time_limit(0);
 $i = 0;
@@ -37,7 +37,7 @@ if ($handle) {
 	}
 	fclose ( $handle );
 }die;
-/*function https_post($url, $data, $i = 0) {
+function https_post($url, $data, $i = 0) {
 	$i++;
 	$str = '';
 	if ($data) {
@@ -70,8 +70,8 @@ if ($handle) {
 	}
 	curl_close ($curl);
 	return $tmpInfo;
-}*/
-die ();
+}
+die ();*/
 function giQSAccountHash($string, $sum = 999) {
 	$string = "$string";
 	$length = strlen ( $string );
@@ -81,7 +81,7 @@ function giQSAccountHash($string, $sum = 999) {
 	}
 	return $result + 1;
 }
-echo giQSAccountHash ( '13459405424' );
+echo giQSAccountHash ( '00000000-0000-0000-0000-000000000000@u591' );
 die ();
 function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	$output = NULL;

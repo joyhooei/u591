@@ -13,7 +13,7 @@ include_once 'config.php';
 include_once 'myEncrypt.php';
 global $mdString;
 $post = serialize($_POST);
-write_log(ROOT_PATH."log","guanwang_token_log_","post=$post, ".date("Y-m-d H:i:s")."\r\n");
+write_log(ROOT_PATH."log","api_token_log_","post=$post, ".date("Y-m-d H:i:s")."\r\n");
 
 $array = array();
 $username = trim($_POST['username']);
@@ -28,16 +28,14 @@ if(!empty($code)){
 	$array['code'] = $code;
 }
 if(!empty($code) || !empty($pass)){
-	if (eregi('^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3}$', $username)){
-		//邮箱登陆
-		$bindtable = getAccountTable($username,'mail_bind');
-		$bindwhere = 'mail';
-	} else if(strlen($username) == 11 && preg_match('/^1[34578]{1}\d{9}$/', $username)){
+	if(strlen($username) == 11 && preg_match('/^1[34578]{1}\d{9}$/', $username)){
 		//手机登陆
 		$bindtable = getAccountTable($username,'mobile_bind');
 		$bindwhere = 'mobile';
-	} else
-		exit(json_encode(array('status'=>2, 'msg'=>'phone or email error.')));
+	} else{
+		$bindtable = getAccountTable($username,'token_bind');
+		$bindwhere = 'token';
+	}
 }else{
 	$username = $username.'@u591';
 	$bindtable = getAccountTable($username,'token_bind');
@@ -50,8 +48,8 @@ if(empty($gameId) || empty($gameId))
 	exit(json_encode(array('status'=>2, 'msg'=>'game id error.')));
 if(empty($array))
 	exit(json_encode(array('status'=>2, 'msg'=>'param error.')));
-$appKey = $key_arr['appKey'];
-$appSecret = $key_arr['appSecret'];
+$appKey = $key_arr[$gameId]['appKey'];
+$appSecret = $key_arr[$gameId]['appSecret'];
 if(!$appKey)
 	exit(json_encode(array('status'=>2, 'msg'=>'appKey error.')));
 if(!$appSecret)
@@ -74,12 +72,12 @@ if(isset($code) && !empty($code)){
 	if(empty($rs)){
 		exit(json_encode(array('status'=>2, 'msg'=>'verification code does not exist.')));
 	}
-	if(time()-$rs['addtime'] > 900){
+	if(time()-$rs['addtime'] > 600){
 		exit(json_encode(array('status'=>2, 'msg'=>'verification failed.')));
 	}
 	$insertinfo = insertaccount($username,$bindtable,$bindwhere,$gameId);
 	if($insertinfo['status'] == '1'){
-		write_log(ROOT_PATH."log","guanwang_token_error_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
+		write_log(ROOT_PATH."log","api_token_error_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
 		exit(json_encode($insertinfo));
 	}else{
 		$insert_id = $insertinfo['data'];
@@ -88,8 +86,7 @@ if(isset($code) && !empty($code)){
 
 }  else if(isset($pass) && !empty($pass)){
 	//账号密码错误
-	$snum = giQSAccountHash($username);
-	$conn = SetConn($gameId,$snum);
+	$conn = SetConn($mygame);
 	$password = md5($pass.$mdString);
 	$selectsql = "select accountid from $bindtable where $bindwhere = '$username' and gameid='$gameId' limit 1";
 	if(false == $query = mysqli_query($conn,$selectsql))
@@ -99,8 +96,6 @@ if(isset($code) && !empty($code)){
 		exit(json_encode(array('status'=>2, 'msg'=>'Account error, please enter again!')));
 	}
 	$accountid = $result['accountid'];
-	$snum = giQSModHash($accountid);
-	$conn = SetConn($gameId,$snum,1);//account分表
 	$acctable = betaSubTableNew($accountid,'account',999);
 	$sql = "select id, password from $acctable where id = '$accountid' limit 1";
 	if(false == $query = mysqli_query($conn,$sql)){
@@ -118,7 +113,7 @@ if(isset($code) && !empty($code)){
 	//快速登陆
 	$insertinfo = insertaccount($username,$bindtable,$bindwhere,$gameId);
 	if($insertinfo['status'] == '1'){
-		write_log(ROOT_PATH."log","guanwang_token_error_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
+		write_log(ROOT_PATH."log","api_token_error_",json_encode($insertinfo).", ".date("Y-m-d H:i:s")."\r\n");
 		exit(json_encode($insertinfo));
 	}else{
 		$insert_id = $insertinfo['data'];
@@ -138,11 +133,8 @@ $array['expired'] = $addtime;
 $newMd5Str = http_build_query($array);
 $token = myEncrypt::encrypt($newMd5Str, $appSecret);
 $conn = SetConn(88);
-if($_POST['is_new']){
-	$isNew = 1;
-}
 $sql = "insert into web_token (account_id, game_id, token, addtime,isnew) values ('$insert_id', '$gameId', '$token', '$addtime',$isNew)";
-write_log(ROOT_PATH."log","guanwang_token_log_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
+write_log(ROOT_PATH."log","api_token_log_","sql=$sql, ".date("Y-m-d H:i:s")."\r\n");
 if(mysqli_query($conn,$sql)){
 	$data['token'] = $token;
     $data['is_new'] = $isNew;

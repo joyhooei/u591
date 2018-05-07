@@ -618,6 +618,22 @@ switch ($sdkType) {
 		$rs = https_post ( $url, $data );
 		echo $rs;
 		break;
+	case 249 : // p8新接口
+		$url = $webHost . "/interface/play800/loginnew.php";
+		$data ['sessionid'] = $p;
+		$data ['uid'] = $token;
+		$data ['game_id'] = $gameId;
+		$rs = https_post ( $url, $data );
+		echo $rs;
+		break;
+	case 250 : // 金立
+		$url = $webHost . "/interface/jinli/login.php";
+		$data ['user_token'] = $p;
+		$data ['uid'] = $token;
+		$data ['game_id'] = $gameId;
+		$rs = https_post ( $url, $data );
+		echo $rs;
+		break;
 	case 1001 : // h5
 		$url = $webHost . '/interface/h5/login.php';
 		$data ['user_token'] = $p;

@@ -1,6 +1,6 @@
 <?php
 $mdString='fu;djf,jk7g.fk*o3l';
-date_default_timezone_set('Etc/GMT-3');
+date_default_timezone_set('Etc/GMT-7');
 function SetConn($ServerInfo,$accnum=0,$type=0) {
         switch ($ServerInfo) {
                 //web database
@@ -10,6 +10,8 @@ function SetConn($ServerInfo,$accnum=0,$type=0) {
                 //acount database
                 case 100: //阿拉伯
                 case 101: //俄罗斯
+                case 102: //泰国
+                case 103: //印尼
                         return ConnServer("18.194.33.115:3356", "gameuser", "rio8t89o,690.60fk", "account");
                         break;
               

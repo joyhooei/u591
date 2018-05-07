@@ -530,11 +530,14 @@ class OperatorsController extends Controller{
 		if($conn == false )
 			return false;
 		$table = subTable($serverId, $this->gmtoolTable, 1000);
-		//$sql = "insert into $table(index_id,type, serverid, param, message, award_type1) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime')";
-		$sql = "insert into $table(index_id,type, serverid, param, message, award_type1,fenbao_str) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime','$fenbaoids')";
+		$sql = "insert into $table(index_id,type, serverid, param, message, award_type1) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime')";
+		//$sql = "insert into $table(index_id,type, serverid, param, message, award_type1,fenbao_str) values('$index_id','$type', '$serverId', '$banTime', '$message', '$bulletinEndtime','$fenbaoids')";
 		
-        if(false == mysqli_query($conn,$sql))
-			return false;
+        if(false == mysqli_query($conn,$sql)){
+        	write_log(ROOT_PATH.'log', 'bulletin_error', "$sql, ".mysqli_error($conn).date('Y-m-d H:i:s')."\r\n");
+        	return false;
+        }
+			
         return true;
 	}
     /**

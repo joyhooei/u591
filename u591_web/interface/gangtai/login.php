@@ -18,7 +18,7 @@ if(!$token || !$game_id || !$userId){
     exit('2 0');
 }
 $userIdArr = explode('_', $userId);
-$type = (isset($userIdArr[1]) && $userIdArr[1] == 'android') ? 'android' : 'ios';
+$type = strtolower($userIdArr[1]);
 $appId = $key_arr[$game_id][$type]['appid'];
 $appSecret = $key_arr[$game_id][$type]['appsecret'];
 $appUserId = $userIdArr[0];
@@ -26,6 +26,8 @@ $sign = md5($appId.$appUserId.$token.$appSecret);
 //$url = "http://sdk-test.changic.net.cn:8191/pocketgames/"; //test url
 if($type == 'android')
     $url = "http://kdygvs-android.88box.com:8091/pocketgames/";
+elseif ($type == 'test')
+	$url = "http://sdk-test.changic.net.cn:8191/pocketgames/";
 else
     $url = "http://kdygvs-ios.88box.com:8091/pocketgames/"; //ios url
 //$url = "http://sdk-android.kdygko.pocketgamesol.com:8091/pocketgames/";

@@ -459,6 +459,11 @@ $key_arr = array(
     				'site'      =>'kdyg_ios100',
     				'key'       =>'8ec20c9ffd26d6ac88e53fc507350ca1',
     		),
+    		'ios103'=>array(
+    				'gid'       =>'9100771533321581',
+    				'site'      =>'kdyg_ios102',
+    				'key'       =>'bdb2ca688b56b15f9a1f4e823ddc43b7',
+    		),
     		'ios104'=>array(
     				'gid'       =>'9100771536511581',
     				'site'      =>'kdyg_ios103',
@@ -554,5 +559,86 @@ $key_arr = array(
     				'site'      =>'kdyg_ios124',
     				'key'       =>'e30d0241cefba525f0a9ad7ff7d17593',
     		),
+    		'ios127'=>array(
+    				'gid'       =>'9185351785371581',
+    				'site'      =>'kdyg_ios126',
+    				'key'       =>'f3c3522a61df29e800ce9f69eb2cbaf6',
+    		),
+    		'ios129'=>array(
+    				'gid'       =>'9185351786881581',
+    				'site'      =>'kdyg_ios128',
+    				'key'       =>'7682a4f465bb0a551c79f9951634d303',
+    		),
     ),
 );
+//密钥 **
+function set_key ( $type , $data ){
+	$pubkey = "-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDI4SPIwGx78Qn5q8jqIFXxnQJT
+qZFKCKz9/dKjFz/1Vf3ecOfGnTh/HkkSqF/Z8wSkoxqPIUf46bd6hAYVqfINHv5e
+lVt87wZacZdESg+Aw3jobcOXVkEt2ezELkG8xtSxvu0kv3lFCZ1SP4uib3exovOy
+aefXQJYivciVUHk1LwIDAQAB
+-----END PUBLIC KEY-----";
+	$prikey = "-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDI4SPIwGx78Qn5q8jqIFXxnQJTqZFKCKz9/dKjFz/1Vf3ecOfG
+nTh/HkkSqF/Z8wSkoxqPIUf46bd6hAYVqfINHv5elVt87wZacZdESg+Aw3jobcOX
+VkEt2ezELkG8xtSxvu0kv3lFCZ1SP4uib3exovOyaefXQJYivciVUHk1LwIDAQAB
+AoGBALHPsBg0VBLFwvmw2LB9nPW48GVT9Jpe4ZoWQoxAuUmWK5jpwg/p/SdwjGgq
+iGXpGlQNWCYX5JhtcQ7OrIAipXDri8SYysUTJZfvvK3exqzy9MlImmkM0lXVBlRd
+Pfl54nGkWZuiQ/nr09uxS2T0W0akLMI0VrjAv5AdWQwNmHMhAkEA8gw7YHOaKGRV
+t+AvMyYSoNTltMX0+Z0B9023ozK3vEqjdUsndZ8vTGnXBW8YlFAF+g7TJN2dzJtY
+TNrwE30OUQJBANR1aLr2AgUfLsnNVZCwelI0Zaer13QAdOnlxPHjTCAtJcP1dMUT
+m2LlNNpYdN6A3X9n8/LIYxrYahounrwvq38CQB7owvhZKtl3np6hiUV92ikhpsfD
+87mgfCzJhubXRjFMUr1awIo7rr2SUnwGKNxfr7O0CvCNQGZtfAQsfTXv5VECQCdT
+kE5DKT6Pdhaupm8A67N5tXNi8J+tUfbVrC3mF/pAwSPTtIiiR3n32V+tTfy9t8JU
+mKhRBV87vfAYvxMwc7sCQQDQ60/rXzpcO3N//RgkaJgyrXfp2STjDIBQSwvH/ySK
+CSIclGpB5PvYOXBsSu6qrvWq7vhzBMkKcjvjn3cXRg+D
+-----END RSA PRIVATE KEY-----";
+	$encrypt_data= '';
+	//加密
+	if( $type == 0 ){
+		$pubkey = openssl_get_publickey($pubkey);
+		if( $pubkey ){
+			for ($j=0; $j<strlen($data); $j+=117) {
+				$src = substr($data, $j, 117);
+				$ret = openssl_public_encrypt($src, $in, $pubkey);
+				$encrypt_data .= $in;
+			}
+			$encrypt_data = base64_encode($encrypt_data);
+			//$encrypt_data = urlencode(base64_encode($encrypt_data));
+			return $encrypt_data;
+		}else{
+			echo json_encode(array('msg'=>'公钥失效，请重新获取'));
+		}
+	}else{
+		$prikey = openssl_get_privatekey($prikey);
+		//解密
+		if( $prikey ){
+			$key_data = base64_decode( $data );
+			for($i=0; $i<strlen($key_data); $i+=128){
+				$src = substr($key_data, $i, 128);
+				$ret = openssl_private_decrypt($src, $out, $prikey);
+				$encrypt_data .= $out;
+			}
+			return $encrypt_data;
+		}else{
+			echo json_encode(array('msg'=>'私钥不可用'));
+		}
+	}
+}
+function doCurl( $params ){
+	$url = 'http://api.gzzongsi.com/';
+	$curl_handle=curl_init();
+	curl_setopt($curl_handle,CURLOPT_URL, $url);
+	curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl_handle,CURLOPT_HEADER, 0);
+	curl_setopt($curl_handle,CURLOPT_POST, true);
+	curl_setopt($curl_handle,CURLOPT_POSTFIELDS, http_build_query($params) );
+	curl_setopt($curl_handle,CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($curl_handle,CURLOPT_SSL_VERIFYPEER, 0);
+	$response_json =curl_exec($curl_handle);
+	$response =json_decode($response_json,true);
+	curl_close($curl_handle);
+	return $response;
+
+}

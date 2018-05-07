@@ -1,0 +1,6 @@
+insert into u_player_questionnaire001(player_id,server_id,questionnaire_id,complete_flag,award_flag) values
+		('11','1','1',1,0),post=a:3:{s:8:"serverid";s:1:"1";s:6:"userid";s:2:"11";s:4:"nper";s:1:"1";}, ,2018-04-11 13:38:16
+insert into u_player_questionnaire001(player_id,server_id,questionnaire_id,complete_flag,award_flag) values
+		('11','1','1',1,0),post=a:3:{s:8:"serverid";s:1:"1";s:6:"userid";s:2:"11";s:4:"nper";s:1:"1";}, ,2018-04-11 13:40:27
+insert into u_player_questionnaire001(player_id,server_id,questionnaire_id,complete_flag,award_flag) values
+		('11','1','1',1,0),post=a:3:{s:8:"serverid";s:1:"1";s:6:"userid";s:2:"11";s:4:"nper";s:1:"1";}, ,2018-04-11 13:40:50
