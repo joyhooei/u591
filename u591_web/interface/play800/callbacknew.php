@@ -23,7 +23,7 @@ $postData['data'] = set_key( 0 , json_encode( $member_data ) );
 
 $resultArr = doCurl($postData);
 $result = json_encode($resultArr);
-write_log(ROOT_PATH."log","play800new_callback_result_","result=$result, postData=".json_encode($postData).", post=$post,get=$get,".date("Y-m-d H:i:s")."\r\n");
+write_log(ROOT_PATH."log","play800new_callback_result_","result=$result, postData=".json_encode($postData).',data:'.json_encode($data).", post=$post,get=$get,".date("Y-m-d H:i:s")."\r\n");
 if($resultArr['code'] != '200' ){
 	write_log(ROOT_PATH."log","play800new_callback_error_","sign error. post=$post,data= ".json_encode($data).date("Y-m-d H:i:s")."\r\n");
 	exit('fail');

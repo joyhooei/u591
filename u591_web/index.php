@@ -43,11 +43,11 @@
     <ul>
         <li><a target="_blank" href="http://poketj.u591776.com:8080/index.php/Auth/login">国服统计后台</a></li>
         <li><a target="_blank" href="http://poketwtj.u591776.com:8080/index.php/Auth/login">港台统计后台</a></li>
-        <li><a target="_blank" href="http://pokeyntj.u591776.com:8080/index.php/Auth/login">越南统计后台</a></li>
+        <li><a target="_blank" href="http://pokeyntj.u591776.com:8080/index.php/Auth/login">越南/泰国统计后台</a></li>
         <li><a target="_blank" href="http://pokerutj.u776hainiu.com:8088/index.php/Auth/login">俄罗斯统计后台</a></li>
         <li><a target="_blank" href="http://pokeartj.u776hainiu.com:8080/index.php/Auth/login">阿拉伯统计后台</a></li>
         <li><a target="_blank" href="http://pokenmtj.u776hainiu.com:8080/index.php/Auth/login">南美统计后台</a></li>
-        <li><a target="_blank" href="http://pokethatj.u776hainiu.com:8080/index.php/Auth/login">泰国统计后台</a></li>
+        <!-- <li><a target="_blank" href="http://pokethatj.u776hainiu.com:8080/index.php/Auth/login">泰国统计后台</a></li> -->
         <li><a target="_blank" href="http://admin-kdyg.szfyhd.com:8080/index.php/Auth/login">H5统计后台</a></li>
         <li><a target="_blank" href="http://fhtj.u776.com:8088/index.php/Auth/login">衣范儿统计后台</a></li>
         <li><a target="_blank" href="http://traveltj.u591776.com:8080/index.php/Auth/login">旅行统计后台</a></li>

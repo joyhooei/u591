@@ -59,6 +59,11 @@ $key_arr = array(
 						'appSecret' => 'Q2sTtcm47tCOPBy2VUVsWdey',
 						'public_key' => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiMJwTaDiwUFymQwWiS51wQcQlykF3fu2Yw34QiDPdXhctIF3WPFrtMd2+ujbfDN1PQ+Rxh2HFXp5/WEr9hNMyVyKUesdsHX1WZyVcbuNFbstDuh1Eb/UybL/dnu0dpwHCn29x/zIZsJBvIpBOTWzUgBBkE1T2dsGL38NS/nq4WIMoCNryg5DCXftzpxwGgVtqlB3OyBCk5gA1HIw1TsscNSEgvVjzhTjqqWPPAMRcUeG1KMyiREaUgccTxfGnug7Mtlk+Ep4t5viCRtOCvCDk9yXeGMixwyiJiSucGKKweOmKAH+62pg5DtGQVZQe1h9fmXKGtO18w3luBc1Z8eF1QIDAQAB' 
 				),
+				'androidth1' => array (
+						'appId' => '1050221710782-b9ohlsb3012ui36c9b5io3j5epbcsaer.apps.googleusercontent.com',
+						'appSecret' => 'Xg15VeSSJGfaNlrgvnes3V-L',
+						'public_key' => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoSsipXOlB7++6BVcunTeVuVhhSsc/RsrmTpNfqEE72PahYLMH5v32Zu2KflxzNJBkHHmttvZrdKZNBo7CwbioOY3Hrq3G63ZPbAkgqPJzOa57l7y98sdSpBkbAbqFXj7Wzl2vLlzV5E5YgLyKXVY9sMpCKrLN2U4QmEMCICxuybyn2BymXvbE0yWWsET5DZWDzgMVc0awxyIxSx/5qYLU9ynzWAz24KKZ3m+ajcAMMLiRkOKt7OR39GsV6tK31idN8dBiAwlydqDCtyiu3uBbcg2rJCUgLBTdp+lE62jqozQv8nT56skaAx0Y/NE+utqHxrFl9d2mh/t+Uv+91iS6wIDAQAB'
+				),
 		)
 );
 $google_id_value = array(
